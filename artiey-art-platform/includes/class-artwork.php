@@ -16,7 +16,15 @@ final class Artiey_AET_Artwork {
 		'not_for_sale' => 'غیرقابل فروش',
 	);
 
-	const SECTIONS = array( 'main', 'photos', 'related' );
+	const SECTIONS = array( 'main', 'certificate', 'market', 'photos', 'related' );
+
+	const SECTION_LABELS = array(
+		'main'        => 'تصویر، مشخصات و قیمت',
+		'certificate' => 'گواهی اصالت (وضعیت، کد، استعلام)',
+		'market'      => 'خرید، حراج و درخواست خرید',
+		'photos'      => 'تصاویر بیشتر',
+		'related'     => 'آثار دیگر هنرمند و گالری',
+	);
 
 	public static function init() {
 		add_action( 'add_meta_boxes', array( __CLASS__, 'boxes' ) );
@@ -347,6 +355,106 @@ final class Artiey_AET_Artwork {
 	}
 
 	/* ---------------------------------------------------------------- */
+	/* Certificate + market (shop / auction / inquiry)                   */
+	/* ---------------------------------------------------------------- */
+
+	/** Visitors only see published artworks; editors can preview drafts. */
+	public static function can_view( $id ) {
+		$status = get_post_status( $id );
+		if ( 'publish' === $status && ! post_password_required( $id ) ) {
+			return true;
+		}
+		return function_exists( 'current_user_can' ) && current_user_can( 'edit_post', $id );
+	}
+
+	/** Mirrored Art COA catalogue row of this artwork post (read-only lookup, never syncs on view). */
+	public static function art_row( $post_id ) {
+		static $cache = array();
+		$post_id = absint( $post_id );
+		if ( ! $post_id || ! class_exists( '\\WPArtCOA\\Database' ) || ! get_option( 'artiey_aet_content_bridge_schema_version' ) ) {
+			return null;
+		}
+		if ( array_key_exists( $post_id, $cache ) ) {
+			return $cache[ $post_id ];
+		}
+		global $wpdb;
+		$rows = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . \WPArtCOA\Database::table( 'artworks' ) . ' WHERE cpt_post_id = %d LIMIT 2', $post_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$cache[ $post_id ] = is_array( $rows ) && 1 === count( $rows ) ? $rows[0] : null;
+		return $cache[ $post_id ];
+	}
+
+	/** Live or upcoming auction of this artwork, if any. */
+	public static function auction_for( $post_id ) {
+		$row = self::art_row( $post_id );
+		if ( ! $row || ! class_exists( '\\WPArtCOA\\Auction' ) ) {
+			return null;
+		}
+		global $wpdb;
+		$au = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . \WPArtCOA\Auction::listings_table() . " WHERE artwork_id = %d AND status IN ('active','scheduled') ORDER BY ends_at_utc ASC LIMIT 1", (int) $row->id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		return $au ? $au : null;
+	}
+
+	public static function certificates( $id ) {
+		if ( ! Artiey_AET_Settings::get( 'show_certificates' ) || ! class_exists( 'Artiey_AET_COA_Bridge' ) ) {
+			return array();
+		}
+		return Artiey_AET_COA_Bridge::certificate_summaries( $id );
+	}
+
+	private static function s_certificate( $a ) {
+		$certs = self::certificates( $a['id'] );
+		if ( ! $certs ) {
+			return '';
+		}
+		return '<section class="aetp-sec aetp-aw-certificate"><h3>گواهی اصالت</h3>' . Artiey_AET_COA_Bridge::badge_html( $certs, 'panel' ) . '</section>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in the bridge
+	}
+
+	private static function s_market( $a ) {
+		$id      = $a['id'];
+		$sale    = $a['sale'];
+		$price   = self::price_text( $a );
+		$row     = self::art_row( $id );
+		$auction = self::auction_for( $id );
+		$buy     = ( $row && class_exists( '\\WPArtCOA\\WooBridge' ) ) ? \WPArtCOA\WooBridge::buy_url( $row ) : '';
+
+		$h  = '<section class="aetp-sec aetp-aw-market"><h3>خرید و عرضه</h3><div class="aetp-market-card">';
+		$h .= '<div class="aetp-market-status"><span class="aetp-ribbon aetp-sale-' . esc_attr( $sale ) . '">' . esc_html( self::SALE[ $sale ] ) . '</span>';
+		if ( $price ) {
+			$h .= '<strong class="aetp-market-price">' . esc_html( $price ) . '</strong>';
+		}
+		if ( self::certificates( $id ) && Artiey_AET_COA_Bridge::has_valid_certificate( $id ) ) {
+			$h .= '<span class="aet-coa-badge is-valid"><span aria-hidden="true">✓</span> همراه با گواهی اصالت معتبر</span>';
+		}
+		$h .= '</div>';
+
+		if ( $auction && class_exists( '\\WPArtCOA\\Shop' ) ) {
+			$current = null !== $auction->current_bid ? $auction->current_bid : $auction->start_price;
+			$live    = 'active' === $auction->status && strtotime( $auction->ends_at_utc . ' UTC' ) > time();
+			$h      .= '<div class="aetp-market-auction"><span class="aetp-market-label">' . esc_html( $live ? 'این اثر در حراج است' : 'حراج به‌زودی' ) . '</span>';
+			$h      .= '<span>' . esc_html( ( null !== $auction->current_bid ? 'بالاترین پیشنهاد: ' : 'قیمت پایه: ' ) . \WPArtCOA\Shop::format_price( $current, (string) $auction->currency ) ) . '</span>';
+			$h      .= '<span class="aet-call-countdown" data-aet-deadline="' . esc_attr( gmdate( 'c', (int) strtotime( $auction->ends_at_utc . ' UTC' ) ) ) . '"></span>';
+			$h      .= '<a class="aetp-btn aetp-btn-primary" href="' . esc_url( home_url( '/art-coa/auction/' . (int) $auction->id . '/' ) ) . '">' . esc_html( $live ? 'ثبت پیشنهاد در حراج' : 'مشاهده حراج' ) . '</a></div>';
+			if ( class_exists( '\\WPArtCOA\\Calls' ) ) {
+				\WPArtCOA\Calls::enqueue();
+			}
+		} elseif ( $buy && in_array( $sale, array( 'available' ), true ) ) {
+			$h .= '<a class="aetp-btn aetp-btn-primary" href="' . esc_url( $buy ) . '">خرید آنلاین</a>';
+		}
+
+		if ( in_array( $sale, array( 'available', 'reserved' ), true ) && ! $auction ) {
+			if ( $row && class_exists( '\\WPArtCOA\\Shop' ) ) {
+				$h .= '<details class="aetp-market-inquiry"' . ( $buy ? '' : ' open' ) . '><summary>' . esc_html( 'reserved' === $sale ? 'درخواست اطلاع از وضعیت اثر' : 'درخواست خرید یا اطلاعات بیشتر' ) . '</summary>' . \WPArtCOA\Shop::inquiry_form( (int) $row->id ) . '</details>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in Shop
+			} elseif ( $a['gallery'] && 'publish' === get_post_status( $a['gallery'] ) ) {
+				$h .= '<a class="aetp-btn" href="' . esc_url( get_permalink( $a['gallery'] ) . '#contact' ) . '">تماس با گالری عرضه‌کننده</a>';
+			}
+		}
+		if ( 'sold' === $sale ) {
+			$h .= '<p class="aetp-muted">این اثر فروخته شده است. برای آثار مشابه، دیگر آثار هنرمند را ببینید.</p>';
+		}
+		return $h . '</div></section>';
+	}
+
+	/* ---------------------------------------------------------------- */
 	/* Front-end                                                         */
 	/* ---------------------------------------------------------------- */
 
@@ -363,8 +471,8 @@ final class Artiey_AET_Artwork {
 		$h  = '<a class="aetp-card aetp-artwork" href="' . esc_url( get_permalink( $p ) ) . '">';
 		$h .= '<span class="aetp-card-img aetp-ratio-art">' . $img; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		$h .= '<span class="aetp-ribbon aetp-sale-' . esc_attr( $a['sale'] ) . '">' . esc_html( self::SALE[ $a['sale'] ] ) . '</span>';
-		if ( get_post_meta( $p->ID, '_aw_coa_certs', true ) ) {
-			$h .= '<span class="aetp-coa-dot" title="دارای گواهی اصالت">✓</span>';
+		if ( Artiey_AET_Settings::get( 'show_certificates' ) && class_exists( 'Artiey_AET_COA_Bridge' ) && Artiey_AET_COA_Bridge::has_valid_certificate( $p->ID ) ) {
+			$h .= '<span class="aetp-coa-dot" title="دارای گواهی اصالت معتبر">✓</span>';
 		}
 		$h .= '</span><span class="aetp-card-title">' . esc_html( get_the_title( $p ) ) . '</span>';
 		if ( $artist ) {
@@ -376,10 +484,14 @@ final class Artiey_AET_Artwork {
 		return $h . '</a>';
 	}
 
-	private static function s_main( $a, $show_title ) {
+	private static function s_main( $a, $show_title, $compact_certificates = false ) {
 		$id = $a['id'];
 
-		$media = has_post_thumbnail( $id ) ? get_the_post_thumbnail( $id, 'large', array( 'alt' => $a['title'] ) ) : '';
+		$media = has_post_thumbnail( $id ) ? get_the_post_thumbnail( $id, 'large', array( 'alt' => $a['title'] . ( self::artist_name( $a ) ? ' — ' . self::artist_name( $a ) : '' ), 'loading' => 'eager', 'fetchpriority' => 'high' ) ) : '';
+		if ( $media ) {
+			$full  = (string) wp_get_attachment_url( (int) get_post_thumbnail_id( $id ) );
+			$media = $full ? '<a href="' . esc_url( $full ) . '" data-aetp-lightbox="aw-' . (int) $id . '" aria-label="بزرگ‌نمایی تصویر اثر">' . $media . '</a>' : $media;
+		}
 		$h     = '<div class="aetp-aw-wrap' . ( $media ? ' has-media' : '' ) . '">';
 		if ( $media ) {
 			$h .= '<div class="aetp-aw-media">' . $media . '<span class="aetp-ribbon aetp-sale-' . esc_attr( $a['sale'] ) . '">' . esc_html( self::SALE[ $a['sale'] ] ) . '</span></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -447,8 +559,12 @@ final class Artiey_AET_Artwork {
 			$h .= '<div class="aetp-price">' . esc_html( $price ) . '</div>';
 		}
 
-		// Certificates (read-only, public-safe).
-		$certs = Artiey_AET_Settings::get( 'show_certificates' ) ? Artiey_AET_COA_Bridge::certificate_summaries( $id ) : array();
+		// Certificates (read-only, public-safe). With a separate certificate section, show only the compact badge here.
+		$certs = self::certificates( $id );
+		if ( $compact_certificates ) {
+			$h    .= Artiey_AET_COA_Bridge::badge_html( $certs, 'badge' );
+			$certs = array();
+		}
 		foreach ( $certs as $c ) {
 			$h .= '<div class="aetp-coa aetp-coa-' . esc_attr( $c['state'] ) . '"><span class="aetp-coa-title">' . esc_html( $c['label'] ) . '</span>';
 			$h .= '<span class="aetp-coa-code" dir="ltr">' . esc_html( $c['code'] ) . '</span>';
@@ -470,31 +586,40 @@ final class Artiey_AET_Artwork {
 		}
 		$h = '<section class="aetp-sec aetp-photos"><h3>تصاویر بیشتر</h3><div class="aetp-photo-grid">';
 		foreach ( $a['photos'] as $pid ) {
-			$img = wp_get_attachment_image( $pid, 'medium_large', false, array( 'loading' => 'lazy' ) );
+			$alt = trim( (string) get_post_meta( $pid, '_wp_attachment_image_alt', true ) );
+			$img = wp_get_attachment_image( $pid, 'medium_large', false, array( 'loading' => 'lazy', 'decoding' => 'async', 'alt' => '' !== $alt ? $alt : $a['title'] ) );
 			if ( $img ) {
-				$h .= '<a href="' . esc_url( wp_get_attachment_url( $pid ) ) . '" target="_blank" rel="noopener">' . $img . '</a>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				$h .= '<a href="' . esc_url( wp_get_attachment_url( $pid ) ) . '" target="_blank" rel="noopener" data-aetp-lightbox="aw-' . (int) $a['id'] . '">' . $img . '</a>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 		}
 		return $h . '</div></section>';
 	}
 
 	private static function s_related( $a ) {
-		if ( ! $a['artist'] ) {
-			return '';
+		$heading = 'آثار دیگر این هنرمند';
+		$list    = array();
+		foreach ( array( 'artist' => '_aw_artist', 'gallery' => '_aw_gallery' ) as $field => $key ) {
+			if ( $list || ! $a[ $field ] ) {
+				continue;
+			}
+			$list = get_posts(
+				array(
+					'post_type'     => 'artiey_artwork',
+					'post_status'   => 'publish',
+					'numberposts'   => 4,
+					'no_found_rows' => true,
+					'post__not_in'  => array( $a['id'] ),
+					'meta_query'    => array( array( 'key' => $key, 'value' => $a[ $field ], 'type' => 'NUMERIC' ) ),
+				)
+			);
+			if ( $list && 'gallery' === $field ) {
+				$heading = 'آثار دیگر این گالری';
+			}
 		}
-		$list = get_posts(
-			array(
-				'post_type'    => 'artiey_artwork',
-				'post_status'  => 'publish',
-				'numberposts'  => 4,
-				'post__not_in' => array( $a['id'] ),
-				'meta_query'   => array( array( 'key' => '_aw_artist', 'value' => $a['artist'], 'type' => 'NUMERIC' ) ),
-			)
-		);
 		if ( ! $list ) {
 			return '';
 		}
-		$h = '<section class="aetp-sec"><h3>آثار دیگر این هنرمند</h3><div class="aetp-grid aap-s-0143d0">';
+		$h = '<section class="aetp-sec"><h3>' . esc_html( $heading ) . '</h3><div class="aetp-grid aap-s-0143d0">';
 		foreach ( $list as $p ) {
 			$h .= self::card( $p );
 		}
@@ -503,24 +628,43 @@ final class Artiey_AET_Artwork {
 
 	public static function render_profile( $id, $sections = null, $show_title = true ) {
 		$id = (int) $id;
-		if ( ! $id || 'artiey_artwork' !== get_post_type( $id ) ) {
+		if ( ! $id || 'artiey_artwork' !== get_post_type( $id ) || ! self::can_view( $id ) ) {
 			return '';
 		}
-		$sections = is_array( $sections ) ? $sections : self::SECTIONS;
+		$sections = is_array( $sections ) ? array_values( array_intersect( self::SECTIONS, $sections ) ) : self::SECTIONS;
 		wp_enqueue_style( 'artiey-aet-profile' );
+		wp_enqueue_script( 'artiey-aet-profile' );
 
 		$a    = self::get( $id );
 		$html = in_array( 'main', $sections, true ) ? Artiey_AET_Statistics::profile_strip( 'artiey_artwork', $id ) : '';
-		if ( in_array( 'main', $sections, true ) ) {
-			$html .= self::s_main( $a, $show_title );
+		foreach ( $sections as $section ) {
+			switch ( $section ) {
+				case 'main':
+					$html .= self::s_main( $a, $show_title, in_array( 'certificate', $sections, true ) );
+					break;
+				case 'certificate':
+					$html .= self::s_certificate( $a );
+					break;
+				case 'market':
+					$html .= self::s_market( $a );
+					break;
+				case 'photos':
+					$html .= self::s_photos( $a );
+					break;
+				case 'related':
+					$html .= self::s_related( $a );
+					break;
+			}
 		}
-		if ( in_array( 'photos', $sections, true ) ) {
-			$html .= self::s_photos( $a );
+		return '' === $html ? '' : '<div class="aetp aetp-aw" dir="rtl">' . $html . '</div>';
+	}
+
+	/** Widgets saved with the 3.0 default selection gain the certificate and market sections. */
+	public static function upgrade_default_sections( $sections ) {
+		if ( is_array( $sections ) && count( $sections ) === 3 && ! array_diff( array( 'main', 'photos', 'related' ), $sections ) ) {
+			return self::SECTIONS;
 		}
-		if ( in_array( 'related', $sections, true ) ) {
-			$html .= self::s_related( $a );
-		}
-		return '<div class="aetp aetp-aw" dir="rtl">' . $html . '</div>';
+		return $sections;
 	}
 
 	public static function filter_content( $content ) {
@@ -536,11 +680,10 @@ final class Artiey_AET_Artwork {
 		$wanted = (array) Artiey_AET_Settings::get( 'artwork_sections' );
 		$id     = get_the_ID();
 
-		$before = in_array( 'main', $wanted, true ) ? self::render_profile( $id, array( 'main' ), false ) : '';
-		$after  = self::render_profile( $id, array_values( array_intersect( array( 'photos', 'related' ), $wanted ) ), false );
-		if ( ! array_intersect( array( 'photos', 'related' ), $wanted ) ) {
-			$after = '';
-		}
+		$wanted = self::upgrade_default_sections( $wanted );
+		$before = in_array( 'main', $wanted, true ) ? self::render_profile( $id, array_values( array_intersect( array( 'main', 'certificate' ), $wanted ) ), false ) : '';
+		$rest   = array_values( array_intersect( array( 'market', 'photos', 'related' ), $wanted ) );
+		$after  = $rest ? self::render_profile( $id, array_merge( in_array( 'main', $wanted, true ) ? array() : array_intersect( array( 'certificate' ), $wanted ), $rest ), false ) : '';
 		return $before . $content . $after;
 	}
 
@@ -561,8 +704,15 @@ final class Artiey_AET_Artwork {
 		if ( ! $id || 'artiey_artwork' !== get_post_type( $id ) ) {
 			return '';
 		}
+		if ( ! self::can_view( $id ) ) {
+			return '';
+		}
 		$a = self::get( $id );
 		switch ( $atts['field'] ) {
+			case 'certificate_badge':
+				return Artiey_AET_COA_Bridge::badge_html( self::certificates( $id ), 'badge' );
+			case 'certificate_panel':
+				return Artiey_AET_COA_Bridge::badge_html( self::certificates( $id ), 'panel' );
 			case 'title_en':
 			case 'medium':
 			case 'edition':

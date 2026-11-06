@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Artiey Art Platform (پلتفرم جامع آرتی)
  * Description:       پلتفرم یکپارچه هنرهای تجسمی با گالری‌ها، هنرمندان، آثار، نمایشگاه‌ها، دو ماژول گواهی اصالت، بازار هنری، حراج، ابزارک‌های المنتور و سئوی فنی.
- * Version:           3.1.0
+ * Version:           3.2.0
  * Requires PHP:      8.1
  * Requires at least: 6.2
  * Author:            Artiey
@@ -79,7 +79,7 @@ if ( $artiey_ap_legacy_loaded ) {
 /* 2. Constants                                                        */
 /* ------------------------------------------------------------------ */
 
-define( 'AET_VERSION', '3.1.0' );
+define( 'AET_VERSION', '3.2.0' );
 define( 'AET_FILE', __FILE__ );
 define( 'AET_DIR', plugin_dir_path( __FILE__ ) );
 define( 'AET_URL', plugin_dir_url( __FILE__ ) );

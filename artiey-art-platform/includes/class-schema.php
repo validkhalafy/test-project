@@ -221,7 +221,19 @@ final class Artiey_AET_Schema {
 				) ) ),
 				'creator'       => $creator,
 				'offers'        => $offer,
+				'dateCreated'   => preg_match( '/^1[2-4]\d\d$/', (string) Artiey_AET_Jalali::to_latin_digits( $a['year'] ) ) ? (string) Artiey_AET_Jalali::j2g( (int) Artiey_AET_Jalali::to_latin_digits( $a['year'] ), 6, 1 )[0] : ( preg_match( '/^(19|20)\d\d$/', (string) $a['year'] ) ? (string) $a['year'] : '' ),
 			);
+			// Certificate of authenticity: public code + online verification page.
+			$certs = class_exists( 'Artiey_AET_COA_Bridge' ) && Artiey_AET_Settings::get( 'show_certificates' ) ? Artiey_AET_COA_Bridge::certificate_summaries( $id ) : array();
+			if ( $certs && 'valid' === $certs[0]['state'] ) {
+				$data['additionalProperty'][] = array( '@type' => 'PropertyValue', 'name' => 'گواهی اصالت', 'value' => $certs[0]['code'] );
+				if ( $certs[0]['url'] ) {
+					$data['subjectOf'] = array( '@type' => 'CreativeWork', 'name' => 'گواهی اصالت ' . $a['title'], 'url' => $certs[0]['url'] );
+				}
+			}
+			if ( $offer && $a['gallery'] && 'publish' === get_post_status( $a['gallery'] ) ) {
+				$data['offers']['seller'] = array( '@type' => 'ArtGallery', 'name' => get_the_title( $a['gallery'] ), 'url' => get_permalink( $a['gallery'] ) );
+			}
 		} else { // Artist.
 			$a    = Artiey_AET_Artist::get( $id );
 			$same = array();

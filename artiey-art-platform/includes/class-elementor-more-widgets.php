@@ -73,7 +73,7 @@ class Artiey_AET_Elementor_Artist_Widget extends Widget_Base {
 				'contact' => 'شبکه‌های ارتباطی', 'works' => 'نمونه آثار (Portfolio)', 'galleries' => 'گالری‌های همکار',
 				'exhibitions' => 'تایم‌لاین نمایشگاه‌ها', 'activity_chart' => 'نمودار فعالیت هنرمند',
 				'sales_chart' => 'نمودار فروش (فقط مالک/مدیر مجاز)', 'artwork_history' => 'تاریخچه آثار، حراج و مالکیت',
-				'interviews' => 'مصاحبه‌ها و مطالب مرتبط (ویدیو پلیر)', 'certificate_stats' => 'آمار گواهی اصالت آثار',
+				'interviews' => 'مصاحبه‌ها و مطالب مرتبط (ویدیو پلیر)', 'certificate_stats' => 'گواهی اصالت آثار (آمار و آثار دارای گواهی)',
 			),
 			'default' => array( 'header', 'short_bio', 'statement', 'bio', 'details', 'awards', 'career_timeline', 'contact', 'works', 'galleries', 'exhibitions', 'activity_chart', 'sales_chart', 'artwork_history', 'interviews', 'certificate_stats' ),
 			'description' => 'هر بخش را جداگانه فعال یا غیرفعال کنید. ترتیب رندر بر اساس ساختار پروفایل است؛ برای تغییر ظاهر به زبانهٔ «استایل» بروید. داده‌های فروش تابع سطح دسترسی COA هستند.',
@@ -454,7 +454,7 @@ class Artiey_AET_Elementor_Artwork_Widget extends Widget_Base {
 	protected function register_controls() {
 		$this->start_controls_section( 'section_content', array( 'label' => 'محتوا', 'tab' => Controls_Manager::TAB_CONTENT ) );
 		$this->add_control( 'profile_layout', array( 'label' => 'چیدمان بخش‌ها', 'type' => Controls_Manager::SELECT, 'options' => array( 'stacked' => 'پشت سر هم', 'tabs' => 'تب‌دار (هر بخش در تب مستقل)', ), 'default' => 'stacked', 'description' => 'مشخصات اثر، تصاویر و آثار مرتبط می‌توانند در تب‌های جدا نمایش داده شوند.' ) );
-		Artiey_AET_Tabs::register_behavior_controls( $this, 'profile_layout', 'tabs', array( 'main' => 'مشخصات اثر', 'photos' => 'تصاویر اثر', 'related' => 'آثار دیگر هنرمند' ) );
+		Artiey_AET_Tabs::register_behavior_controls( $this, 'profile_layout', 'tabs', array( 'main' => 'مشخصات اثر', 'certificate' => 'گواهی اصالت', 'market' => 'خرید و حراج', 'photos' => 'تصاویر اثر', 'related' => 'آثار مرتبط' ) );
 		$this->aet_source_control( 'artwork', 'artiey_artwork', 'اثر', 'اثر جاری (در قالب تک‌اثر)' );
 		$this->add_control( 'artwork_profile_style', array( 'label' => 'سبک نمایش اثر', 'type' => Controls_Manager::SELECT, 'options' => array( 'catalog' => 'کاتالوگی', 'showcase' => 'ویترینی', 'minimal' => 'مینیمال' ), 'default' => 'catalog', 'prefix_class' => 'aetp-artwork-style-' ) );
 		$this->end_controls_section();
@@ -467,12 +467,9 @@ class Artiey_AET_Elementor_Artwork_Widget extends Widget_Base {
 				'type'        => Controls_Manager::SELECT2,
 				'multiple'    => true,
 				'label_block' => true,
-				'options'     => array(
-					'main'    => 'تصویر، مشخصات، قیمت و گواهی',
-					'photos'  => 'تصاویر بیشتر',
-					'related' => 'آثار دیگر هنرمند',
-				),
-				'default'     => array( 'main', 'photos', 'related' ),
+				'options'     => Artiey_AET_Artwork::SECTION_LABELS,
+				'default'     => Artiey_AET_Artwork::SECTIONS,
+				'description' => 'وقتی «گواهی اصالت» جدا انتخاب شود، در بخش اصلی فقط نشان کوچک گواهی نمایش داده می‌شود.',
 			)
 		);
 		$this->add_control( 'show_title', array( 'label' => 'نمایش عنوان', 'type' => Controls_Manager::SWITCHER, 'return_value' => 'yes', 'default' => 'yes' ) );
@@ -489,7 +486,7 @@ class Artiey_AET_Elementor_Artwork_Widget extends Widget_Base {
 			$this->aet_empty_message( $s, 'یک اثر انتخاب کنید یا ویجت را داخل قالب تک‌اثر قرار دهید.' );
 			return;
 		}
-		$sections = Artiey_AET_Elementor_Options::sections( $s, 'sections', Artiey_AET_Artwork::SECTIONS );
+		$sections = Artiey_AET_Artwork::upgrade_default_sections( Artiey_AET_Elementor_Options::sections( $s, 'sections', Artiey_AET_Artwork::SECTIONS ) );
 		Artiey_AET_Profile_Guard::mark( $id );
 		if ( isset( $s['profile_layout'] ) && 'tabs' === $s['profile_layout'] ) {
 			$html = $this->aet_render_profile_tabs( $id, 'artiey_artwork', $sections, ! empty( $s['show_title'] ), $s );

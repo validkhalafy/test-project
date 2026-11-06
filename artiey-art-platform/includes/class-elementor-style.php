@@ -404,6 +404,7 @@ trait Artiey_AET_Elementor_Style {
 				'details' => 'مشخصات', 'awards' => 'جوایز و افتخارات', 'career_timeline' => 'خط زمانی تحصیلات و جوایز',
 				'contact' => 'ارتباط با هنرمند', 'works' => 'نمونه آثار', 'galleries' => 'گالری‌های همکار',
 				'exhibitions' => 'نمایشگاه‌ها', 'activity_chart' => 'نمودار فعالیت', 'sales_chart' => 'نمودار فروش', 'artwork_history' => 'تاریخچه آثار',
+				'interviews' => 'مصاحبه‌ها', 'certificate_stats' => 'گواهی اصالت آثار',
 			),
 			'artiey_gallery' => array(
 				'header' => 'سربرگ', 'short_bio' => 'معرفی کوتاه', 'statement' => 'بیانیه گالری', 'bio' => 'بیوگرافی', 'critics' => 'نقد منتقدان',
@@ -412,7 +413,7 @@ trait Artiey_AET_Elementor_Style {
 				'artists' => 'هنرمندان', 'curators' => 'کیوریتورها', 'collectors' => 'مجموعه‌داران عمومی', 'auctions' => 'حراج‌های مرتبط',
 				'calls' => 'فراخوان‌ها', 'exhibitions' => 'نمایشگاه‌های جاری و پیش‌رو', 'past_exhibitions' => 'نمایشگاه‌های گذشته',
 			),
-			'artiey_artwork' => array( 'main' => 'مشخصات اثر', 'photos' => 'تصاویر اثر', 'related' => 'آثار دیگر هنرمند' ),
+			'artiey_artwork' => array( 'main' => 'مشخصات اثر', 'certificate' => 'گواهی اصالت', 'market' => 'خرید و حراج', 'photos' => 'تصاویر اثر', 'related' => 'آثار مرتبط' ),
 			'artiey_exhibition' => array( 'header' => 'معرفی نمایشگاه', 'details' => 'جزئیات و تاریخ‌ها', 'artists' => 'هنرمندان شرکت‌کننده', 'gallery' => 'گالری برگزارکننده', 'styles' => 'سبک‌های هنری' ),
 		);
 		$classes = array(

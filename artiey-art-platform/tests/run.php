@@ -142,6 +142,7 @@ require_once $root . 'class-elementor-options.php';
 require_once $root . 'class-elementor-tabs.php';
 require_once $root . 'class-elementor-style.php';
 require_once $root . 'class-gallery.php'; // the gallery widget reads its section list from the profile class
+require_once $root . 'class-artwork.php'; // the artwork widget reads its section list from the profile class
 foreach (['class-elementor-widget', 'class-elementor-profile-widget', 'class-elementor-more-widgets'] as $f) { require_once $root . $f . '.php'; }
 foreach ([
     'Artiey_AET_Elementor_Widget', 'Artiey_AET_Elementor_Profile_Widget', 'Artiey_AET_Elementor_Artist_Widget',

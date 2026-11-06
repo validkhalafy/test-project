@@ -793,6 +793,20 @@ final class Profiles
                             <dd><a href="<?php echo esc_url(home_url('/art-coa/gallery/' . $art->gallery_slug)); ?>"><?php echo esc_html($art->gallery_name); ?></a></dd>
                         <?php endif; ?>
                     </dl>
+                    <?php
+                    $aw_certs = class_exists('\\Artiey_AET_COA_Bridge') ? \Artiey_AET_COA_Bridge::certificate_summaries(0, (int) $art->id) : [];
+                    if ($aw_certs) {
+                        // Verified against the COA signature + ledger (the index row alone can be stale).
+                        echo \Artiey_AET_COA_Bridge::badge_html($aw_certs, 'panel'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                        $cert = null;
+                    }
+                    $aw_auction = class_exists(Auction::class) ? $wpdb->get_row($wpdb->prepare('SELECT id, status, current_bid, start_price, currency FROM ' . Auction::listings_table() . " WHERE artwork_id = %d AND status = 'active' AND ends_at_utc > UTC_TIMESTAMP() ORDER BY ends_at_utc ASC LIMIT 1", (int) $art->id)) : null;
+                    if ($aw_auction): ?>
+                        <p class="art-coa-aw-auction"><span class="art-coa-c-badge is-inline"><?php echo esc_html(I18n::is_fa() ? 'در حراج' : 'In auction'); ?></span>
+                            <a class="art-coa-btn" href="<?php echo esc_url(home_url('/art-coa/auction/' . (int) $aw_auction->id . '/')); ?>"><?php echo esc_html(I18n::t('place_bid')); ?></a></p>
+                    <?php elseif (!$sold && !empty($art->for_sale)): ?>
+                        <details class="aet-shop-inquiry"><summary><?php echo esc_html(I18n::t('shop_inquire')); ?></summary><?php echo Shop::inquiry_form((int) $art->id); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></details>
+                    <?php endif; ?>
                     <?php if ($cert): ?>
                         <div class="art-coa-aw-cert">
                             <span aria-hidden="true">🎖️</span>

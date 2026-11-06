@@ -26,6 +26,84 @@ final class Auction
         add_action('template_redirect', [self::class, 'maybe_render']);
         add_action('init', [self::class, 'handle_create']);
         add_action('init', [self::class, 'handle_bid']);
+        add_action('wp_head', [self::class, 'print_seo'], 3);
+        add_filter('pre_get_document_title', [self::class, 'document_title']);
+    }
+
+    /** Lot being rendered on /art-coa/auction/{id}/ (set by render_single for the head tags). */
+    private static ?object $seo_row = null;
+
+    public static function document_title(string $title): string
+    {
+        if (!self::$seo_row) {
+            return $title;
+        }
+        return sanitize_text_field((string) self::$seo_row->title) . ' — ' . (I18n::is_fa() ? 'حراج' : 'Auction') . ' | ' . get_bloginfo('name');
+    }
+
+    /** Canonical, description, Open Graph and Product/Offer JSON-LD for a public auction lot. */
+    public static function print_seo(): void
+    {
+        $settings = get_option('wp_art_coa_settings', []);
+        if (is_array($settings) && isset($settings['enable_seo']) && empty($settings['enable_seo'])) {
+            return;
+        }
+        $mode = (string) get_query_var('art_coa_auction');
+        if ($mode === 'list') {
+            echo '<link rel="canonical" href="' . esc_url(home_url('/art-coa/auctions/')) . '" />' . "\n";
+            echo '<meta name="description" content="' . esc_attr(I18n::t('auction_intro')) . '" />' . "\n";
+            return;
+        }
+        $row = self::$seo_row;
+        if (!$row || $mode !== 'single') {
+            return;
+        }
+        $url = home_url('/art-coa/auction/' . (int) $row->id . '/');
+        $artist = ($row->artist_status ?? '') === 'active' ? (string) ($row->artist_name ?: trim(($row->first_name ?? '') . ' ' . ($row->last_name ?? ''))) : '';
+        $price = $row->current_bid !== null ? (float) $row->current_bid : (float) $row->start_price;
+        $desc = trim(implode(' — ', array_filter([
+            (string) $row->title, $artist, (string) ($row->medium ?? ''),
+            (I18n::is_fa() ? 'قیمت فعلی: ' : 'Current price: ') . Shop::format_price($price, (string) $row->currency),
+        ])));
+        $image = Media::url($row, 'image', 'large');
+        echo '<link rel="canonical" href="' . esc_url($url) . '" />' . "\n";
+        echo '<meta name="description" content="' . esc_attr(\Artiey_AET_Text::substr($desc, 0, 160)) . '" />' . "\n";
+        echo '<meta property="og:type" content="product" />' . "\n";
+        echo '<meta property="og:title" content="' . esc_attr((string) $row->title) . '" />' . "\n";
+        echo '<meta property="og:url" content="' . esc_url($url) . '" />' . "\n";
+        echo '<meta property="og:description" content="' . esc_attr($desc) . '" />' . "\n";
+        if ($image) {
+            echo '<meta property="og:image" content="' . esc_url($image) . '" />' . "\n";
+        }
+        $live = $row->status === 'active' && strtotime((string) $row->ends_at_utc . ' UTC') > time();
+        $schema = [
+            '@context' => 'https://schema.org',
+            '@type' => ['Product', 'VisualArtwork'],
+            'name' => (string) $row->title,
+            'url' => $url,
+            'offers' => [
+                '@type' => 'Offer',
+                'price' => (string) $price,
+                'priceCurrency' => (string) ($row->currency ?: 'IRR'),
+                'availability' => $live ? 'https://schema.org/InStock' : ($row->status === 'sold' ? 'https://schema.org/SoldOut' : 'https://schema.org/OutOfStock'),
+                'priceValidUntil' => gmdate('Y-m-d', (int) strtotime((string) $row->ends_at_utc . ' UTC')),
+                'url' => $url,
+            ],
+        ];
+        if ($image) {
+            $schema['image'] = $image;
+        }
+        if ($artist !== '') {
+            $schema['creator'] = ['@type' => 'Person', 'name' => $artist];
+        }
+        if (!empty($row->medium)) {
+            $schema['artMedium'] = (string) $row->medium;
+        }
+        $certs = class_exists('\\Artiey_AET_COA_Bridge') ? \Artiey_AET_COA_Bridge::certificate_summaries(0, (int) $row->artwork_id) : [];
+        if ($certs && $certs[0]['state'] === 'valid') {
+            $schema['additionalProperty'] = ['@type' => 'PropertyValue', 'name' => I18n::is_fa() ? 'گواهی اصالت' : 'Certificate of authenticity', 'value' => $certs[0]['code']];
+        }
+        echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) . '</script>' . "\n";
     }
 
     public static function register_cron_schedule(array $schedules): array
@@ -511,7 +589,8 @@ final class Auction
         if ($search !== '') {
             $where .= ' AND (a.title LIKE %s OR ar.display_name LIKE %s OR au.auction_house LIKE %s OR au.lot_number LIKE %s)';
             $like = '%' . $wpdb->esc_like($search) . '%';
-            $params = [$like, $like, $like, $like];
+            // Append: replacing the array dropped the public-status values and broke visitor searches.
+            $params = array_merge($params, [$like, $like, $like, $like]);
         }
         $sql = "SELECT au.*, a.title, a.status AS artwork_status, a.image_url, a.image_id, a.year_created,
                     ar.display_name AS artist_name, ar.slug AS artist_slug, ar.first_name, ar.last_name, ar.status AS artist_status,
@@ -601,6 +680,9 @@ final class Auction
             return '';
         }
 
+        if (get_query_var('art_coa_auction') === 'single') {
+            self::$seo_row = $row;
+        }
         $bids = $wpdb->get_results($wpdb->prepare(
             'SELECT * FROM ' . self::bids_table() . ' WHERE auction_id = %d ORDER BY amount DESC, id DESC LIMIT 20',
             $id
@@ -689,6 +771,14 @@ final class Auction
                     <?php endif; ?>
 
                     <?php
+                    $lot_certs = class_exists('\\Artiey_AET_COA_Bridge') ? \Artiey_AET_COA_Bridge::certificate_summaries(0, (int) $row->artwork_id) : [];
+                    if ($lot_certs): ?>
+                        <section class="art-coa-section art-coa-auction-certificate">
+                            <h2><?php echo esc_html(I18n::is_fa() ? 'گواهی اصالت اثر' : 'Certificate of authenticity'); ?></h2>
+                            <?php echo \Artiey_AET_COA_Bridge::badge_html($lot_certs, 'panel'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                        </section>
+                    <?php endif; ?>
+                    <?php
                     $auction_details = [
                         'auction_house' => I18n::is_fa() ? 'برگزارکننده' : 'Auction house',
                         'auction_location' => I18n::is_fa() ? 'محل حراج' : 'Location',
@@ -757,8 +847,9 @@ final class Auction
                             <p class="art-coa-bid-msg" data-au="msg" role="status" aria-live="polite"></p>
                         </form>
                     <?php else: ?>
-                        <p class="art-coa-auction-closed"><strong><?php echo esc_html(I18n::t('auction_closed')); ?></strong>
-                            (<?php echo esc_html($row->status); ?>)</p>
+                        <?php $status_labels = ['sold' => I18n::t('cat_sold'), 'closed' => I18n::t('auction_closed'), 'ended' => I18n::t('auction_closed'), 'unsold' => (I18n::is_fa() ? 'بدون فروش' : 'Unsold'), 'cancelled' => (I18n::is_fa() ? 'لغو شده' : 'Cancelled'), 'scheduled' => (I18n::is_fa() ? 'هنوز آغاز نشده' : 'Not started yet'), 'pending_payment' => (I18n::is_fa() ? 'در انتظار پرداخت برنده' : 'Awaiting payment'), 'defaulted' => (I18n::is_fa() ? 'عدم پرداخت برنده' : 'Winner defaulted')]; ?>
+                        <p class="art-coa-auction-closed"><strong><?php echo esc_html($row->status === 'scheduled' ? $status_labels['scheduled'] : I18n::t('auction_closed')); ?></strong>
+                            <?php if ($row->status !== 'scheduled'): ?>(<?php echo esc_html($status_labels[(string) $row->status] ?? (string) $row->status); ?>)<?php endif; ?></p>
                         <?php if ($row->status === 'sold' && $row->current_bidder_name): ?>
                             <p><?php echo esc_html(I18n::t('winner')); ?>: <?php echo esc_html(self::mask_name((string) $row->current_bidder_name)); ?>
                                 — <?php echo esc_html(Shop::format_price($row->current_bid, $row->currency)); ?></p>
@@ -802,8 +893,10 @@ final class Auction
         $artist_is_public = ($row->artist_status ?? '') === 'active';
         $an  = $artist_is_public ? ($row->artist_name ?: trim(($row->first_name ?? '') . ' ' . ($row->last_name ?? ''))) : '';
         $bid = $row->current_bid !== null ? $row->current_bid : $row->start_price;
-        $url = home_url('/art-coa/auction/' . (int) $row->id);
+        $url = home_url('/art-coa/auction/' . (int) $row->id . '/');
         $img = \WPArtCOA\Media::url($row, 'image', 'large');
+        $scheduled = ($row->status ?? '') === 'scheduled' || (!empty($row->starts_at_utc) && strtotime((string) $row->starts_at_utc . ' UTC') > time());
+        $certs = class_exists('\\Artiey_AET_COA_Bridge') ? \Artiey_AET_COA_Bridge::certificate_summaries(0, (int) ($row->artwork_id ?? 0)) : [];
         $est = [];
         if (!empty($row->estimate_low)) { $est[] = Shop::format_price($row->estimate_low, $row->currency); }
         if (!empty($row->estimate_high)) { $est[] = Shop::format_price($row->estimate_high, $row->currency); }
@@ -820,11 +913,12 @@ final class Auction
         ?>
         <article class="art-coa-au-card">
             <a class="art-coa-au-media" href="<?php echo esc_url($url); ?>" tabindex="-1" aria-hidden="true">
-                <?php if ($img): ?><img src="<?php echo esc_url($img); ?>" alt="" loading="lazy"><?php else: ?><span class="art-coa-c-ph">🖼</span><?php endif; ?>
-                <?php if (!empty($o['show_badge'])): ?><span class="art-coa-au-badge"><?php echo esc_html(I18n::t('auction_live')); ?></span><?php endif; ?>
+                <?php if ($img): ?><?php echo Media::img($row, 'image', 'medium_large', ['alt' => '']); ?><?php else: ?><span class="art-coa-c-ph">🖼</span><?php endif; ?>
+                <?php if (!empty($o['show_badge'])): ?><span class="art-coa-au-badge<?php echo $scheduled ? ' is-scheduled' : ''; ?>"><?php echo esc_html($scheduled ? (I18n::is_fa() ? 'به‌زودی' : 'Upcoming') : I18n::t('auction_live')); ?></span><?php endif; ?>
             </a>
             <div class="art-coa-au-body">
                 <h3 class="art-coa-au-title"><a href="<?php echo esc_url($url); ?>"><?php echo esc_html($row->title); ?></a></h3>
+                <?php if ($certs && class_exists('\\Artiey_AET_COA_Bridge')): ?><p class="art-coa-au-cert"><?php echo \Artiey_AET_COA_Bridge::badge_html($certs, 'badge'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p><?php endif; ?>
                 <?php if (!empty($o['show_artist']) && $an && $row->artist_slug): ?>
                     <p class="art-coa-au-artist"><a href="<?php echo esc_url(ContentSync::artist_url((string) $row->artist_slug)); ?>"><?php echo esc_html($an); ?></a></p>
                 <?php endif; ?>
@@ -837,7 +931,7 @@ final class Auction
                     <?php if (!empty($o['show_ends'])): ?><li><?php echo esc_html(I18n::t('ends_at')); ?>: <?php echo esc_html(Dates::format($row->ends_at_utc, true)); ?></li><?php endif; ?>
                     <?php if ($left !== ''): ?><li class="art-coa-au-left"><?php echo esc_html($left); ?></li><?php endif; ?>
                 </ul>
-                <a class="art-coa-au-btn" href="<?php echo esc_url($url); ?>"><?php echo esc_html($o['button_text'] !== '' ? (string) $o['button_text'] : I18n::t('place_bid')); ?></a>
+                <a class="art-coa-au-btn" href="<?php echo esc_url($url); ?>"><?php echo esc_html($o['button_text'] !== '' ? (string) $o['button_text'] : ($scheduled ? I18n::t('view_page') : I18n::t('place_bid'))); ?><span class="screen-reader-text"> — <?php echo esc_html((string) $row->title); ?></span></a>
             </div>
         </article>
         <?php

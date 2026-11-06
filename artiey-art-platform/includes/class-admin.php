@@ -291,11 +291,7 @@ final class Artiey_AET_Admin {
 		/* ---- Artworks / certificates ---- */
 		echo '<div class="aet-panel" data-panel="artwork"><h2 class="title">صفحه اثر هنری</h2><table class="form-table" role="presentation">';
 		self::f_check( 'artwork_auto', 'نمایش خودکار', 'در صفحه تک‌اثر، تصویر، مشخصات، قیمت و گواهی اصالت خودکار اضافه شود', 'برای طراحی با Theme Builder المنتور خاموش کنید و از ویجت «پروفایل اثر» یا شورت‌کدها استفاده کنید.' );
-		$w_labels = array(
-			'main'    => 'بخش اصلی (تصویر، مشخصات، قیمت، گواهی)',
-			'photos'  => 'تصاویر بیشتر اثر',
-			'related' => 'آثار دیگر همان هنرمند',
-		);
+		$w_labels = Artiey_AET_Artwork::SECTION_LABELS;
 		$w_have = (array) $o['artwork_sections'];
 		$html   = '';
 		foreach ( $w_labels as $key => $text ) {

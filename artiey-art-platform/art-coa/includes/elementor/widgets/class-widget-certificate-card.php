@@ -51,6 +51,13 @@ final class Certificate_Card extends Widget_Base
 
         $this->add_control('heading', ['label' => 'عنوان (اختیاری)', 'type' => Controls_Manager::TEXT, 'default' => '', 'dynamic' => ['active' => true]]);
 
+        $this->add_control('source', [
+            'label'   => 'منبع گواهی',
+            'type'    => Controls_Manager::SELECT,
+            'default' => 'manual',
+            'options' => ['manual' => 'شماره سریال مشخص', 'artwork' => 'گواهی اثر همین صفحه (خودکار)'],
+            'description' => 'در قالب تک‌اثر، معتبرترین گواهی متصل به اثر به‌صورت خودکار نمایش داده می‌شود.',
+        ]);
         $this->add_control('serial', [
             'label'       => 'شماره سریال',
             'type'        => Controls_Manager::TEXT,
@@ -74,6 +81,25 @@ final class Certificate_Card extends Widget_Base
         $serial   = $settings['serial'] ?? '';
         if ($serial === '' && !empty($settings['serial_from_query']) && isset($_GET['serial']) && is_scalar($_GET['serial'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- public read-only lookup, sanitised below.
             $serial = wp_unslash((string) $_GET['serial']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        }
+        if (($settings['source'] ?? 'manual') === 'artwork' && class_exists('\\Artiey_AET_COA_Bridge')) {
+            $serial = '';
+            $post_id = class_exists('\\Artiey_AET_Elementor_Options') ? (int) \Artiey_AET_Elementor_Options::current_post_id('artiey_artwork') : 0;
+            $art_row = 0;
+            if (!$post_id && get_query_var('art_coa_type') === 'artwork') {
+                $row = \WPArtCOA\Entities\Artwork::get_by_slug(sanitize_title((string) get_query_var('art_coa_slug')));
+                $art_row = $row ? (int) $row->id : 0;
+            }
+            $certs = ($post_id || $art_row) ? \Artiey_AET_COA_Bridge::certificate_summaries($post_id, $art_row) : [];
+            if ($certs && $certs[0]['state'] !== 'revoked') {
+                $serial = $certs[0]['code'];
+            }
+            if ($serial === '') {
+                if (class_exists('\\Artiey_AET_Elementor_Options') && \Artiey_AET_Elementor_Options::is_editor_mode()) {
+                    echo '<p class="art-coa-empty">برای این اثر گواهی اصالتی ثبت نشده است.</p>';
+                }
+                return;
+            }
         }
         $heading = sanitize_text_field((string) ($settings['heading'] ?? ''));
         if ($heading !== '') { echo '<h2 class="art-coa-elementor-title">' . esc_html($heading) . '</h2>'; }

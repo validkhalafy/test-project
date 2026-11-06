@@ -556,9 +556,29 @@ final class Artiey_AET_Artist {
 	}
 
 	private static function s_certificate_stats( $a ) {
-		if ( ! class_exists( 'Artiey_AET_COA_Bridge' ) || ! Artiey_AET_COA_Bridge::available() ) { return ''; }
-		$count = absint( Artiey_AET_COA_Bridge::active_count_for_artist_post( $a['id'] ) );
-		return '<section class="aetp-sec aetp-artist-certificate-stats"><h3>آمار گواهی اصالت آثار</h3><div class="aetp-stats"><div class="aetp-stat"><strong>' . esc_html( self::fa( $count ) ) . '</strong><span>گواهی اصالت فعال</span></div></div></section>';
+		if ( ! class_exists( 'Artiey_AET_COA_Bridge' ) || ! Artiey_AET_COA_Bridge::available() || ! Artiey_AET_Settings::get( 'show_certificates' ) ) { return ''; }
+		$stats = Artiey_AET_COA_Bridge::artist_certificate_stats( $a['id'], 8 );
+		if ( ! $stats['active'] && ! $stats['artworks'] ) {
+			return '';
+		}
+		$total = count( self::artworks_of( $a['id'], 48, false ) );
+		$h     = '<section class="aetp-sec aetp-artist-certificate-stats"><h3>گواهی اصالت آثار</h3><div class="aetp-stats">';
+		$h    .= '<div class="aetp-stat"><strong>' . esc_html( self::fa( $stats['active'] ) ) . '</strong><span>گواهی اصالت معتبر</span></div>';
+		if ( $total ) {
+			$h .= '<div class="aetp-stat"><strong>' . esc_html( self::fa( count( $stats['artworks'] ) ) . ' / ' . self::fa( $total ) ) . '</strong><span>آثار کاتالوگ دارای گواهی</span></div>';
+		}
+		$h .= '</div>';
+		if ( $stats['artworks'] && class_exists( 'Artiey_AET_Artwork' ) ) {
+			$h .= '<h4 class="aetp-sub-h">آثار دارای گواهی اصالت</h4><div class="aetp-grid aetp-artist-artworks">';
+			foreach ( $stats['artworks'] as $wid ) {
+				$post = get_post( $wid );
+				if ( $post ) {
+					$h .= Artiey_AET_Artwork::card( $post );
+				}
+			}
+			$h .= '</div>';
+		}
+		return $h . '</section>';
 	}
 
 	/** Resolve a COA artist row by canonical WordPress post ID, never by ambiguous numeric slug. */
@@ -571,9 +591,10 @@ final class Artiey_AET_Artist {
 			return self::$coa_artist_id_cache[ $artist_post_id ];
 		}
 		$coa_id = 0;
-		if ( class_exists( '\\WPArtCOA\\ContentBridge' ) ) {
+		// row_id_for_post() may create/sync the relational row; that write must never run on a public page view.
+		if ( function_exists( 'is_admin' ) && is_admin() && class_exists( '\\WPArtCOA\\ContentBridge' ) ) {
 			$coa_id = absint( \WPArtCOA\ContentBridge::row_id_for_post( 'artists', $artist_post_id ) );
-		} elseif ( class_exists( '\\WPArtCOA\\Database' ) ) {
+		} elseif ( class_exists( '\\WPArtCOA\\Database' ) && get_option( 'artiey_aet_content_bridge_schema_version' ) ) {
 			global $wpdb;
 			$table = \WPArtCOA\Database::table( 'artists' );
 			$coa_id = absint( $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$table} WHERE cpt_post_id = %d ORDER BY id ASC LIMIT 1", $artist_post_id ) ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name comes from Database::table.
@@ -732,16 +753,16 @@ final class Artiey_AET_Artist {
 	private static function s_contact( $a ) {
 		$social = '';
 		if ( $a['instagram'] ) {
-			$social .= '<a class="aetp-pill aetp-ig" href="' . esc_url( 'https://instagram.com/' . $a['instagram'] ) . '" target="_blank" rel="noopener">اینستاگرام</a>';
+			$social .= '<a class="aetp-pill aetp-ig" href="' . esc_url( 'https://instagram.com/' . rawurlencode( ltrim( $a['instagram'], '@' ) ) ) . '" target="_blank" rel="me noopener noreferrer">اینستاگرام</a>';
 		}
 		if ( $a['telegram'] ) {
-			$social .= '<a class="aetp-pill aetp-tg" href="' . esc_url( 'https://t.me/' . $a['telegram'] ) . '" target="_blank" rel="noopener">تلگرام</a>';
+			$social .= '<a class="aetp-pill aetp-tg" href="' . esc_url( 'https://t.me/' . rawurlencode( ltrim( $a['telegram'], '@' ) ) ) . '" target="_blank" rel="me noopener noreferrer">تلگرام</a>';
 		}
 		if ( $a['website'] ) {
-			$social .= '<a class="aetp-pill" href="' . esc_url( $a['website'] ) . '" target="_blank" rel="noopener">وب‌سایت</a>';
+			$social .= '<a class="aetp-pill" href="' . esc_url( $a['website'] ) . '" target="_blank" rel="me noopener noreferrer">وب‌سایت</a>';
 		}
-		if ( $a['email'] ) {
-			$social .= '<a class="aetp-pill" href="' . esc_url( 'mailto:' . $a['email'] ) . '">ایمیل</a>';
+		if ( $a['email'] && is_email( $a['email'] ) ) {
+			$social .= '<a class="aetp-pill" href="' . esc_url( 'mailto:' . antispambot( $a['email'] ) ) . '">ایمیل</a>';
 		}
 		if ( '' === $social ) {
 			return '';

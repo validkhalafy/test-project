@@ -34,6 +34,20 @@ final class Artiey_AET_COA_Bridge {
 
 		add_action( 'save_post_artiey_gallery', array( __CLASS__, 'save_gallery_link' ), 20 );
 		add_action( 'save_post_artiey_artist', array( __CLASS__, 'save_artist_link' ), 20 );
+		add_action( 'save_post_artiey_artwork', array( __CLASS__, 'save_artwork_links' ), 20 );
+		// Revocation / transfer change what the public sees on artwork, shop and auction pages.
+		add_action( 'wp_coa_pro_certificate_revoked', array( __CLASS__, 'on_certificate_changed' ), 30 );
+		add_action( 'wp_coa_pro_certificate_transferred', array( __CLASS__, 'on_certificate_changed' ), 30 );
+		add_action( 'wp_art_coa_certificate_issued', array( __CLASS__, 'on_certificate_changed' ), 30 );
+		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'register_assets' ), 5 );
+	}
+
+	public static function register_assets() {
+		wp_register_style( 'artiey-coa-badge', AET_URL . 'assets/css/coa-badge.css', array(), AET_VERSION );
+	}
+
+	public static function on_certificate_changed() {
+		self::bust();
 	}
 
 	/* ---------------------------------------------------------------- */
@@ -135,26 +149,74 @@ final class Artiey_AET_COA_Bridge {
 	}
 
 	/**
-	 * Public-safe summaries of the certificates linked to an artwork.
-	 * Only code, state and issue date are returned (no owner / notes data).
+	 * Every COA certificate id connected to an artwork, from both link models:
+	 *  - `_aw_coa_certs` on the WordPress artwork post (issued from the artwork screen or linked by code),
+	 *  - the Art COA certificate index (`art_certificates.artwork_id`) of the mirrored catalogue row.
 	 *
-	 * @return array<int,array{code:string,state:string,label:string,url:string,issued:string}>
+	 * @param int $artwork_post_id WordPress artwork post (0 when unknown).
+	 * @param int $art_row_id      Art COA catalogue row (0 = resolve from the post).
+	 * @return int[] unique ids, newest link first, max 20
 	 */
-	public static function certificate_summaries( $artwork_id ) {
-		$out = array();
-		if ( ! self::available() ) {
-			return $out;
+	public static function certificate_ids( $artwork_post_id, $art_row_id = 0 ) {
+		$artwork_post_id = absint( $artwork_post_id );
+		$art_row_id      = absint( $art_row_id );
+		$ids             = array();
+		if ( $artwork_post_id ) {
+			$links = get_post_meta( $artwork_post_id, '_aw_coa_certs', true );
+			foreach ( is_array( $links ) ? array_reverse( $links ) : array() as $l ) {
+				if ( isset( $l['id'] ) && absint( $l['id'] ) ) {
+					$ids[] = absint( $l['id'] );
+				}
+			}
 		}
-		$links = get_post_meta( $artwork_id, '_aw_coa_certs', true );
-		if ( ! is_array( $links ) ) {
-			return $out;
+		if ( class_exists( '\\WPArtCOA\\Database' ) ) {
+			global $wpdb;
+			$art_table  = \WPArtCOA\Database::table( 'artworks' );
+			$cert_table = \WPArtCOA\Database::table( 'certificates' );
+			if ( ! $art_row_id && $artwork_post_id && get_option( 'artiey_aet_content_bridge_schema_version' ) ) {
+				$rows       = $wpdb->get_col( $wpdb->prepare( "SELECT id FROM {$art_table} WHERE cpt_post_id = %d LIMIT 2", $artwork_post_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				$art_row_id = is_array( $rows ) && 1 === count( $rows ) ? absint( $rows[0] ) : 0;
+			}
+			if ( $art_row_id ) {
+				$coa = $wpdb->get_col( $wpdb->prepare( "SELECT coa_id FROM {$cert_table} WHERE artwork_id = %d AND coa_id IS NOT NULL ORDER BY id DESC LIMIT 20", $art_row_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				foreach ( is_array( $coa ) ? $coa : array() as $c ) {
+					$ids[] = absint( $c );
+				}
+				if ( ! $artwork_post_id ) {
+					$post_id = absint( $wpdb->get_var( $wpdb->prepare( "SELECT cpt_post_id FROM {$art_table} WHERE id = %d", $art_row_id ) ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+					if ( $post_id && 'artiey_artwork' === get_post_type( $post_id ) ) {
+						return self::certificate_ids( $post_id, $art_row_id );
+					}
+				}
+			}
+		}
+		return array_slice( array_values( array_unique( array_filter( $ids ) ) ), 0, 20 );
+	}
+
+	/**
+	 * Public-safe summaries of the certificates linked to an artwork.
+	 * Only code, state and issue date are returned (no owner / notes data). Signatures are checked,
+	 * results are cached until the next certificate or content change.
+	 *
+	 * @return array<int,array{id:int,code:string,state:string,label:string,url:string,issued:string}>
+	 */
+	public static function certificate_summaries( $artwork_id, $art_row_id = 0 ) {
+		if ( ! self::available() ) {
+			return array();
+		}
+		$artwork_id = absint( $artwork_id );
+		$art_row_id = absint( $art_row_id );
+		$key        = 'aet_coa_sum_' . md5( $artwork_id . ':' . $art_row_id . ':' . Artiey_AET_Settings::version() );
+		$cached     = get_transient( $key );
+		if ( is_array( $cached ) ) {
+			return $cached;
 		}
 		$repo   = self::repo();
 		$sig    = self::sig();
 		$lookup = self::public_lookup_enabled();
-
-		foreach ( array_slice( $links, 0, 10 ) as $l ) {
-			$row = isset( $l['id'] ) ? $repo->get_by_id( (int) $l['id'] ) : null;
+		$out    = array();
+		foreach ( self::certificate_ids( $artwork_id, $art_row_id ) as $coa_id ) {
+			$row = $repo->get_by_id( $coa_id );
 			if ( ! $row ) {
 				continue;
 			}
@@ -173,14 +235,195 @@ final class Artiey_AET_COA_Bridge {
 				$issued = Artiey_AET_Jalali::format_long( substr( (string) $row->issue_date, 0, 10 ) );
 			}
 			$out[] = array(
+				'id'     => (int) $row->id,
 				'code'   => (string) $row->certificate_code,
 				'state'  => $state,
 				'label'  => $label,
-				'url'    => $lookup ? WP_COA_Pro::get_verification_url( $row->certificate_code ) : '',
+				'url'    => $lookup && class_exists( 'WP_COA_Pro' ) ? WP_COA_Pro::get_verification_url( $row->certificate_code ) : '',
 				'issued' => $issued,
 			);
 		}
+		// Valid certificates first, then those needing review, revoked last.
+		$rank = array( 'valid' => 0, 'check' => 1, 'revoked' => 2 );
+		usort( $out, static function ( $a, $b ) use ( $rank ) {
+			return $rank[ $a['state'] ] <=> $rank[ $b['state'] ];
+		} );
+		set_transient( $key, $out, 10 * MINUTE_IN_SECONDS );
 		return $out;
+	}
+
+	/** True when at least one linked certificate is active and its signature verifies. */
+	public static function has_valid_certificate( $artwork_id, $art_row_id = 0 ) {
+		foreach ( self::certificate_summaries( $artwork_id, $art_row_id ) as $c ) {
+			if ( 'valid' === $c['state'] ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Compact public badge (cards, shop, auctions) or full certificate panel (artwork / auction page).
+	 * @param array<int,array<string,mixed>> $summaries
+	 */
+	public static function badge_html( array $summaries, $mode = 'badge' ) {
+		if ( ! $summaries ) {
+			return '';
+		}
+		if ( function_exists( 'wp_style_is' ) && ! wp_style_is( 'artiey-coa-badge', 'registered' ) ) {
+			self::register_assets();
+		}
+		wp_enqueue_style( 'artiey-coa-badge' );
+		$main = $summaries[0];
+		if ( 'badge' === $mode ) {
+			if ( 'valid' !== $main['state'] ) {
+				return '';
+			}
+			return '<span class="aet-coa-badge is-valid" title="' . esc_attr( $main['label'] . ' — ' . $main['code'] ) . '"><span aria-hidden="true">✓</span> گواهی اصالت</span>';
+		}
+		$h = '<section class="aet-coa-panel" aria-label="گواهی اصالت اثر">';
+		foreach ( $summaries as $c ) {
+			$h .= '<div class="aet-coa-item aet-coa-' . esc_attr( $c['state'] ) . '">';
+			$h .= '<span class="aet-coa-seal" aria-hidden="true">' . ( 'valid' === $c['state'] ? '✓' : ( 'revoked' === $c['state'] ? '✕' : '!' ) ) . '</span>';
+			$h .= '<span class="aet-coa-body"><strong class="aet-coa-label">' . esc_html( $c['label'] ) . '</strong>';
+			$h .= '<span class="aet-coa-meta"><span>کد گواهی: <code dir="ltr">' . esc_html( $c['code'] ) . '</code></span>';
+			if ( '' !== $c['issued'] ) {
+				$h .= '<span>تاریخ صدور: ' . esc_html( $c['issued'] ) . '</span>';
+			}
+			$h .= '</span></span>';
+			if ( '' !== $c['url'] ) {
+				$h .= '<a class="aet-coa-verify" href="' . esc_url( $c['url'] ) . '" target="_blank" rel="noopener">استعلام آنلاین گواهی</a>';
+			}
+			$h .= '</div>';
+		}
+		$h .= '<p class="aet-coa-note">اعتبار گواهی با امضای دیجیتال و دفتر ثبت سامانه گواهی اصالت بررسی می‌شود.</p>';
+		return $h . '</section>';
+	}
+
+	/**
+	 * Admin: connect an already issued certificate to an artwork by its code.
+	 * @return string '' on success, otherwise a Persian error message.
+	 */
+	public static function link_certificate_code( $artwork_post_id, $code ) {
+		$artwork_post_id = absint( $artwork_post_id );
+		$code            = strtoupper( preg_replace( '/[^A-Za-z0-9\-]/', '', (string) $code ) );
+		if ( ! self::can_manage() || 'artiey_artwork' !== get_post_type( $artwork_post_id ) || ! current_user_can( 'edit_post', $artwork_post_id ) ) {
+			return 'دسترسی مدیریت گواهی‌ها لازم است.';
+		}
+		if ( '' === $code ) {
+			return 'کد گواهی وارد نشده است.';
+		}
+		$row = self::repo()->get_by_code( $code );
+		if ( ! $row ) {
+			return 'گواهی با این کد پیدا نشد.';
+		}
+		$list = get_post_meta( $artwork_post_id, '_aw_coa_certs', true );
+		$list = is_array( $list ) ? $list : array();
+		foreach ( $list as $l ) {
+			if ( isset( $l['id'] ) && (int) $l['id'] === (int) $row->id ) {
+				return '';
+			}
+		}
+		// A certificate belongs to one artwork: refuse codes already linked to another artwork post.
+		global $wpdb;
+		$like  = '%' . $wpdb->esc_like( '"code";s:' . strlen( (string) $row->certificate_code ) . ':"' . $row->certificate_code . '"' ) . '%';
+		$other = absint( $wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '_aw_coa_certs' AND post_id <> %d AND meta_value LIKE %s LIMIT 1", $artwork_post_id, $like ) ) );
+		if ( $other ) {
+			return 'این گواهی قبلاً به اثر دیگری («' . get_the_title( $other ) . '») متصل شده است.';
+		}
+		$list[] = array( 'id' => (int) $row->id, 'code' => (string) $row->certificate_code, 'at' => time() );
+		update_post_meta( $artwork_post_id, '_aw_coa_certs', $list );
+		self::mirror_link( (int) $row->id, $artwork_post_id );
+		self::bust();
+		return '';
+	}
+
+	public static function unlink_certificate( $artwork_post_id, $coa_id ) {
+		$artwork_post_id = absint( $artwork_post_id );
+		$coa_id          = absint( $coa_id );
+		if ( ! self::can_manage() || ! current_user_can( 'edit_post', $artwork_post_id ) ) {
+			return false;
+		}
+		$list = get_post_meta( $artwork_post_id, '_aw_coa_certs', true );
+		$list = is_array( $list ) ? array_values( array_filter( $list, static function ( $l ) use ( $coa_id ) {
+			return ! isset( $l['id'] ) || (int) $l['id'] !== $coa_id;
+		} ) ) : array();
+		update_post_meta( $artwork_post_id, '_aw_coa_certs', $list );
+		if ( class_exists( '\\WPArtCOA\\Database' ) ) {
+			global $wpdb;
+			$wpdb->update( \WPArtCOA\Database::table( 'certificates' ), array( 'artwork_id' => null ), array( 'coa_id' => $coa_id ) );
+		}
+		self::bust();
+		return true;
+	}
+
+	/** Keep the Art COA certificate index pointed at the mirrored catalogue row of this artwork post. */
+	private static function mirror_link( $coa_id, $artwork_post_id ) {
+		if ( ! class_exists( '\\WPArtCOA\\CertificateMirror' ) || ! class_exists( '\\WPArtCOA\\Database' ) ) {
+			return;
+		}
+		global $wpdb;
+		$rows = $wpdb->get_col( $wpdb->prepare( 'SELECT id FROM ' . \WPArtCOA\Database::table( 'artworks' ) . ' WHERE cpt_post_id = %d LIMIT 2', $artwork_post_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		if ( is_array( $rows ) && 1 === count( $rows ) ) {
+			\WPArtCOA\CertificateMirror::link( (int) $coa_id, (int) $rows[0] );
+		}
+	}
+
+	/** Save handler for the artwork screen's certificate tab (link by code / unlink). */
+	public static function save_artwork_links( $post_id ) {
+		if ( ! isset( $_POST['aetw_coa_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['aetw_coa_nonce'] ) ), 'aetw_coa_link_' . $post_id ) ) {
+			return;
+		}
+		if ( wp_is_post_revision( $post_id ) || ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || ! self::can_manage() ) {
+			return;
+		}
+		$in = isset( $_POST['aetw_coa'] ) && is_array( $_POST['aetw_coa'] ) ? wp_unslash( $_POST['aetw_coa'] ) : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitised below
+		foreach ( isset( $in['unlink'] ) && is_array( $in['unlink'] ) ? $in['unlink'] : array() as $coa_id ) {
+			self::unlink_certificate( $post_id, absint( $coa_id ) );
+		}
+		$code = isset( $in['link_code'] ) && is_string( $in['link_code'] ) ? trim( $in['link_code'] ) : '';
+		if ( '' !== $code ) {
+			$error = self::link_certificate_code( $post_id, $code );
+			if ( '' !== $error ) {
+				set_transient( 'aetw_coa_err_' . get_current_user_id(), $error, 60 );
+			}
+		}
+	}
+
+	/** Artist-level certificate figures: COA person profile + the artist's catalogue artworks. */
+	public static function artist_certificate_stats( $artist_post_id, $limit = 8 ) {
+		$artist_post_id = absint( $artist_post_id );
+		$result         = array( 'active' => 0, 'artworks' => array() );
+		if ( ! $artist_post_id || ! self::available() ) {
+			return $result;
+		}
+		$key    = 'aet_coa_artist_' . $artist_post_id . '_' . absint( $limit ) . '_' . md5( Artiey_AET_Settings::version() );
+		$cached = get_transient( $key );
+		if ( is_array( $cached ) ) {
+			return $cached;
+		}
+		$works = get_posts( array(
+			'post_type'      => 'artiey_artwork',
+			'post_status'    => 'publish',
+			'numberposts'    => 60,
+			'fields'         => 'ids',
+			'no_found_rows'  => true,
+			'meta_query'     => array( array( 'key' => '_aw_artist', 'value' => $artist_post_id, 'type' => 'NUMERIC' ) ),
+		) );
+		$seen = array();
+		foreach ( (array) $works as $wid ) {
+			foreach ( self::certificate_summaries( (int) $wid ) as $c ) {
+				if ( 'valid' === $c['state'] && ! isset( $seen[ $c['id'] ] ) ) {
+					$seen[ $c['id'] ] = true;
+					if ( count( $result['artworks'] ) < $limit && ! in_array( (int) $wid, $result['artworks'], true ) ) {
+						$result['artworks'][] = (int) $wid;
+					}
+				}
+			}
+		}
+		$result['active'] = max( count( $seen ), self::active_count_for_artist_post( $artist_post_id ) );
+		set_transient( $key, $result, 10 * MINUTE_IN_SECONDS );
+		return $result;
 	}
 
 	/** Number of active certificates linked to artworks of this artist (via COA person profile). */
@@ -268,15 +511,35 @@ final class Artiey_AET_COA_Bridge {
 	public static function panel_artwork( $post ) {
 		$certs  = self::certificate_summaries( $post->ID );
 		$manage = self::can_manage();
+		$error  = get_transient( 'aetw_coa_err_' . get_current_user_id() );
+		if ( $error ) {
+			delete_transient( 'aetw_coa_err_' . get_current_user_id() );
+			echo '<div class="notice notice-error inline"><p>' . esc_html( (string) $error ) . '</p></div>';
+		}
 
 		if ( $certs ) {
-			echo '<table class="widefat striped aap-s-371f3d"><thead><tr><th>کد گواهی</th><th>وضعیت</th><th>تاریخ صدور</th></tr></thead><tbody>';
+			echo '<table class="widefat striped aap-s-371f3d"><thead><tr><th>کد گواهی</th><th>وضعیت</th><th>تاریخ صدور</th>' . ( $manage ? '<th>جداسازی</th>' : '' ) . '</tr></thead><tbody>';
 			foreach ( $certs as $c ) {
-				echo '<tr><td><code dir="ltr">' . esc_html( $c['code'] ) . '</code></td><td>' . esc_html( $c['label'] ) . '</td><td>' . esc_html( $c['issued'] ? $c['issued'] : '—' ) . '</td></tr>';
+				echo '<tr><td><code dir="ltr">' . esc_html( $c['code'] ) . '</code>';
+				if ( $c['url'] ) {
+					echo ' <a href="' . esc_url( $c['url'] ) . '" target="_blank" rel="noopener">استعلام</a>';
+				}
+				echo '</td><td>' . esc_html( $c['label'] ) . '</td><td>' . esc_html( $c['issued'] ? $c['issued'] : '—' ) . '</td>';
+				if ( $manage ) {
+					echo '<td><label><input type="checkbox" name="aetw_coa[unlink][]" value="' . (int) $c['id'] . '"> جدا شود</label></td>';
+				}
+				echo '</tr>';
 			}
 			echo '</tbody></table>';
 		} else {
 			echo '<p>برای این اثر هنوز گواهی اصالتی ثبت نشده است.</p>';
+		}
+
+		if ( $manage ) {
+			wp_nonce_field( 'aetw_coa_link_' . $post->ID, 'aetw_coa_nonce' );
+			echo '<div class="aetg-field"><label for="aetw-coa-code">اتصال گواهی صادرشده با کد</label>';
+			echo '<input type="text" id="aetw-coa-code" name="aetw_coa[link_code]" dir="ltr" placeholder="COA-XXXX-XXXX" autocomplete="off">';
+			echo '<div class="aetg-hint">اگر گواهی قبلاً بدون اتصال به این اثر صادر شده، کد آن را وارد و نوشته را به‌روزرسانی کنید. هر گواهی فقط به یک اثر وصل می‌شود؛ امضای گواهی تغییر نمی‌کند.</div></div>';
 		}
 
 		if ( $manage && in_array( get_post_status( $post->ID ), array( 'publish', 'draft', 'pending', 'private', 'future' ), true ) ) {
@@ -287,10 +550,10 @@ final class Artiey_AET_COA_Bridge {
 					'_aet_pf'     => wp_create_nonce( 'aet_prefill_' . $post->ID ),
 				)
 			);
-			echo '<p><a class="button button-primary" href="' . esc_url( $url ) . '">صدور گواهی اصالت برای این اثر</a></p>';
-			echo '<p class="aetg-hint">فرم صدور گواهی با اطلاعات همین اثر (عنوان، هنرمند، رسانه، ابعاد، سال، عکس و گالری) پر می‌شود. بعد از صدور، گواهی خودکار به این اثر وصل می‌شود. اطلاعات امضاشده بعد از صدور قابل ویرایش نیستند؛ قبل از صدور اطلاعات اثر را مرور کنید.</p>';
+			echo '<p><a class="button button-primary" href="' . esc_url( $url ) . '">صدور گواهی اصالت جدید برای این اثر</a></p>';
+			echo '<p class="aetg-hint">فرم صدور گواهی با اطلاعات همین اثر (عنوان، هنرمند، رسانه، ابعاد، سال، عکس و گالری) پر می‌شود. بعد از صدور، گواهی خودکار به این اثر و به کاتالوگ ماژول گواهی (فروشگاه، حراج، تاریخچه) وصل می‌شود. اطلاعات امضاشده بعد از صدور قابل ویرایش نیستند؛ قبل از صدور اطلاعات اثر را مرور کنید.</p>';
 		} elseif ( ! $manage ) {
-			echo '<p class="aetg-hint">برای صدور گواهی، دسترسی «مدیریت گواهی‌ها» لازم است.</p>';
+			echo '<p class="aetg-hint">برای صدور یا اتصال گواهی، دسترسی «مدیریت گواهی‌ها» لازم است.</p>';
 		}
 	}
 

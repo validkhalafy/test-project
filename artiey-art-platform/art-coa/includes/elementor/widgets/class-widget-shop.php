@@ -71,6 +71,9 @@ final class Widget_Shop extends Widget_Base
         ]);
         $this->add_control('gallery', ['label' => 'شناسه گالری (اختیاری)', 'type' => Controls_Manager::NUMBER, 'default' => 0, 'min' => 0]);
         $this->add_control('only_sale', ['label' => 'فقط آثار قابل فروش', 'type' => Controls_Manager::SWITCHER, 'return_value' => '1', 'default' => '1']);
+        $this->add_control('certified', ['label' => 'فقط آثار دارای گواهی اصالت', 'type' => Controls_Manager::SWITCHER, 'return_value' => '1', 'default' => '']);
+        $this->add_control('sort', ['label' => 'مرتب‌سازی پیش‌فرض', 'type' => Controls_Manager::SELECT, 'default' => 'newest', 'options' => ['newest' => 'جدیدترین', 'price_low' => 'ارزان‌ترین', 'price_high' => 'گران‌ترین', 'title' => 'عنوان']]);
+        $this->add_control('follow_page', ['label' => 'آثار هنرمند/گالری همین صفحه', 'type' => Controls_Manager::SWITCHER, 'return_value' => '1', 'default' => '1', 'description' => 'در قالب تک‌هنرمند یا تک‌گالری، اگر هنرمند/گالری انتخاب نشده باشد، آثار همان صفحه نمایش داده می‌شود.']);
         $this->end_controls_section();
 
         $this->start_controls_section('shop_layout_controls', ['label' => 'تعداد و چیدمان محصولات', 'tab' => Controls_Manager::TAB_CONTENT]);
@@ -112,11 +115,25 @@ final class Widget_Shop extends Widget_Base
             $row = \WPArtCOA\Entities\Gallery::get_by_slug($route_slug);
             if ($row) { $gallery = (int) $row->id; }
         }
+        // WordPress artist / gallery single pages (Theme Builder): map the post to its catalogue row (read-only).
+        if (!$artist && !$gallery && $slug === '' && !empty($s['follow_page']) && class_exists('\\Artiey_AET_Elementor_Options') && get_option('artiey_aet_content_bridge_schema_version')) {
+            global $wpdb;
+            foreach (['artiey_artist' => 'artists', 'artiey_gallery' => 'galleries'] as $post_type => $table) {
+                $pid = (int) \Artiey_AET_Elementor_Options::current_post_id($post_type);
+                if (!$pid) { continue; }
+                $ids = $wpdb->get_col($wpdb->prepare('SELECT id FROM ' . \WPArtCOA\Database::table($table) . ' WHERE cpt_post_id = %d LIMIT 2', $pid)); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+                if (is_array($ids) && count($ids) === 1) {
+                    if ($table === 'artists') { $artist = (int) $ids[0]; } else { $gallery = (int) $ids[0]; }
+                }
+                break;
+            }
+        }
         $filter = $artist || $slug !== '' ? 'artist' : 'all';
         $base = [
             'filter' => $filter, 'artist' => $artist, 'slug' => $slug,
             'limit' => max(1, min(100, absint($s['limit'] ?? 12))), 'columns' => max(1, min(4, absint($s['columns'] ?? 3))),
             'gallery' => $gallery, 'show_title' => false, 'title' => '', 'show_intro' => false, 'show_filter' => false,
+            'sort' => sanitize_key((string) ($s['sort'] ?? 'newest')), 'certified' => !empty($s['certified']) ? '1' : '0',
         ];
         if (($s['presentation'] ?? 'single') !== 'tabs') {
             echo Shop::render(array_merge($base, [

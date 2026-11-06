@@ -602,3 +602,30 @@
 .aetp-scheme-dark .aetp-critic{background:#1d2026;border-color:#2c3037}
 .aetp-scheme-dark .aetp-critic-text,.aetp-scheme-dark .aetp-press-excerpt{color:#d7dae0}
 @media (prefers-reduced-motion:reduce){.aetp-critics--slider .aetp-critics-list{scroll-behavior:auto}}
+
+/* ---------- 3.2: artwork market panel, buttons, lightbox ---------- */
+.aetp-btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 22px;border:2px solid var(--aetp-accent);border-radius:12px;background:transparent;color:var(--aetp-accent);font-weight:700;text-decoration:none;cursor:pointer;transition:background-color .15s,color .15s}
+.aetp-btn:hover,.aetp-btn:focus-visible{background:var(--aetp-accent);color:#fff}
+.aetp-btn-primary{background:var(--aetp-accent);color:#fff}
+.aetp-btn-primary:hover,.aetp-btn-primary:focus-visible{filter:brightness(1.08)}
+.aetp-market-card{display:flex;flex-direction:column;gap:14px;padding:20px;border:1px solid #e6e6e6;border-radius:16px;background:#fff;box-shadow:0 6px 18px rgba(0,0,0,.05)}
+.aetp-market-status{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.aetp-market-status .aetp-ribbon{position:static}
+.aetp-market-price{font-size:1.35em;color:#111}
+.aetp-market-auction{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:14px;border-radius:12px;background:color-mix(in srgb,var(--aetp-accent) 8%,#fff)}
+.aetp-market-label{font-weight:700}
+.aetp-market-inquiry summary{cursor:pointer;font-weight:700;color:var(--aetp-accent)}
+.aetp-market-inquiry[open] summary{margin-bottom:10px}
+.aetp-market-inquiry form{display:grid;gap:8px;max-width:520px}
+.aetp-market-inquiry input,.aetp-market-inquiry textarea{width:100%;padding:8px 10px;border:1px solid #d9dde3;border-radius:10px}
+.aetp-aw-media a{display:block;cursor:zoom-in}
+.aetp-lb{position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;gap:12px;padding:24px;background:rgba(10,12,16,.92)}
+.aetp-lb[hidden]{display:none}
+.aetp-lb-fig{margin:0;max-width:min(92vw,1400px);text-align:center}
+.aetp-lb-fig img{max-width:100%;max-height:82vh;object-fit:contain;border-radius:6px}
+.aetp-lb-fig figcaption{margin-top:10px;color:#e5e7eb;font-size:.92em}
+.aetp-lb button{display:grid;place-items:center;width:48px;height:48px;border:1px solid rgba(255,255,255,.35);border-radius:50%;background:rgba(255,255,255,.08);color:#fff;font-size:26px;cursor:pointer}
+.aetp-lb button:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.aetp-lb-close{position:absolute;top:16px;inset-inline-end:16px}
+html.aetp-lb-open{overflow:hidden}
+@media (max-width:600px){.aetp-lb-prev,.aetp-lb-next{position:absolute;bottom:20px}.aetp-lb-prev{inset-inline-start:20px}.aetp-lb-next{inset-inline-end:20px}}

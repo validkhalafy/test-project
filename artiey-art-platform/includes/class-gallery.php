@@ -535,7 +535,7 @@ final class Artiey_AET_Gallery {
 				continue;
 			}
 			$full = wp_get_attachment_url( $pid );
-			$h   .= '<a href="' . esc_url( $full ) . '" target="_blank" rel="noopener" data-art-lightbox="gallery-' . (int) $g['id'] . '">' . $img . '</a>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			$h   .= '<a href="' . esc_url( $full ) . '" target="_blank" rel="noopener" data-aetp-lightbox="gallery-' . (int) $g['id'] . '">' . $img . '</a>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 		return $h . '</div></section>';
 	}
@@ -1108,6 +1108,7 @@ final class Artiey_AET_Gallery {
 			return '';
 		}
 		wp_enqueue_style( 'artiey-aet-profile' );
+		wp_enqueue_script( 'artiey-aet-profile' );
 
 		$g    = self::get( $id );
 		$html = in_array( 'header', $sections, true ) ? Artiey_AET_Statistics::profile_strip( 'artiey_gallery', $id ) : '';

@@ -85,7 +85,7 @@ final class Artiey_AET_Settings {
 			'directory_ajax'     => 1,
 			'schema'             => 1,
 			'artwork_auto'       => 1,
-			'artwork_sections'   => array( 'main', 'photos', 'related' ),
+			'artwork_sections'   => array( 'main', 'certificate', 'market', 'photos', 'related' ),
 			'currency'           => 'تومان',
 			'show_certificates'  => 1,
 			// Advanced.
@@ -266,7 +266,7 @@ final class Artiey_AET_Settings {
 		$o['artist_sections'] = array_values( array_intersect( array( 'header', 'short_bio', 'statement', 'details', 'awards', 'career_timeline', 'contact', 'works', 'galleries', 'exhibitions', 'activity_chart', 'sales_chart', 'artwork_history' ), $asecs ) );
 
 		$wsecs = isset( $in['artwork_sections'] ) && is_array( $in['artwork_sections'] ) ? $in['artwork_sections'] : array();
-		$o['artwork_sections'] = array_values( array_intersect( array( 'main', 'photos', 'related' ), $wsecs ) );
+		$o['artwork_sections'] = array_values( array_intersect( array( 'main', 'certificate', 'market', 'photos', 'related' ), $wsecs ) );
 
 		$cur = isset( $in['currency'] ) ? sanitize_text_field( $in['currency'] ) : '';
 		$o['currency'] = ( '' !== $cur ) ? Artiey_AET_Text::substr( $cur, 0, 12 ) : $d['currency'];

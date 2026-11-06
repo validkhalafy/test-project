@@ -1,0 +1,20 @@
+/* Certificate of authenticity: compact badge + full panel. Shared by artwork, shop and auction pages. */
+.aet-coa-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:999px;font-size:.8em;font-weight:700;line-height:1.6;white-space:nowrap}
+.aet-coa-badge.is-valid{background:#e8f6ec;color:#14532d;border:1px solid #bfe3c9}
+.aet-coa-panel{display:flex;flex-direction:column;gap:10px}
+.aet-coa-item{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px;padding:14px 16px;border:1px solid #e3e6ea;border-radius:14px;background:#fff}
+.aet-coa-item.aet-coa-valid{border-color:#bfe3c9;background:linear-gradient(135deg,#f3fbf5,#fff)}
+.aet-coa-item.aet-coa-revoked{border-color:#f1c4c4;background:#fdf5f5}
+.aet-coa-item.aet-coa-check{border-color:#f3dcae;background:#fffaf0}
+.aet-coa-seal{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;font-size:22px;font-weight:700;color:#fff;background:#6b7280}
+.aet-coa-valid .aet-coa-seal{background:#15803d;box-shadow:0 0 0 4px #dcf2e2}
+.aet-coa-revoked .aet-coa-seal{background:#b42318}
+.aet-coa-check .aet-coa-seal{background:#b26b00}
+.aet-coa-body{display:flex;flex-direction:column;gap:4px;min-width:0}
+.aet-coa-label{font-size:1.02em}
+.aet-coa-meta{display:flex;flex-wrap:wrap;gap:4px 16px;color:#4b5563;font-size:.9em}
+.aet-coa-meta code{font-size:.95em;background:transparent}
+.aet-coa-verify{display:inline-flex;align-items:center;min-height:38px;padding:6px 14px;border-radius:999px;background:#15803d;color:#fff!important;font-weight:600;text-decoration:none;white-space:nowrap}
+.aet-coa-verify:hover,.aet-coa-verify:focus-visible{background:#116a32}
+.aet-coa-note{margin:0;color:#6b7280;font-size:.82em}
+@media (max-width:600px){.aet-coa-item{grid-template-columns:auto 1fr}.aet-coa-verify{grid-column:1/-1;justify-content:center}}

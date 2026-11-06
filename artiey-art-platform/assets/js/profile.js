@@ -476,3 +476,74 @@
 		window.jQuery(window).on('elementor/frontend/init', bindElementorTabs);
 	}
 })();
+
+/* Lightbox for profile photos: <a href="full.jpg" data-aetp-lightbox="group">. Keyboard: ←/→, Esc; focus is restored on close. */
+(function () {
+	'use strict';
+	var box = null, img = null, cap = null, items = [], index = 0, opener = null;
+
+	function build() {
+		box = document.createElement('div');
+		box.className = 'aetp-lb';
+		box.setAttribute('role', 'dialog');
+		box.setAttribute('aria-modal', 'true');
+		box.setAttribute('aria-label', 'نمایش تصویر');
+		box.hidden = true;
+		box.innerHTML = '<button type="button" class="aetp-lb-close" aria-label="بستن">×</button>' +
+			'<button type="button" class="aetp-lb-prev" aria-label="تصویر قبلی">›</button>' +
+			'<figure class="aetp-lb-fig"><img alt=""><figcaption></figcaption></figure>' +
+			'<button type="button" class="aetp-lb-next" aria-label="تصویر بعدی">‹</button>';
+		document.body.appendChild(box);
+		img = box.querySelector('img');
+		cap = box.querySelector('figcaption');
+		box.addEventListener('click', function (e) {
+			if (e.target === box || e.target.classList.contains('aetp-lb-close')) { close(); }
+			else if (e.target.classList.contains('aetp-lb-prev')) { show(index - 1); }
+			else if (e.target.classList.contains('aetp-lb-next')) { show(index + 1); }
+		});
+	}
+
+	function show(i) {
+		if (!items.length) { return; }
+		index = (i + items.length) % items.length;
+		var a = items[index], thumb = a.querySelector('img');
+		img.src = a.getAttribute('href');
+		img.alt = thumb ? (thumb.getAttribute('alt') || '') : '';
+		cap.textContent = img.alt + (items.length > 1 ? '  (' + (index + 1) + '/' + items.length + ')' : '');
+		box.querySelector('.aetp-lb-prev').hidden = box.querySelector('.aetp-lb-next').hidden = items.length < 2;
+	}
+
+	function close() {
+		box.hidden = true;
+		document.documentElement.classList.remove('aetp-lb-open');
+		img.removeAttribute('src');
+		if (opener) { opener.focus(); }
+	}
+
+	document.addEventListener('click', function (e) {
+		var a = e.target.closest && e.target.closest('a[data-aetp-lightbox]');
+		if (!a || e.ctrlKey || e.metaKey || e.shiftKey) { return; }
+		e.preventDefault();
+		if (!box) { build(); }
+		var group = a.getAttribute('data-aetp-lightbox');
+		items = Array.prototype.slice.call(document.querySelectorAll('a[data-aetp-lightbox="' + group + '"]'));
+		opener = a;
+		box.hidden = false;
+		document.documentElement.classList.add('aetp-lb-open');
+		show(items.indexOf(a));
+		box.querySelector('.aetp-lb-close').focus();
+	});
+
+	document.addEventListener('keydown', function (e) {
+		if (!box || box.hidden) { return; }
+		if (e.key === 'Escape') { close(); }
+		else if (e.key === 'ArrowLeft') { show(index + 1); }
+		else if (e.key === 'ArrowRight') { show(index - 1); }
+		else if (e.key === 'Tab') {
+			var f = Array.prototype.slice.call(box.querySelectorAll('button:not([hidden])'));
+			var at = f.indexOf(document.activeElement);
+			e.preventDefault();
+			f[(at + (e.shiftKey ? -1 : 1) + f.length) % f.length].focus();
+		}
+	});
+})();

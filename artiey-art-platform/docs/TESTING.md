@@ -10,6 +10,7 @@ php tests/page-integration.php
 php tests/gallery-directory.php
 php tests/follows-gallery-calls.php   # follow/followers, gallery statement & critics, open calls (3.1)
 php tests/new-widgets.php             # structure of the follow and calls Elementor widgets
+php tests/artwork-shop-auction.php    # certificate links, artwork page, shop and auction (3.2)
 node tests/js/follow.browser.test.js  # follow.js in Chromium (needs Playwright)
 ```
 
