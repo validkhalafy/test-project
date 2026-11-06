@@ -54,3 +54,13 @@
 .aetcu--featured .aetcu-bio{font-size:1.02em}
 @media (prefers-reduced-motion:reduce){.aetcu-item,.aetcu-btn{transition:none}.aetcu-item:hover{transform:none}}
 .aetcu .screen-reader-text{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:nowrap;border:0}
+/* 3.1: stats + follow actions */
+.aetcu-stats{display:flex;flex-wrap:wrap;gap:14px;margin:0;padding:0;list-style:none;font-size:.88em;color:#5b6470}
+.aetcu-stats strong{color:var(--aetcu-p);font-size:1.15em}
+.aetcu-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:4px}
+.aetcu-actions .aetcu-btn{margin-top:0}
+.aetcu-actions .aet-follow{--aetf-p:var(--aetcu-p)}
+.aetcu--card .aetcu-stats,.aetcu--card .aetcu-actions{justify-content:center}
+.aetcu--compact .aetcu-stats{display:none}
+.aetcu--compact .aetcu-actions{margin-inline-start:auto}
+.aetcu-cover img{width:100%;height:100%;object-fit:cover;display:block}

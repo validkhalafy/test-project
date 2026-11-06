@@ -139,6 +139,42 @@
 			mediaStatus($field).removeClass('is-error').text('تصویر(ها) پاک شد؛ برای ذخیره تغییرات، نوشته را به‌روزرسانی کنید.');
 		});
 
+		/* ---------- Repeatable rows (critics, press, team) ---------- */
+		function repCount($rep) {
+			var n = $rep.find('> .aetg-rep-rows > .aetg-rep-row').length;
+			$rep.find('> label .aetg-rep-count').text('(' + n + '/' + ($rep.data('max') || 20) + ')');
+			$rep.find('> .aetg-rep-add').prop('disabled', n >= (parseInt($rep.data('max'), 10) || 20));
+		}
+		$('.aetg-repeater').each(function () { repCount($(this)); });
+		$(document).on('click', '.aetg-rep-add', function (e) {
+			e.preventDefault();
+			var $rep = $(this).closest('.aetg-repeater');
+			var max = parseInt($rep.data('max'), 10) || 20;
+			var $rows = $rep.find('> .aetg-rep-rows');
+			if ($rows.children('.aetg-rep-row').length >= max) { return; }
+			var tpl = $rep.find('> template.aetg-rep-tpl').html() || '';
+			var key = 'n' + Date.now().toString(36) + Math.floor(Math.random() * 1000);
+			var $row = $(tpl.replace(/__i__/g, key));
+			$rows.append($row);
+			$row.find('input,textarea').first().trigger('focus');
+			repCount($rep);
+		});
+		$(document).on('click', '.aetg-rep-remove', function (e) {
+			e.preventDefault();
+			var $rep = $(this).closest('.aetg-repeater');
+			var $row = $(this).closest('.aetg-rep-row');
+			var filled = $row.find('input[type=text],input[type=url],textarea').filter(function () { return $.trim($(this).val()) !== ''; }).length;
+			if (filled && !window.confirm('این ردیف حذف شود؟')) { return; }
+			$row.remove();
+			repCount($rep);
+		});
+		$(document).on('click', '.aetg-rep-up, .aetg-rep-down', function (e) {
+			e.preventDefault();
+			var $row = $(this).closest('.aetg-rep-row');
+			if ($(this).hasClass('aetg-rep-up')) { $row.prev('.aetg-rep-row').before($row); } else { $row.next('.aetg-rep-row').after($row); }
+			$(this).trigger('focus');
+		});
+
 		/* ---------- Artist filter ---------- */
 		$(document).on('input', '.aetg-filter', function () {
 			var q = $(this).val().toLowerCase();

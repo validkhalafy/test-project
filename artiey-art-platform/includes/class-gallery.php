@@ -11,7 +11,37 @@ final class Artiey_AET_Gallery {
 	// PHP "w" numbers, Persian week order (Saturday first).
 	const WEEK_ORDER = array( 6, 0, 1, 2, 3, 4, 5 );
 
-	const ALL_SECTIONS = array( 'header', 'short_bio', 'bio', 'details', 'contact', 'hours', 'map', 'photos', 'artists', 'curators', 'collectors', 'auctions', 'exhibitions', 'past_exhibitions' );
+	const ALL_SECTIONS = array( 'header', 'short_bio', 'statement', 'bio', 'critics', 'details', 'awards', 'team', 'contact', 'hours', 'map', 'photos', 'press', 'follow', 'artists', 'curators', 'collectors', 'auctions', 'calls', 'exhibitions', 'past_exhibitions' );
+
+	/** Section labels shared by the Elementor widget, the tab layout and the shortcode documentation. */
+	const SECTION_LABELS = array(
+		'header'           => 'سربرگ (کاور، لوگو، نام‌ها، وضعیت، دکمه دنبال کردن)',
+		'short_bio'        => 'بیوگرافی کوتاه',
+		'statement'        => 'بیانیه گالری',
+		'bio'              => 'بیوگرافی کامل',
+		'critics'          => 'نقد و نظر منتقدان',
+		'details'          => 'مشخصات',
+		'awards'           => 'جوایز و افتخارات',
+		'team'             => 'تیم گالری',
+		'contact'          => 'راه‌های ارتباطی',
+		'hours'            => 'ساعات کاری',
+		'map'              => 'آدرس و نقشه',
+		'photos'           => 'تصاویر گالری',
+		'press'            => 'بازتاب رسانه‌ای',
+		'follow'           => 'دنبال‌کنندگان',
+		'artists'          => 'هنرمندان مرتبط',
+		'curators'         => 'کیوریتورهای همکار',
+		'collectors'       => 'مجموعه‌داران عمومی مرتبط',
+		'auctions'         => 'حراج‌ها و لات‌های مرتبط',
+		'calls'            => 'فراخوان‌های باز گالری',
+		'exhibitions'      => 'نمایشگاه‌های جاری و پیش‌رو',
+		'past_exhibitions' => 'پوستر نمایشگاه‌های برگزارشده',
+	);
+
+	/** Upper bounds for the repeatable profile lists (admin form and renderer). */
+	const MAX_CRITICS = 24;
+	const MAX_PRESS   = 40;
+	const MAX_TEAM    = 24;
 
 	/** Request-local schema cache avoids repeating SHOW TABLES / SHOW COLUMNS for every relation block. */
 	private static $schema_cache = array();
@@ -138,7 +168,69 @@ final class Artiey_AET_Gallery {
 			'cover'      => (int) self::meta( $id, 'cover' ),
 			'photos'     => self::id_list( self::meta( $id, 'photos' ) ),
 			'artists'    => self::id_list( self::meta( $id, 'artists' ) ),
+			'statement'  => (string) self::meta( $id, 'statement' ),
+			'statement_author' => (string) self::meta( $id, 'statement_author' ),
+			'statement_role'   => (string) self::meta( $id, 'statement_role' ),
+			'critics'    => self::rows( self::meta( $id, 'critics' ), array( 'name', 'role', 'text', 'source', 'url', 'date', 'photo' ), self::MAX_CRITICS ),
+			'press'      => self::rows( self::meta( $id, 'press' ), array( 'title', 'outlet', 'url', 'date', 'excerpt' ), self::MAX_PRESS ),
+			'team'       => self::rows( self::meta( $id, 'team' ), array( 'name', 'role', 'photo', 'url' ), self::MAX_TEAM ),
+			'awards'     => (string) self::meta( $id, 'awards' ),
 		);
+	}
+
+	/**
+	 * Normalise a stored repeatable list: only known keys, scalar strings, no empty rows.
+	 * @return array<int,array<string,string>>
+	 */
+	public static function rows( $raw, array $keys, $max ) {
+		$out = array();
+		foreach ( is_array( $raw ) ? $raw : array() as $row ) {
+			if ( ! is_array( $row ) ) {
+				continue;
+			}
+			$clean = array();
+			foreach ( $keys as $k ) {
+				$clean[ $k ] = isset( $row[ $k ] ) && is_scalar( $row[ $k ] ) ? trim( (string) $row[ $k ] ) : '';
+			}
+			if ( '' === implode( '', $clean ) ) {
+				continue;
+			}
+			$out[] = $clean;
+			if ( count( $out ) >= (int) $max ) {
+				break;
+			}
+		}
+		return $out;
+	}
+
+	/** "1398 | عنوان" / "۱۳۹۸ - عنوان" / "عنوان" lines → [year, title]. */
+	public static function award_lines( $text ) {
+		$out = array();
+		foreach ( preg_split( '/\r\n|\r|\n/', (string) $text ) ?: array() as $line ) {
+			$line = trim( wp_strip_all_tags( $line ) );
+			if ( '' === $line ) {
+				continue;
+			}
+			$year = '';
+			if ( preg_match( '/^([0-9۰-۹]{4})\s*[|\-–—:،,]\s*(.+)$/u', $line, $m ) ) {
+				$year = $m[1];
+				$line = trim( $m[2] );
+			}
+			$out[] = array( 'year' => $year, 'title' => $line );
+			if ( count( $out ) >= 60 ) {
+				break;
+			}
+		}
+		return $out;
+	}
+
+	/** Visitors only see published galleries; editors may preview drafts. */
+	public static function can_view( $id ) {
+		$status = get_post_status( $id );
+		if ( 'publish' === $status && ! post_password_required( $id ) ) {
+			return true;
+		}
+		return function_exists( 'current_user_can' ) && current_user_can( 'edit_post', $id );
 	}
 
 	private static function has_hours( $g ) {
@@ -207,7 +299,7 @@ final class Artiey_AET_Gallery {
 	/* Section renderers                                                 */
 	/* ---------------------------------------------------------------- */
 
-	private static function s_header( $g, $show_title ) {
+	private static function s_header( $g, $show_title, $extras = array() ) {
 		$id    = $g['id'];
 		$cover = $g['cover'] ? wp_get_attachment_image( $g['cover'], 'large', false, array( 'class' => 'aetp-cover', 'alt' => '', 'loading' => 'lazy' ) ) : '';
 
@@ -240,8 +332,28 @@ final class Artiey_AET_Gallery {
 			$h .= '<div class="aetp-meta">' . implode( ' <span class="aetp-dot">·</span> ', $meta ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 		$h .= self::badge( $g );
-		$h .= '</div></div></header>';
+		$h .= '</div>';
+		if ( self::flag( $extras, 'header_show_follow', true ) ) {
+			$h .= self::follow_button( $id, array( 'size' => 'md' ) );
+		}
+		$h .= '</div></header>';
 		return $h;
+	}
+
+	/** Read a yes/no option from widget settings / shortcode extras. */
+	private static function flag( $extras, $key, $default ) {
+		if ( ! is_array( $extras ) || ! array_key_exists( $key, $extras ) ) {
+			return (bool) $default;
+		}
+		return in_array( $extras[ $key ], array( 'yes', '1', 1, true, 'true', 'on' ), true );
+	}
+
+	private static function follow_button( $post_id, $options = array() ) {
+		if ( ! class_exists( '\\WPArtCOA\\Follows' ) ) {
+			return '';
+		}
+		$subject = \WPArtCOA\Follows::subject_for_post( (int) $post_id );
+		return $subject ? '<div class="aetp-hero-follow">' . \WPArtCOA\Follows::button_html( $subject[0], (int) $subject[1], $options ) . '</div>' : '';
 	}
 
 	private static function s_short_bio( $g ) {
@@ -390,10 +502,11 @@ final class Artiey_AET_Gallery {
 			$lng  = (float) $g['lng'];
 			$bbox = sprintf( '%.6F,%.6F,%.6F,%.6F', $lng - 0.004, $lat - 0.0025, $lng + 0.004, $lat + 0.0025 );
 			$src  = 'https://www.openstreetmap.org/export/embed.html?bbox=' . rawurlencode( $bbox ) . '&layer=mapnik&marker=' . rawurlencode( sprintf( '%.6F,%.6F', $lat, $lng ) );
-			$h   .= '<div class="aetp-map-frame"><iframe src="' . esc_url( $src ) . '" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" title="نقشه ' . esc_attr( $g['name'] ) . '" referrerpolicy="no-referrer-when-downgrade"></iframe></div>';
+			$h   .= '<div class="aetp-map-frame"><iframe src="' . esc_url( $src ) . '" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" title="نقشه ' . esc_attr( $g['name'] ) . '"></iframe></div>';
 			$h   .= '<div class="aetp-social">';
-			$h   .= '<a class="aetp-pill" href="' . esc_url( self::map_link( $g ) ) . '" target="_blank" rel="noopener">باز کردن در گوگل‌مپ</a>';
-			$h   .= '<a class="aetp-pill" href="' . esc_url( 'https://waze.com/ul?ll=' . rawurlencode( $lat . ',' . $lng ) . '&navigate=yes' ) . '" target="_blank" rel="noopener">مسیریابی با Waze</a>';
+			$h   .= '<a class="aetp-pill" href="' . esc_url( self::map_link( $g ) ) . '" target="_blank" rel="noopener noreferrer">باز کردن در گوگل‌مپ</a>';
+			$h   .= '<a class="aetp-pill" href="' . esc_url( 'https://waze.com/ul?ll=' . rawurlencode( $lat . ',' . $lng ) . '&navigate=yes' ) . '" target="_blank" rel="noopener noreferrer">مسیریابی با Waze</a>';
+			$h   .= '<a class="aetp-pill" href="' . esc_url( 'https://neshan.org/maps/@' . rawurlencode( $lat . ',' . $lng ) . ',16z' ) . '" target="_blank" rel="noopener noreferrer">مسیریابی با نشان</a>';
 			$h   .= '</div>';
 		}
 		return $h . '</section>';
@@ -416,12 +529,13 @@ final class Artiey_AET_Gallery {
 		self::prime_post_caches( $g['photos'] );
 		$h = '<section class="aetp-sec aetp-photos"><h3>تصاویر گالری</h3><div class="aetp-photo-grid">';
 		foreach ( $g['photos'] as $pid ) {
-			$img = wp_get_attachment_image( $pid, 'medium_large', false, array( 'loading' => 'lazy' ) );
+			$alt = trim( (string) get_post_meta( $pid, '_wp_attachment_image_alt', true ) );
+			$img = wp_get_attachment_image( $pid, 'medium_large', false, array( 'loading' => 'lazy', 'decoding' => 'async', 'alt' => '' !== $alt ? $alt : sprintf( 'فضای %s', $g['name'] ) ) );
 			if ( ! $img ) {
 				continue;
 			}
 			$full = wp_get_attachment_url( $pid );
-			$h   .= '<a href="' . esc_url( $full ) . '" target="_blank" rel="noopener">' . $img . '</a>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			$h   .= '<a href="' . esc_url( $full ) . '" target="_blank" rel="noopener" data-art-lightbox="gallery-' . (int) $g['id'] . '">' . $img . '</a>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 		return $h . '</div></section>';
 	}
@@ -756,6 +870,192 @@ final class Artiey_AET_Gallery {
 		return self::related_section( 'auctions', 'حراج‌های مرتبط با آثار گالری', $items, 'auction', $extras );
 	}
 
+	/* ---------------------------------------------------------------- */
+	/* Statement, critics, press, awards, team, followers, open calls   */
+	/* ---------------------------------------------------------------- */
+
+	private static function initial( $name ) {
+		$name = trim( (string) $name );
+		return '' === $name ? '؟' : ( function_exists( 'mb_substr' ) ? mb_substr( $name, 0, 1 ) : substr( $name, 0, 1 ) );
+	}
+
+	private static function person_media( $attachment_id, $name, $size = 'thumbnail' ) {
+		$attachment_id = absint( $attachment_id );
+		$img           = $attachment_id ? wp_get_attachment_image( $attachment_id, $size, false, array( 'alt' => '', 'loading' => 'lazy', 'decoding' => 'async' ) ) : '';
+		return '<span class="aetp-person-media" aria-hidden="true">' . ( $img ? $img : '<span>' . esc_html( self::initial( $name ) ) . '</span>' ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+
+	private static function safe_link( $url ) {
+		$url = esc_url_raw( trim( (string) $url ) );
+		return preg_match( '#^https?://#i', $url ) ? $url : '';
+	}
+
+	private static function s_statement( $g, $extras = array() ) {
+		$text = trim( (string) $g['statement'] );
+		if ( '' === $text ) {
+			return '';
+		}
+		$style = isset( $extras['statement_style'] ) && in_array( $extras['statement_style'], array( 'quote', 'plain', 'highlight' ), true ) ? $extras['statement_style'] : 'quote';
+		$body  = wp_kses_post( wpautop( Artiey_AET_Profile_Guard::clean_markup( $text ) ) );
+		$h     = '<section class="aetp-sec aetp-statement aetp-statement--' . esc_attr( $style ) . '"><h3>' . esc_html( trim( (string) ( $extras['statement_heading'] ?? '' ) ) ?: 'بیانیه گالری' ) . '</h3>';
+		$h    .= 'plain' === $style ? '<div class="aetp-statement-text">' . $body . '</div>' : '<blockquote class="aetp-statement-text">' . $body . '</blockquote>';
+		$sign  = array_filter( array( $g['statement_author'], $g['statement_role'] ) );
+		if ( $sign ) {
+			$h .= '<p class="aetp-statement-sign"><span aria-hidden="true">— </span>' . esc_html( implode( '، ', $sign ) ) . '</p>';
+		}
+		return $h . '</section>';
+	}
+
+	private static function s_critics( $g, $extras = array() ) {
+		$items = $g['critics'];
+		$limit = isset( $extras['critics_limit'] ) ? max( 1, min( self::MAX_CRITICS, absint( $extras['critics_limit'] ) ?: 6 ) ) : 6;
+		$items = array_values( array_filter( $items, static function ( $c ) {
+			return '' !== trim( $c['text'] ) && '' !== trim( $c['name'] );
+		} ) );
+		if ( ! $items ) {
+			return '';
+		}
+		$total  = count( $items );
+		$items  = array_slice( $items, 0, $limit );
+		$layout = isset( $extras['critics_layout'] ) && in_array( $extras['critics_layout'], array( 'cards', 'quotes', 'slider' ), true ) ? $extras['critics_layout'] : 'cards';
+		$words  = isset( $extras['critics_words'] ) ? max( 15, min( 400, absint( $extras['critics_words'] ) ) ) : 70;
+		$heading = trim( (string) ( $extras['critics_heading'] ?? '' ) ) ?: 'نقد و نظر منتقدان';
+
+		$h  = '<section class="aetp-sec aetp-critics aetp-critics--' . esc_attr( $layout ) . '"><div class="aetp-related-heading"><h3>' . esc_html( $heading ) . '</h3><span class="aetp-related-count">' . esc_html( self::fa( $total ) ) . '</span></div>';
+		$h .= '<div class="aetp-critics-list"' . ( 'slider' === $layout ? ' tabindex="0" role="region" aria-label="' . esc_attr( $heading ) . '"' : '' ) . '>';
+		foreach ( $items as $c ) {
+			$url   = self::safe_link( $c['url'] );
+			$text  = trim( wp_strip_all_tags( $c['text'] ) );
+			$list  = preg_split( '/\s+/u', $text ) ?: array();
+			$short = count( $list ) > $words ? implode( ' ', array_slice( $list, 0, $words ) ) . '…' : '';
+			$h    .= '<figure class="aetp-critic">';
+			$h    .= '<blockquote class="aetp-critic-text"' . ( $url ? ' cite="' . esc_url( $url ) . '"' : '' ) . '>';
+			if ( '' !== $short ) {
+				$h .= '<p>' . esc_html( $short ) . '</p><details class="aetp-critic-more"><summary>متن کامل نقد</summary>' . wpautop( esc_html( $text ) ) . '</details>';
+			} else {
+				$h .= wpautop( esc_html( $text ) );
+			}
+			$h .= '</blockquote><figcaption class="aetp-critic-by">' . self::person_media( $c['photo'], $c['name'] );
+			$h .= '<span class="aetp-critic-meta"><strong>' . esc_html( $c['name'] ) . '</strong>';
+			$sub = array_filter( array( $c['role'], $c['source'], '' !== $c['date'] ? self::fa( $c['date'] ) : '' ) );
+			if ( $sub ) {
+				$h .= '<small>' . esc_html( implode( ' · ', $sub ) ) . '</small>';
+			}
+			if ( $url ) {
+				$h .= '<a class="aetp-critic-source" href="' . esc_url( $url ) . '" target="_blank" rel="noopener noreferrer">مشاهده منبع</a>';
+			}
+			$h .= '</span></figcaption></figure>';
+		}
+		return $h . '</div></section>';
+	}
+
+	private static function s_awards( $g ) {
+		$lines = self::award_lines( $g['awards'] );
+		if ( ! $lines ) {
+			return '';
+		}
+		$h = '<section class="aetp-sec aetp-awards"><h3>جوایز و افتخارات</h3><ol class="aetp-award-list">';
+		foreach ( $lines as $line ) {
+			$h .= '<li>' . ( '' !== $line['year'] ? '<span class="aetp-award-year">' . esc_html( self::fa( $line['year'] ) ) . '</span>' : '' ) . '<span class="aetp-award-title">' . esc_html( $line['title'] ) . '</span></li>';
+		}
+		return $h . '</ol></section>';
+	}
+
+	private static function s_team( $g ) {
+		$team = array_values( array_filter( $g['team'], static function ( $m ) {
+			return '' !== trim( $m['name'] );
+		} ) );
+		if ( ! $team ) {
+			return '';
+		}
+		$h = '<section class="aetp-sec aetp-team"><h3>تیم گالری</h3><ul class="aetp-team-grid">';
+		foreach ( $team as $m ) {
+			$url   = self::safe_link( $m['url'] );
+			$inner = self::person_media( $m['photo'], $m['name'], 'medium' ) . '<span class="aetp-team-name">' . esc_html( $m['name'] ) . '</span>' . ( '' !== $m['role'] ? '<span class="aetp-team-role">' . esc_html( $m['role'] ) . '</span>' : '' );
+			$h    .= '<li class="aetp-team-member">' . ( $url ? '<a href="' . esc_url( $url ) . '" target="_blank" rel="noopener noreferrer">' . $inner . '</a>' : $inner ) . '</li>';
+		}
+		return $h . '</ul></section>';
+	}
+
+	private static function s_press( $g, $extras = array() ) {
+		$items = array_values( array_filter( $g['press'], static function ( $p ) {
+			return '' !== trim( $p['title'] );
+		} ) );
+		if ( ! $items ) {
+			return '';
+		}
+		$limit = isset( $extras['press_limit'] ) ? max( 1, min( self::MAX_PRESS, absint( $extras['press_limit'] ) ?: 10 ) ) : 10;
+		$h     = '<section class="aetp-sec aetp-press"><div class="aetp-related-heading"><h3>بازتاب رسانه‌ای</h3><span class="aetp-related-count">' . esc_html( self::fa( count( $items ) ) ) . '</span></div><ul class="aetp-press-list">';
+		foreach ( array_slice( $items, 0, $limit ) as $p ) {
+			$url   = self::safe_link( $p['url'] );
+			$title = esc_html( $p['title'] );
+			$h    .= '<li class="aetp-press-item">';
+			if ( '' !== $p['outlet'] ) {
+				$h .= '<span class="aetp-press-outlet">' . esc_html( $p['outlet'] ) . '</span>';
+			}
+			$h .= '<span class="aetp-press-title">' . ( $url ? '<a href="' . esc_url( $url ) . '" target="_blank" rel="noopener noreferrer">' . $title . '</a>' : $title ) . '</span>';
+			if ( '' !== $p['excerpt'] ) {
+				$h .= '<span class="aetp-press-excerpt">' . esc_html( $p['excerpt'] ) . '</span>';
+			}
+			if ( '' !== $p['date'] ) {
+				$h .= '<span class="aetp-press-date">' . esc_html( self::fa( $p['date'] ) ) . '</span>';
+			}
+			$h .= '</li>';
+		}
+		return $h . '</ul></section>';
+	}
+
+	private static function s_follow( $g, $extras = array() ) {
+		if ( ! class_exists( '\\WPArtCOA\\Follows' ) ) {
+			return '';
+		}
+		$subject = \WPArtCOA\Follows::subject_for_post( (int) $g['id'] );
+		if ( ! $subject ) {
+			return '';
+		}
+		$panel = \WPArtCOA\Follows::followers_html( $subject[0], (int) $subject[1], array(
+			'avatars'        => isset( $extras['followers_avatars'] ) ? absint( $extras['followers_avatars'] ) : 10,
+			'show_following' => false,
+			'show_button'    => ! self::flag( $extras, 'header_show_follow', true ) || ! empty( $extras['follow_section_button'] ),
+			'layout'         => 'minimal',
+		) );
+		return '' === $panel ? '' : '<section class="aetp-sec aetp-follow-sec"><h3>دنبال‌کنندگان گالری</h3>' . $panel . '</section>';
+	}
+
+	/** Open calls published by this gallery (Art COA open calls joined through the mirrored gallery row). */
+	private static function s_calls( $g, $extras = array() ) {
+		$gallery_row = self::coa_gallery_id( $g['id'] );
+		if ( ! $gallery_row || ! class_exists( '\\WPArtCOA\\Calls' ) ) {
+			return '';
+		}
+		$table = self::art_table( 'open_calls' );
+		if ( ! $table ) {
+			return '';
+		}
+		$limit = self::related_limit( $extras );
+		$rows  = self::related_rows( 'calls-' . $gallery_row . '-' . gmdate( 'YmdH' ), static function () use ( $table, $gallery_row ) {
+			global $wpdb;
+			return $wpdb->get_results( $wpdb->prepare( // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				"SELECT id, slug, title, call_type, deadline_utc, city, location, cover_url FROM `{$table}` WHERE gallery_id = %d AND status = 'open' AND (deadline_utc IS NULL OR deadline_utc >= %s) ORDER BY is_featured DESC, deadline_utc ASC LIMIT 24",
+				$gallery_row,
+				gmdate( 'Y-m-d H:i:s' )
+			) ) ?: array();
+		}, 300 );
+		$items = array();
+		foreach ( array_slice( $rows, 0, $limit ) as $row ) {
+			$days    = \WPArtCOA\Calls::days_left( (string) ( $row->deadline_utc ?? '' ) );
+			$items[] = array(
+				'title' => (string) $row->title,
+				'url'   => \WPArtCOA\Calls::url( $row ),
+				'image' => (string) ( $row->cover_url ?? '' ),
+				'sub'   => \WPArtCOA\Calls::type_label( (string) $row->call_type ) . ( ! empty( $row->deadline_utc ) ? ' • مهلت: ' . \WPArtCOA\Dates::format( (string) $row->deadline_utc ) : '' ),
+				'meta'  => (string) ( $row->city ?: $row->location ),
+				'badge' => null === $days ? 'باز' : ( 0 === $days ? 'آخرین روز' : self::fa( $days ) . ' روز مانده' ),
+			);
+		}
+		return self::related_section( 'calls', 'فراخوان‌های باز گالری', $items, 'call', $extras );
+	}
+
 	private static function s_exhibitions( $g ) {
 		return Artiey_AET_Exhibition::render_groups(
 			Artiey_AET_Exhibition::for_gallery( $g['id'] ),
@@ -784,19 +1084,25 @@ final class Artiey_AET_Gallery {
 		if ( ! is_array( $sections ) ) {
 			return $sections;
 		}
-		$legacy_defaults = array( 'header', 'short_bio', 'bio', 'details', 'contact', 'hours', 'map', 'photos', 'artists', 'exhibitions', 'past_exhibitions' );
+		$legacy_sets = array(
+			array( 'header', 'short_bio', 'bio', 'details', 'contact', 'hours', 'map', 'photos', 'artists', 'exhibitions', 'past_exhibitions' ),
+			array( 'header', 'short_bio', 'bio', 'details', 'contact', 'hours', 'map', 'photos', 'artists', 'curators', 'collectors', 'auctions', 'exhibitions', 'past_exhibitions' ),
+		);
 		$selected = array_values( array_intersect( self::ALL_SECTIONS, $sections ) );
-		if ( count( $selected ) === count( $legacy_defaults ) && empty( array_diff( $legacy_defaults, $selected ) ) ) {
-			return self::ALL_SECTIONS;
+		foreach ( $legacy_sets as $legacy_defaults ) {
+			if ( count( $selected ) === count( $legacy_defaults ) && empty( array_diff( $legacy_defaults, $selected ) ) ) {
+				return self::ALL_SECTIONS;
+			}
 		}
 		return $selected;
 	}
 
 	public static function render_profile( $id, $sections = null, $show_title = true, $extras = array() ) {
 		$id = (int) $id;
-		if ( ! $id || 'artiey_gallery' !== get_post_type( $id ) ) {
+		if ( ! $id || 'artiey_gallery' !== get_post_type( $id ) || ! self::can_view( $id ) ) {
 			return '';
 		}
+		$extras   = is_array( $extras ) ? $extras : array();
 		$sections = is_array( $sections ) ? array_values( array_intersect( self::ALL_SECTIONS, $sections ) ) : self::ALL_SECTIONS;
 		if ( ! $sections ) {
 			return '';
@@ -811,13 +1117,34 @@ final class Artiey_AET_Gallery {
 			}
 			switch ( $key ) {
 				case 'header':
-					$html .= self::s_header( $g, $show_title );
+					$html .= self::s_header( $g, $show_title, $extras );
 					break;
 				case 'short_bio':
 					$html .= self::s_short_bio( $g );
 					break;
+				case 'statement':
+					$html .= self::s_statement( $g, $extras );
+					break;
 				case 'bio':
 					$html .= self::s_bio( $g );
+					break;
+				case 'critics':
+					$html .= self::s_critics( $g, $extras );
+					break;
+				case 'awards':
+					$html .= self::s_awards( $g );
+					break;
+				case 'team':
+					$html .= self::s_team( $g );
+					break;
+				case 'press':
+					$html .= self::s_press( $g, $extras );
+					break;
+				case 'follow':
+					$html .= self::s_follow( $g, $extras );
+					break;
+				case 'calls':
+					$html .= self::s_calls( $g, $extras );
 					break;
 				case 'details':
 					$html .= self::s_details( $g );
@@ -870,8 +1197,8 @@ final class Artiey_AET_Gallery {
 		$wanted = (array) Artiey_AET_Settings::get( 'profile_sections' );
 		$id     = get_the_ID();
 
-		$before = array_values( array_intersect( array( 'header', 'short_bio' ), $wanted ) );
-		$after  = array_values( array_intersect( array( 'details', 'contact', 'hours', 'map', 'photos', 'artists', 'exhibitions', 'past_exhibitions' ), $wanted ) );
+		$before = array_values( array_intersect( array( 'header', 'short_bio', 'statement' ), $wanted ) );
+		$after  = array_values( array_intersect( array( 'critics', 'details', 'awards', 'team', 'contact', 'hours', 'map', 'photos', 'press', 'follow', 'artists', 'curators', 'collectors', 'auctions', 'calls', 'exhibitions', 'past_exhibitions' ), $wanted ) );
 
 		$out = '';
 		if ( $before ) {
@@ -891,9 +1218,13 @@ final class Artiey_AET_Gallery {
 	public static function shortcode_profile( $atts ) {
 		$atts = shortcode_atts(
 			array(
-				'id'         => 0,
-				'sections'   => '',
-				'show_title' => 'yes',
+				'id'              => 0,
+				'sections'        => '',
+				'show_title'      => 'yes',
+				'critics_layout'  => 'cards',
+				'critics_limit'   => 6,
+				'statement_style' => 'quote',
+				'follow'          => 'yes',
 			),
 			(array) $atts,
 			'artiey_gallery_profile'
@@ -907,7 +1238,12 @@ final class Artiey_AET_Gallery {
 			$sections = array_intersect( self::ALL_SECTIONS, array_map( 'trim', explode( ',', (string) $atts['sections'] ) ) );
 		}
 		Artiey_AET_Profile_Guard::mark( $id );
-		return self::render_profile( $id, $sections, 'no' !== $atts['show_title'] );
+		return self::render_profile( $id, $sections, 'no' !== $atts['show_title'], array(
+			'critics_layout'     => sanitize_key( (string) $atts['critics_layout'] ),
+			'critics_limit'      => absint( $atts['critics_limit'] ),
+			'statement_style'    => sanitize_key( (string) $atts['statement_style'] ),
+			'header_show_follow' => 'no' !== $atts['follow'] ? 'yes' : '',
+		) );
 	}
 
 	public static function shortcode_field( $atts ) {
@@ -921,7 +1257,7 @@ final class Artiey_AET_Gallery {
 			'artiey_gallery_field'
 		);
 		$id = absint( $atts['id'] ) ? absint( $atts['id'] ) : (int) get_the_ID();
-		if ( ! $id || 'artiey_gallery' !== get_post_type( $id ) ) {
+		if ( ! $id || 'artiey_gallery' !== get_post_type( $id ) || ! self::can_view( $id ) ) {
 			return '';
 		}
 		$g    = self::get( $id );
@@ -976,6 +1312,18 @@ final class Artiey_AET_Gallery {
 				return esc_html( $st['label'] );
 			case 'map_link':
 				return esc_url( self::map_link( $g ) );
+			case 'statement':
+				return wp_kses_post( wpautop( $g['statement'] ) );
+			case 'statement_author':
+				return esc_html( $g['statement_author'] );
+			case 'followers':
+				if ( ! class_exists( '\\WPArtCOA\\Follows' ) ) {
+					return '';
+				}
+				$subject = \WPArtCOA\Follows::subject_for_post( $id );
+				return $subject ? esc_html( \WPArtCOA\Follows::compact_number( \WPArtCOA\Follows::count( $subject[0], (int) $subject[1] ) ) ) : '';
+			case 'critics_count':
+				return esc_html( self::fa( count( $g['critics'] ) ) );
 			case 'styles':
 				$terms = get_the_terms( $id, 'artiey_style' );
 				if ( ! $terms || is_wp_error( $terms ) ) {

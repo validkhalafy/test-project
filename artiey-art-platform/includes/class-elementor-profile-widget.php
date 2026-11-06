@@ -41,7 +41,7 @@ class Artiey_AET_Elementor_Profile_Widget extends Widget_Base {
 		$this->start_controls_section( 'section_content', array( 'label' => 'منبع و چیدمان گالری', 'tab' => Controls_Manager::TAB_CONTENT ) );
 
 		$this->add_control( 'profile_layout', array( 'label' => 'چیدمان بخش‌ها', 'type' => Controls_Manager::SELECT, 'options' => array( 'stacked' => 'پشت سر هم', 'tabs' => 'تب‌دار (هر بخش در تب مستقل)', ), 'default' => 'stacked', 'description' => 'در حالت تب‌دار، هر بخش فعال و دارای اطلاعات در تب مستقل قرار می‌گیرد.' ) );
-		Artiey_AET_Tabs::register_behavior_controls( $this, 'profile_layout', 'tabs', array( 'header' => 'سربرگ', 'short_bio' => 'بیوگرافی کوتاه', 'bio' => 'بیوگرافی کامل', 'details' => 'مشخصات', 'contact' => 'راه‌های ارتباطی', 'hours' => 'ساعات کاری', 'map' => 'آدرس و نقشه', 'photos' => 'تصاویر گالری', 'artists' => 'هنرمندان مرتبط', 'curators' => 'کیوریتورها', 'collectors' => 'مجموعه‌داران عمومی', 'auctions' => 'حراج‌ها', 'exhibitions' => 'نمایشگاه‌های جاری', 'past_exhibitions' => 'نمایشگاه‌های گذشته' ) );
+		Artiey_AET_Tabs::register_behavior_controls( $this, 'profile_layout', 'tabs', self::tab_labels() );
 		$this->aet_source_control( 'gallery', 'artiey_gallery', 'گالری', 'گالری جاری (در قالب تک‌گالری)' );
 		$this->add_control( 'gallery_header_style', array( 'label' => 'سبک سربرگ گالری', 'type' => Controls_Manager::SELECT, 'options' => array( 'classic' => 'کلاسیک', 'editorial' => 'مجله‌ای', 'centered' => 'متمرکز', 'compact' => 'فشرده' ), 'default' => 'classic', 'prefix_class' => 'aetp-gallery-header-' ) );
 		$this->end_controls_section();
@@ -54,26 +54,24 @@ class Artiey_AET_Elementor_Profile_Widget extends Widget_Base {
 				'type'        => Controls_Manager::SELECT2,
 				'multiple'    => true,
 				'label_block' => true,
-				'options'     => array(
-					'header'      => 'سربرگ (کاور، لوگو، نام‌ها، وضعیت)',
-					'short_bio'   => 'بیوگرافی کوتاه',
-					'bio'         => 'بیوگرافی کامل',
-					'details'     => 'مشخصات',
-					'contact'     => 'راه‌های ارتباطی',
-					'hours'       => 'ساعات کاری',
-					'map'         => 'آدرس و نقشه',
-					'photos'      => 'تصاویر گالری',
-					'artists'     => 'هنرمندان مرتبط',
-					'curators'     => 'کیوریتورهای همکار',
-					'collectors'   => 'مجموعه‌داران عمومی مرتبط',
-					'auctions'     => 'حراج‌ها و لات‌های مرتبط',
-					'exhibitions' => 'نمایشگاه‌های جاری و پیش‌رو',
-					'past_exhibitions' => 'پوستر نمایشگاه‌های برگزارشده',
-				),
-				'default'     => array( 'header', 'short_bio', 'bio', 'details', 'contact', 'hours', 'map', 'photos', 'artists', 'curators', 'collectors', 'auctions', 'exhibitions', 'past_exhibitions' ),
+				'options'     => Artiey_AET_Gallery::SECTION_LABELS,
+				'default'     => Artiey_AET_Gallery::ALL_SECTIONS,
+				'description' => 'بخش‌های بدون اطلاعات به‌صورت خودکار پنهان می‌شوند؛ بنابراین می‌توانید همه را فعال نگه دارید.',
 			)
 		);
+		$this->add_control( 'header_show_follow', array( 'label' => 'دکمه دنبال کردن در سربرگ', 'type' => Controls_Manager::SWITCHER, 'return_value' => 'yes', 'default' => 'yes' ) );
 
+		$this->end_controls_section();
+
+		$this->start_controls_section( 'gallery_content_statement', array( 'label' => 'بیانیه، منتقدان و رسانه', 'tab' => Controls_Manager::TAB_CONTENT ) );
+		$this->add_control( 'statement_style', array( 'label' => 'سبک بیانیه', 'type' => Controls_Manager::SELECT, 'default' => 'quote', 'options' => array( 'quote' => 'نقل‌قول برجسته', 'highlight' => 'کادر رنگی', 'plain' => 'متن ساده' ) ) );
+		$this->add_control( 'statement_heading', array( 'label' => 'عنوان بخش بیانیه', 'type' => Controls_Manager::TEXT, 'placeholder' => 'بیانیه گالری', 'dynamic' => array( 'active' => true ) ) );
+		$this->add_control( 'critics_layout', array( 'label' => 'چیدمان نقدها', 'type' => Controls_Manager::SELECT, 'default' => 'cards', 'options' => array( 'cards' => 'کارت‌های شبکه‌ای', 'quotes' => 'نقل‌قول‌های پشت سر هم', 'slider' => 'اسلایدر لمسی' ) ) );
+		$this->add_control( 'critics_heading', array( 'label' => 'عنوان بخش منتقدان', 'type' => Controls_Manager::TEXT, 'placeholder' => 'نقد و نظر منتقدان', 'dynamic' => array( 'active' => true ) ) );
+		$this->add_control( 'critics_limit', array( 'label' => 'حداکثر تعداد نقد', 'type' => Controls_Manager::NUMBER, 'min' => 1, 'max' => Artiey_AET_Gallery::MAX_CRITICS, 'default' => 6 ) );
+		$this->add_control( 'critics_words', array( 'label' => 'تعداد کلمات پیش از «متن کامل»', 'type' => Controls_Manager::NUMBER, 'min' => 15, 'max' => 400, 'default' => 70 ) );
+		$this->add_control( 'press_limit', array( 'label' => 'حداکثر مطالب رسانه‌ای', 'type' => Controls_Manager::NUMBER, 'min' => 1, 'max' => Artiey_AET_Gallery::MAX_PRESS, 'default' => 10 ) );
+		$this->add_control( 'followers_avatars', array( 'label' => 'تصویر دنبال‌کنندگان (تعداد)', 'type' => Controls_Manager::NUMBER, 'min' => 0, 'max' => 48, 'default' => 10 ) );
 		$this->end_controls_section();
 
 		$this->start_controls_section( 'gallery_content_relationships', array( 'label' => 'ارتباطات اکوسیستم هنری', 'tab' => Controls_Manager::TAB_CONTENT ) );
@@ -125,6 +123,30 @@ class Artiey_AET_Elementor_Profile_Widget extends Widget_Base {
 		$this->end_controls_section();
 
 		$this->aet_style_controls( array( 'hero' => true, 'stats' => true, 'map' => true, 'sections' => true, 'tabs' => true ) );
+
+		$this->start_controls_section( 'style_statement', array( 'label' => 'بیانیه و نقدها', 'tab' => Controls_Manager::TAB_STYLE ) );
+		$this->add_control( 'statement_bg', array( 'label' => 'پس‌زمینه بیانیه', 'type' => Controls_Manager::COLOR, 'selectors' => array( '{{WRAPPER}} .aetp-statement-text' => 'background: {{VALUE}};' ) ) );
+		$this->add_control( 'statement_color', array( 'label' => 'رنگ متن بیانیه', 'type' => Controls_Manager::COLOR, 'selectors' => array( '{{WRAPPER}} .aetp-statement-text' => 'color: {{VALUE}};' ) ) );
+		$this->add_group_control( \Elementor\Group_Control_Typography::get_type(), array( 'name' => 'statement_typo', 'label' => 'تایپوگرافی بیانیه', 'selector' => '{{WRAPPER}} .aetp-statement-text' ) );
+		$this->add_control( 'critic_bg', array( 'label' => 'پس‌زمینه کارت نقد', 'type' => Controls_Manager::COLOR, 'selectors' => array( '{{WRAPPER}} .aetp-critic' => 'background: {{VALUE}};' ) ) );
+		$this->add_control( 'critic_color', array( 'label' => 'رنگ متن نقد', 'type' => Controls_Manager::COLOR, 'selectors' => array( '{{WRAPPER}} .aetp-critic-text' => 'color: {{VALUE}};' ) ) );
+		$this->add_group_control( \Elementor\Group_Control_Typography::get_type(), array( 'name' => 'critic_typo', 'label' => 'تایپوگرافی نقد', 'selector' => '{{WRAPPER}} .aetp-critic-text' ) );
+		$this->add_group_control( \Elementor\Group_Control_Border::get_type(), array( 'name' => 'critic_border', 'selector' => '{{WRAPPER}} .aetp-critic' ) );
+		$this->add_responsive_control( 'critic_radius', array( 'label' => 'گردی گوشه کارت نقد', 'type' => Controls_Manager::SLIDER, 'size_units' => array( 'px' ), 'range' => array( 'px' => array( 'min' => 0, 'max' => 40 ) ), 'selectors' => array( '{{WRAPPER}} .aetp-critic' => 'border-radius: {{SIZE}}{{UNIT}};' ) ) );
+		$this->add_responsive_control( 'critic_columns', array( 'label' => 'حداقل عرض کارت نقد', 'type' => Controls_Manager::SLIDER, 'size_units' => array( 'px' ), 'range' => array( 'px' => array( 'min' => 180, 'max' => 600 ) ), 'selectors' => array( '{{WRAPPER}} .aetp-critics-list' => 'grid-template-columns: repeat(auto-fill, minmax({{SIZE}}{{UNIT}}, 1fr));' ) ) );
+		$this->add_control( 'critic_accent', array( 'label' => 'رنگ تأکیدی (گیومه، سال جوایز)', 'type' => Controls_Manager::COLOR, 'selectors' => array( '{{WRAPPER}} .aetp' => '--aetp-accent: {{VALUE}};' ) ) );
+		$this->end_controls_section();
+	}
+
+	/** Tab labels: short versions of the section names. */
+	public static function tab_labels() {
+		return array(
+			'header' => 'سربرگ', 'short_bio' => 'بیوگرافی کوتاه', 'statement' => 'بیانیه', 'bio' => 'بیوگرافی کامل', 'critics' => 'منتقدان',
+			'details' => 'مشخصات', 'awards' => 'جوایز', 'team' => 'تیم', 'contact' => 'راه‌های ارتباطی', 'hours' => 'ساعات کاری',
+			'map' => 'آدرس و نقشه', 'photos' => 'تصاویر گالری', 'press' => 'رسانه‌ها', 'follow' => 'دنبال‌کنندگان', 'artists' => 'هنرمندان مرتبط',
+			'curators' => 'کیوریتورها', 'collectors' => 'مجموعه‌داران عمومی', 'auctions' => 'حراج‌ها', 'calls' => 'فراخوان‌ها',
+			'exhibitions' => 'نمایشگاه‌های جاری', 'past_exhibitions' => 'نمایشگاه‌های گذشته',
+		);
 	}
 
 	protected function render() {

@@ -124,6 +124,36 @@ final class Artiey_AET_Schema {
 				'hasMap'                    => ( '' !== $g['lat'] && '' !== $g['lng'] ) ? 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode( (float) $g['lat'] . ',' . (float) $g['lng'] ) : '',
 				'additionalProperty'        => isset( array( 'physical' => 'گالری فیزیکی', 'online' => 'گالری آنلاین', 'hybrid' => 'گالری فیزیکی و آنلاین' )[ $g['venue_type'] ] ) ? array( '@type' => 'PropertyValue', 'name' => 'نوع گالری', 'value' => array( 'physical' => 'گالری فیزیکی', 'online' => 'گالری آنلاین', 'hybrid' => 'گالری فیزیکی و آنلاین' )[ $g['venue_type'] ] ) : array(),
 				'sameAs'                    => $same,
+				'slogan'                    => '' !== trim( $g['statement'] ) ? Artiey_AET_Text::substr( trim( preg_replace( '/\s+/u', ' ', wp_strip_all_tags( $g['statement'] ) ) ), 0, 300 ) : '',
+				'award'                     => array_values( array_filter( array_map( static function ( $a ) {
+					return trim( ( '' !== $a['year'] ? $a['year'] . ' — ' : '' ) . $a['title'] );
+				}, Artiey_AET_Gallery::award_lines( $g['awards'] ) ) ) ),
+				'employee'                  => array_values( array_filter( array_map( static function ( $m ) {
+					if ( '' === trim( $m['name'] ) ) {
+						return null;
+					}
+					$person = array( '@type' => 'Person', 'name' => $m['name'] );
+					if ( '' !== $m['role'] ) {
+						$person['jobTitle'] = $m['role'];
+					}
+					if ( preg_match( '#^https?://#i', (string) $m['url'] ) ) {
+						$person['url'] = $m['url'];
+					}
+					return $person;
+				}, array_slice( $g['team'], 0, 12 ) ) ) ),
+				'subjectOf'                 => array_values( array_filter( array_map( static function ( $p ) {
+					if ( '' === trim( $p['title'] ) ) {
+						return null;
+					}
+					$work = array( '@type' => 'CreativeWork', 'name' => $p['title'] );
+					if ( preg_match( '#^https?://#i', (string) $p['url'] ) ) {
+						$work['url'] = $p['url'];
+					}
+					if ( '' !== $p['outlet'] ) {
+						$work['publisher'] = array( '@type' => 'Organization', 'name' => $p['outlet'] );
+					}
+					return $work;
+				}, array_slice( $g['press'], 0, 10 ) ) ) ),
 			);
 		} elseif ( 'artiey_exhibition' === $type ) {
 			$start = get_post_meta( $id, '_ae_start', true );

@@ -85,6 +85,7 @@ class Artiey_AET_Elementor_Artist_Widget extends Widget_Base {
 		$this->add_control( 'header_show_city', array( 'label' => 'نمایش شهر در سربرگ', 'type' => Controls_Manager::SWITCHER, 'return_value' => 'yes', 'default' => 'yes', 'conditions' => $this->artist_section_conditions( array( 'header' ) ) ) );
 		$this->add_control( 'header_show_age', array( 'label' => 'نمایش سن / سال تولد در سربرگ', 'type' => Controls_Manager::SWITCHER, 'return_value' => 'yes', 'default' => 'yes', 'conditions' => $this->artist_section_conditions( array( 'header' ) ) ) );
 		$this->add_control( 'header_show_styles', array( 'label' => 'نمایش چیپ‌های سبک هنری', 'type' => Controls_Manager::SWITCHER, 'return_value' => 'yes', 'default' => 'yes', 'conditions' => $this->artist_section_conditions( array( 'header' ) ) ) );
+		$this->add_control( 'header_show_follow', array( 'label' => 'دکمه دنبال کردن و تعداد دنبال‌کنندگان', 'type' => Controls_Manager::SWITCHER, 'return_value' => 'yes', 'default' => 'yes', 'conditions' => $this->artist_section_conditions( array( 'header' ) ) ) );
 		$this->add_control( 'empty_text', array( 'label' => 'پیام وقتی داده‌ای نیست', 'type' => Controls_Manager::TEXT, 'default' => 'برای این هنرمند در بخش‌های انتخاب‌شده اطلاعاتی ثبت نشده است. هنرمند را انتخاب کنید یا ویجت را داخل قالب تک‌هنرمند قرار دهید.' ) );
 
 		$this->end_controls_section();

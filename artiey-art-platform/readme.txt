@@ -1,7 +1,7 @@
 === Artiey Art Platform (پلتفرم جامع آرتی) ===
 Requires at least: 6.2
 Requires PHP: 8.1
-Stable tag: 3.0.5
+Stable tag: 3.1.0
 
 = 2.32.32 =
 * سخت‌سازی ورودی‌های درخواست: افزودن خوانندهٔ scalar امن برای داده‌های GET/POST؛ ورودی‌های آرایه‌ای/شیء به مقدار پیش‌فرض تبدیل می‌شوند تا به TypeError در PHP 8+ و شکست درخواست منجر نشوند.
@@ -568,6 +568,13 @@ Stable tag: 3.0.5
 * پل اتصال گواهی: اتصال گالری/هنرمند به پروفایل‌های COA، صدور گواهی از روی اثر، نمایش وضعیت گواهی
 * پیشخوان یکپارچه «پلتفرم آرتی» با آمار و بررسی سلامت سیستم
 * حفاظت در برابر فعال‌بودن هم‌زمان افزونه‌های قدیمی
+
+= 3.1.0 =
+* Follow / followers for artists, galleries, curators and public collectors: live AJAX buttons that stay correct behind page caches, followers and following panels (privacy-safe), new Elementor widget and [artiey_follow] / [artiey_followers] shortcodes.
+* Professional gallery profile: statement, critics, awards, team, press, followers and open-call sections with a repeatable-rows admin editor, new Elementor controls and richer ArtGallery JSON-LD.
+* Curators: Media Library images with srcset, "current curator" and "gallery partners" widget modes, stats and follow buttons.
+* Open calls: canonical slug URLs, SEO meta + Event schema, filters/search/pagination, live countdown, spam protection, duplicate-application guard, full admin editing, application statuses and CSV export, new Elementor widget.
+* Fixed: draft galleries visible through the widget, list layout of calls, double-unslashed call data, duplicated iframe attribute, inactive artists on gallery pages, plain-text emails on public profiles.
 
 = 3.0.5 =
 * Fixed legacy-plugin detection for all bundled replacements: Artiey Exhibition Timeline, WP COA Pro, and WP Art COA Pro are now checked in both site-active and network-active plugin lists.

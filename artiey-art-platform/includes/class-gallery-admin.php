@@ -101,6 +101,110 @@ final class Artiey_AET_Gallery_Admin {
 		echo '</div>';
 	}
 
+	/**
+	 * Repeatable rows editor (add / remove / move) used for critics, press and team.
+	 * Every field is posted as aetg[{name}][{row}][{key}] and re-sanitised in save_gallery().
+	 *
+	 * @param array<int,array<string,string>> $rows
+	 * @param array<string,array<string,mixed>> $fields
+	 */
+	private static function repeater( $name, $label, $hint, $rows, $fields, $max, $add_label ) {
+		echo '<div class="aetg-field aetg-repeater" data-max="' . (int) $max . '" data-name="' . esc_attr( $name ) . '">';
+		echo '<label>' . esc_html( $label ) . ' <span class="aetg-rep-count">(' . esc_html( (string) count( $rows ) ) . '/' . (int) $max . ')</span></label>';
+		if ( $hint ) {
+			echo '<div class="aetg-hint">' . esc_html( $hint ) . '</div>';
+		}
+		echo '<div class="aetg-rep-rows">';
+		foreach ( array_values( $rows ) as $i => $row ) {
+			self::repeater_row( $name, (string) $i, $row, $fields );
+		}
+		echo '</div>';
+		echo '<template class="aetg-rep-tpl">';
+		self::repeater_row( $name, '__i__', array(), $fields );
+		echo '</template>';
+		echo '<button type="button" class="button aetg-rep-add">+ ' . esc_html( $add_label ) . '</button>';
+		echo '<input type="hidden" name="aetg[' . esc_attr( $name ) . '_present]" value="1">';
+		echo '</div>';
+	}
+
+	private static function repeater_row( $name, $index, $row, $fields ) {
+		echo '<div class="aetg-rep-row">';
+		echo '<div class="aetg-rep-tools"><span class="aetg-rep-handle" aria-hidden="true">⋮⋮</span>';
+		echo '<button type="button" class="button-link aetg-rep-up" aria-label="انتقال به بالا">▲</button>';
+		echo '<button type="button" class="button-link aetg-rep-down" aria-label="انتقال به پایین">▼</button>';
+		echo '<button type="button" class="button-link-delete aetg-rep-remove">حذف</button></div>';
+		echo '<div class="aetg-rep-fields">';
+		foreach ( $fields as $key => $f ) {
+			$field_name = 'aetg[' . $name . '][' . $index . '][' . $key . ']';
+			$value      = isset( $row[ $key ] ) ? (string) $row[ $key ] : '';
+			$type       = isset( $f['type'] ) ? $f['type'] : 'text';
+			echo '<div class="aetg-rep-field' . ( ! empty( $f['wide'] ) || 'image' === $type ? ' is-wide' : '' ) . '"><label>' . esc_html( $f['label'] );
+			if ( 'textarea' === $type ) {
+				echo '<textarea name="' . esc_attr( $field_name ) . '" rows="4">' . esc_textarea( $value ) . '</textarea>';
+			} elseif ( 'image' === $type ) {
+				$aid = absint( $value );
+				$img = $aid ? wp_get_attachment_image( $aid, 'thumbnail' ) : '';
+				echo '</label><div class="aetg-media aetg-media-inline" data-multiple="0"><div class="aetg-preview">' . $img . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo '<input type="hidden" class="aetg-media-input" name="' . esc_attr( $field_name ) . '" value="' . esc_attr( $aid ? (string) $aid : '' ) . '">';
+				echo '<button type="button" class="button button-small aetg-media-pick">انتخاب تصویر</button> <button type="button" class="button-link-delete aetg-media-clear">حذف</button></div></div>';
+				continue;
+			} else {
+				echo '<input type="' . esc_attr( in_array( $type, array( 'url', 'text' ), true ) ? $type : 'text' ) . '" name="' . esc_attr( $field_name ) . '" value="' . esc_attr( $value ) . '"'
+					. ( ! empty( $f['dir'] ) ? ' dir="' . esc_attr( $f['dir'] ) . '"' : '' )
+					. ( ! empty( $f['placeholder'] ) ? ' placeholder="' . esc_attr( $f['placeholder'] ) . '"' : '' ) . '>';
+			}
+			echo '</label></div>';
+		}
+		echo '</div></div>';
+	}
+
+	/**
+	 * Sanitise one posted repeater list.
+	 * @param array<string,string> $schema key => text|textarea|url|image
+	 * @return array<int,array<string,string|int>>
+	 */
+	public static function sanitize_rows( $raw, array $schema, $max, array $required ) {
+		$out = array();
+		foreach ( is_array( $raw ) ? $raw : array() as $index => $row ) {
+			if ( '__i__' === (string) $index || ! is_array( $row ) ) {
+				continue;
+			}
+			$clean = array();
+			foreach ( $schema as $key => $type ) {
+				$v = isset( $row[ $key ] ) && is_scalar( $row[ $key ] ) ? (string) $row[ $key ] : '';
+				switch ( $type ) {
+					case 'textarea':
+						$clean[ $key ] = Artiey_AET_Text::substr( sanitize_textarea_field( $v ), 0, 4000 );
+						break;
+					case 'url':
+						$url           = esc_url_raw( trim( $v ), array( 'http', 'https' ) );
+						$clean[ $key ] = $url ? $url : '';
+						break;
+					case 'image':
+						$aid           = absint( $v );
+						$clean[ $key ] = ( $aid && 'attachment' === get_post_type( $aid ) && wp_attachment_is_image( $aid ) ) ? $aid : '';
+						break;
+					default:
+						$clean[ $key ] = Artiey_AET_Text::substr( sanitize_text_field( $v ), 0, 200 );
+				}
+			}
+			$ok = true;
+			foreach ( $required as $req ) {
+				if ( '' === trim( (string) $clean[ $req ] ) ) {
+					$ok = false;
+				}
+			}
+			if ( ! $ok ) {
+				continue;
+			}
+			$out[] = $clean;
+			if ( count( $out ) >= (int) $max ) {
+				break;
+			}
+		}
+		return $out;
+	}
+
 	/** Searchable checkbox list of artists. */
 	public static function artist_checklist( $field_name, $selected ) {
 		$artists  = get_posts(
@@ -142,8 +246,10 @@ final class Artiey_AET_Gallery_Admin {
 		$tabs = apply_filters(
 			'artiey_ap_gallery_tabs',
 			array(
-				'identity' => 'شناسنامه',
-				'contact'  => 'تماس و شبکه‌ها',
+				'identity'  => 'شناسنامه',
+				'statement' => 'بیانیه و منتقدان',
+				'press'     => 'رسانه، جوایز و تیم',
+				'contact'   => 'تماس و شبکه‌ها',
 				'location' => 'آدرس و نقشه',
 				'hours'    => 'وضعیت و ساعات کاری',
 				'images'   => 'تصاویر',
@@ -176,6 +282,84 @@ final class Artiey_AET_Gallery_Admin {
 		echo '<textarea name="aetg[short_bio]" rows="3" maxlength="400">' . esc_textarea( self::val( $id, 'short_bio' ) ) . '</textarea>';
 		echo '<div class="aetg-hint">حداکثر ۴۰۰ حرف؛ در بالای صفحه گالری و کارت‌ها نمایش داده می‌شود.</div></div>';
 		echo '<p class="aetg-hint">سبک هنری گالری را از کادر کناری «سبک هنری» انتخاب یا اضافه کنید (چند مورد ممکن است).</p>';
+		echo '</div>';
+
+		// Statement + critics.
+		echo '<div class="aetg-panel" data-panel="statement">';
+		echo '<div class="aetg-field"><label for="aetgstatement">بیانیه گالری</label>';
+		echo '<div class="aetg-hint">مانیفست، رویکرد هنری و مأموریت گالری؛ در پروفایل به‌صورت نقل‌قول برجسته نمایش داده می‌شود.</div>';
+		if ( function_exists( 'wp_editor' ) ) {
+			wp_editor(
+				(string) self::val( $id, 'statement' ),
+				'aetgstatement',
+				array(
+					'textarea_name' => 'aetg[statement]',
+					'textarea_rows' => 8,
+					'media_buttons' => false,
+					'teeny'         => true,
+					'quicktags'     => array( 'buttons' => 'strong,em,link,ul,ol,li,close' ),
+				)
+			);
+		} else {
+			echo '<textarea id="aetgstatement" name="aetg[statement]" rows="8">' . esc_textarea( (string) self::val( $id, 'statement' ) ) . '</textarea>';
+		}
+		echo '</div><div class="aetg-row">';
+		self::text( 'statement_author', self::val( $id, 'statement_author' ), 'امضای بیانیه (نام)', array( 'placeholder' => 'مثلاً: نام مدیر هنری' ) );
+		self::text( 'statement_role', self::val( $id, 'statement_role' ), 'سمت امضاکننده', array( 'placeholder' => 'مدیر هنری گالری' ) );
+		echo '</div>';
+		self::repeater(
+			'critics',
+			'نقد و نظر منتقدان',
+			'متن نقد، نام منتقد و منبع انتشار را وارد کنید. ردیف‌ها را با دکمه‌های بالا/پایین مرتب کنید؛ ترتیب همین‌جا در سایت رعایت می‌شود.',
+			Artiey_AET_Gallery::rows( self::val( $id, 'critics' ), array( 'name', 'role', 'text', 'source', 'url', 'date', 'photo' ), Artiey_AET_Gallery::MAX_CRITICS ),
+			array(
+				'name'   => array( 'label' => 'نام منتقد *', 'type' => 'text' ),
+				'role'   => array( 'label' => 'عنوان / تخصص', 'type' => 'text', 'placeholder' => 'منتقد هنری، پژوهشگر…' ),
+				'text'   => array( 'label' => 'متن نقد *', 'type' => 'textarea', 'wide' => true ),
+				'source' => array( 'label' => 'منبع (نشریه، کتاب، سایت)', 'type' => 'text' ),
+				'url'    => array( 'label' => 'پیوند منبع', 'type' => 'url', 'dir' => 'ltr', 'placeholder' => 'https://' ),
+				'date'   => array( 'label' => 'تاریخ', 'type' => 'text', 'placeholder' => 'مهر ۱۴۰۲' ),
+				'photo'  => array( 'label' => 'تصویر منتقد', 'type' => 'image' ),
+			),
+			Artiey_AET_Gallery::MAX_CRITICS,
+			'افزودن نقد'
+		);
+		echo '</div>';
+
+		// Press, awards, team.
+		echo '<div class="aetg-panel" data-panel="press">';
+		self::repeater(
+			'press',
+			'بازتاب رسانه‌ای',
+			'گزارش‌ها، مصاحبه‌ها و مقاله‌هایی که درباره گالری منتشر شده‌اند.',
+			Artiey_AET_Gallery::rows( self::val( $id, 'press' ), array( 'title', 'outlet', 'url', 'date', 'excerpt' ), Artiey_AET_Gallery::MAX_PRESS ),
+			array(
+				'title'   => array( 'label' => 'عنوان مطلب *', 'type' => 'text', 'wide' => true ),
+				'outlet'  => array( 'label' => 'رسانه', 'type' => 'text', 'placeholder' => 'روزنامه، مجله، خبرگزاری…' ),
+				'date'    => array( 'label' => 'تاریخ', 'type' => 'text' ),
+				'url'     => array( 'label' => 'پیوند', 'type' => 'url', 'dir' => 'ltr', 'placeholder' => 'https://' ),
+				'excerpt' => array( 'label' => 'خلاصه (اختیاری)', 'type' => 'textarea', 'wide' => true ),
+			),
+			Artiey_AET_Gallery::MAX_PRESS,
+			'افزودن مطلب'
+		);
+		echo '<div class="aetg-field"><label for="aetg-awards">جوایز و افتخارات</label>';
+		echo '<textarea id="aetg-awards" name="aetg[awards]" rows="5" placeholder="۱۴۰۱ | جایزه بهترین گالری سال&#10;۱۳۹۸ - عضویت در انجمن گالری‌داران">' . esc_textarea( (string) self::val( $id, 'awards' ) ) . '</textarea>';
+		echo '<div class="aetg-hint">هر مورد در یک سطر. اگر سطر با سال شروع شود (مثلاً «۱۴۰۱ | عنوان»)، سال جداگانه و به‌صورت خط زمانی نمایش داده می‌شود.</div></div>';
+		self::repeater(
+			'team',
+			'تیم گالری',
+			'مدیر، کیوریتورهای ثابت و اعضای تیم را با سمت معرفی کنید.',
+			Artiey_AET_Gallery::rows( self::val( $id, 'team' ), array( 'name', 'role', 'photo', 'url' ), Artiey_AET_Gallery::MAX_TEAM ),
+			array(
+				'name'  => array( 'label' => 'نام *', 'type' => 'text' ),
+				'role'  => array( 'label' => 'سمت', 'type' => 'text' ),
+				'url'   => array( 'label' => 'پیوند پروفایل', 'type' => 'url', 'dir' => 'ltr', 'placeholder' => 'https://' ),
+				'photo' => array( 'label' => 'تصویر', 'type' => 'image' ),
+			),
+			Artiey_AET_Gallery::MAX_TEAM,
+			'افزودن عضو'
+		);
 		echo '</div>';
 
 		// Contact.
@@ -255,7 +439,7 @@ final class Artiey_AET_Gallery_Admin {
 
 		// Extension panels (e.g. certificates from the COA bridge).
 		foreach ( $tabs as $key => $label ) {
-			if ( in_array( $key, array( 'identity', 'contact', 'location', 'hours', 'images', 'artists', 'look' ), true ) ) {
+			if ( in_array( $key, array( 'identity', 'statement', 'press', 'contact', 'location', 'hours', 'images', 'artists', 'look' ), true ) ) {
 				continue;
 			}
 			echo '<div class="aetg-panel" data-panel="' . esc_attr( $key ) . '">';
@@ -373,6 +557,26 @@ final class Artiey_AET_Gallery_Admin {
 			}
 		}
 		update_post_meta( $post_id, '_ag_artists', $artists );
+
+		// Statement, critics, press, awards, team.
+		if ( array_key_exists( 'statement', $in ) ) {
+			$statement = is_string( $in['statement'] ) ? wp_kses_post( $in['statement'] ) : '';
+			update_post_meta( $post_id, '_ag_statement', Artiey_AET_Text::substr( $statement, 0, 12000 ) );
+			update_post_meta( $post_id, '_ag_statement_author', $text( 'statement_author' ) );
+			update_post_meta( $post_id, '_ag_statement_role', $text( 'statement_role' ) );
+		}
+		if ( ! empty( $in['critics_present'] ) ) {
+			update_post_meta( $post_id, '_ag_critics', self::sanitize_rows( $in['critics'] ?? array(), array( 'name' => 'text', 'role' => 'text', 'text' => 'textarea', 'source' => 'text', 'url' => 'url', 'date' => 'text', 'photo' => 'image' ), Artiey_AET_Gallery::MAX_CRITICS, array( 'name', 'text' ) ) );
+		}
+		if ( ! empty( $in['press_present'] ) ) {
+			update_post_meta( $post_id, '_ag_press', self::sanitize_rows( $in['press'] ?? array(), array( 'title' => 'text', 'outlet' => 'text', 'url' => 'url', 'date' => 'text', 'excerpt' => 'textarea' ), Artiey_AET_Gallery::MAX_PRESS, array( 'title' ) ) );
+		}
+		if ( ! empty( $in['team_present'] ) ) {
+			update_post_meta( $post_id, '_ag_team', self::sanitize_rows( $in['team'] ?? array(), array( 'name' => 'text', 'role' => 'text', 'url' => 'url', 'photo' => 'image' ), Artiey_AET_Gallery::MAX_TEAM, array( 'name' ) ) );
+		}
+		if ( array_key_exists( 'awards', $in ) ) {
+			update_post_meta( $post_id, '_ag_awards', is_string( $in['awards'] ) ? Artiey_AET_Text::substr( sanitize_textarea_field( $in['awards'] ), 0, 6000 ) : '' );
+		}
 
 		// Timeline colour.
 		$color = '';

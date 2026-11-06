@@ -29,3 +29,16 @@
 .aetg-media-status.is-error{color:#b32d2e;font-weight:600}
 .aetg-preview img{max-height:240px;object-fit:contain;background:#f6f7f7}
 .aetg-preview-multi img{max-height:none;background:#fff}
+/* Repeatable rows: critics, press, team */
+.aetg-repeater{border:1px solid #dcdcde;border-radius:8px;padding:12px;background:#fbfbfc}
+.aetg-rep-count{color:#646970;font-weight:400}
+.aetg-rep-rows{display:flex;flex-direction:column;gap:10px;margin:10px 0}
+.aetg-rep-row{display:flex;gap:10px;align-items:flex-start;padding:10px;border:1px solid #dcdcde;border-radius:6px;background:#fff}
+.aetg-rep-tools{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:48px}
+.aetg-rep-handle{color:#a7aaad;letter-spacing:-2px}
+.aetg-rep-fields{flex:1 1 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px 12px}
+.aetg-rep-field label{display:flex;flex-direction:column;gap:4px;font-weight:600;font-size:12px}
+.aetg-rep-field input,.aetg-rep-field textarea{width:100%;font-weight:400}
+.aetg-rep-field.is-wide{grid-column:1/-1}
+.aetg-media-inline .aetg-preview img{max-width:72px;height:auto;border-radius:50%}
+.aetg-rep-add[disabled]{opacity:.5}

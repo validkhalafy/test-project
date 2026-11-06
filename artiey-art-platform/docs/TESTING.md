@@ -8,6 +8,9 @@ Run the core suite and the focused integration regressions:
 php tests/run.php
 php tests/page-integration.php
 php tests/gallery-directory.php
+php tests/follows-gallery-calls.php   # follow/followers, gallery statement & critics, open calls (3.1)
+php tests/new-widgets.php             # structure of the follow and calls Elementor widgets
+node tests/js/follow.browser.test.js  # follow.js in Chromium (needs Playwright)
 ```
 
 `tests/bootstrap.php` stubs the few WordPress functions the pure-logic code needs (options, transients, sanitizers) and a fake `$wpdb`.

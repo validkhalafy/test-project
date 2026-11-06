@@ -36,7 +36,11 @@ class Artiey_AET_Elementor_Curator_Widget extends Widget_Base {
 	}
 
 	public function get_style_depends() {
-		return array( 'artiey-aet-curator' );
+		return array( 'artiey-aet-curator', 'artiey-follow' );
+	}
+
+	public function get_script_depends() {
+		return array( 'artiey-follow' );
 	}
 
 	protected function register_controls() {
@@ -48,7 +52,22 @@ class Artiey_AET_Elementor_Curator_Widget extends Widget_Base {
 			'label'   => 'حالت',
 			'type'    => Controls_Manager::SELECT,
 			'default' => 'list',
-			'options' => array( 'list' => 'فهرست کیوریتورها', 'single' => 'یک کیوریتور مشخص' ),
+			'options' => array(
+				'list'    => 'فهرست کیوریتورها',
+				'single'  => 'یک کیوریتور مشخص',
+				'current' => 'کیوریتور همین صفحه (قالب پروفایل کیوریتور)',
+				'gallery' => 'کیوریتورهای همکار یک گالری',
+			),
+			'description' => 'حالت «همین صفحه» در قالب المنتوری مسیر /art-coa/curator/… یا با پارامتر ‎?curator=slug‎ کار می‌کند.',
+		) );
+		$this->add_control( 'gallery_post', array(
+			'label'       => 'گالری',
+			'type'        => Controls_Manager::SELECT2,
+			'options'     => array( '' => 'گالری همین صفحه' ) + ( class_exists( 'Artiey_AET_Elementor_Options' ) ? Artiey_AET_Elementor_Options::posts( 'artiey_gallery' ) : array() ),
+			'default'     => '',
+			'label_block' => true,
+			'condition'   => array( 'mode' => 'gallery' ),
+			'description' => 'کیوریتورهایی که دست‌کم یک نمایشگاه منتشرشده در این گالری داشته‌اند.',
 		) );
 		$this->add_control( 'curator_id', array(
 			'label'       => 'کیوریتور',
@@ -66,13 +85,13 @@ class Artiey_AET_Elementor_Curator_Widget extends Widget_Base {
 			'condition'   => array( 'mode' => 'single' ),
 			'description' => 'اگر کیوریتور بالا انتخاب نشده باشد از این نامک استفاده می‌شود.',
 		) );
-		$this->add_control( 'limit', array( 'label' => 'تعداد', 'type' => Controls_Manager::NUMBER, 'min' => 1, 'max' => 48, 'default' => 6, 'condition' => array( 'mode' => 'list' ) ) );
+		$this->add_control( 'limit', array( 'label' => 'تعداد', 'type' => Controls_Manager::NUMBER, 'min' => 1, 'max' => 48, 'default' => 6, 'condition' => array( 'mode' => array( 'list', 'gallery' ) ) ) );
 		$this->add_control( 'orderby', array(
 			'label'     => 'ترتیب',
 			'type'      => Controls_Manager::SELECT,
 			'default'   => 'newest',
-			'options'   => array( 'newest' => 'جدیدترین', 'name' => 'نام (الفبایی)', 'experience' => 'بیشترین سابقه' ),
-			'condition' => array( 'mode' => 'list' ),
+			'options'   => array( 'newest' => 'جدیدترین', 'name' => 'نام (الفبایی)', 'experience' => 'بیشترین سابقه', 'random' => 'تصادفی (بدون کش)' ),
+			'condition' => array( 'mode' => array( 'list', 'gallery' ) ),
 		) );
 		$this->add_control( 'specialty', array( 'label' => 'فیلتر تخصص (متن)', 'type' => Controls_Manager::TEXT, 'condition' => array( 'mode' => 'list' ), 'description' => 'فقط کیوریتورهایی که این عبارت در تخصص یا بیوگرافی‌شان هست.' ) );
 		$this->end_controls_section();
@@ -119,6 +138,9 @@ class Artiey_AET_Elementor_Curator_Widget extends Widget_Base {
 		$this->add_control( 'bio_words', array( 'label' => 'تعداد کلمات خلاصه', 'type' => Controls_Manager::NUMBER, 'min' => 5, 'max' => 120, 'default' => 28, 'condition' => array( 'show_bio' => 'yes' ) ) );
 		$this->add_control( 'show_meta', $yes + array( 'label' => 'سابقه و زبان‌ها', 'default' => '' ) );
 		$this->add_control( 'show_social', $yes + array( 'label' => 'پیوندهای وب‌سایت و شبکه‌ها', 'default' => '', 'description' => 'ایمیل و تلفن هرگز نمایش داده نمی‌شوند.' ) );
+		$this->add_control( 'show_stats', $yes + array( 'label' => 'آمار (نمایشگاه‌ها و دنبال‌کنندگان)', 'default' => '' ) );
+		$this->add_control( 'show_follow', $yes + array( 'label' => 'دکمهٔ دنبال کردن', 'default' => 'yes', 'description' => 'دکمه بدون بارگذاری مجدد صفحه کار می‌کند و با کش صفحه سازگار است.' ) );
+		$this->add_control( 'follow_style', array( 'label' => 'سبک دکمهٔ دنبال کردن', 'type' => Controls_Manager::SELECT, 'default' => 'outline', 'options' => array( 'solid' => 'توپر', 'outline' => 'خطی', 'pill' => 'کپسولی', 'ghost' => 'کم‌رنگ' ), 'condition' => array( 'show_follow' => 'yes' ) ) );
 		$this->add_control( 'show_button', $yes + array( 'label' => 'دکمهٔ مشاهدهٔ پروفایل', 'default' => 'yes' ) );
 		$this->add_control( 'button_text', array( 'label' => 'متن دکمه', 'type' => Controls_Manager::TEXT, 'default' => 'مشاهده پروفایل', 'condition' => array( 'show_button' => 'yes' ) ) );
 		$this->end_controls_section();
@@ -194,18 +216,7 @@ class Artiey_AET_Elementor_Curator_Widget extends Widget_Base {
 			return;
 		}
 
-		$args = array( 'limit' => 'single' === ( $s['mode'] ?? 'list' ) ? 1 : (int) ( $s['limit'] ?? 6 ), 'orderby' => $s['orderby'] ?? 'newest', 'specialty' => $s['specialty'] ?? '' );
-		if ( 'single' === ( $s['mode'] ?? 'list' ) ) {
-			$args['specialty'] = '';
-			if ( ! empty( $s['curator_id'] ) ) {
-				$args['id'] = (int) $s['curator_id'];
-			} elseif ( ! empty( $s['curator_slug'] ) ) {
-				$args['slug'] = (string) $s['curator_slug'];
-			} else {
-				$args = array();
-			}
-		}
-		$rows = $args ? Artiey_AET_Curator_View::fetch( $args ) : array();
+		$rows = Artiey_AET_Curator_View::fetch_for_settings( $s );
 
 		if ( ! $rows ) {
 			$text = trim( (string) ( $s['empty_text'] ?? '' ) );
@@ -237,6 +248,9 @@ class Artiey_AET_Elementor_Curator_Widget extends Widget_Base {
 			'name_tag'     => $s['name_tag'] ?? 'h3',
 			'avatar_shape' => $s['avatar_shape'] ?? 'circle',
 			'label'        => $s['aria_label'] ?? '',
+			'follow'       => ! empty( $s['show_follow'] ),
+			'follow_style' => $s['follow_style'] ?? 'outline',
+			'stats'        => ! empty( $s['show_stats'] ),
 		) );
 
 		if ( ! empty( $s['schema'] ) && ! $edit ) {

@@ -73,7 +73,7 @@ final class Artiey_AET_Settings {
 			'highlight_today'    => 1,
 			// Gallery profile.
 			'profile_auto'       => 1,
-			'profile_sections'   => array( 'header', 'short_bio', 'details', 'contact', 'hours', 'map', 'photos', 'artists', 'exhibitions', 'past_exhibitions' ),
+			'profile_sections'   => array( 'header', 'short_bio', 'statement', 'critics', 'details', 'awards', 'team', 'contact', 'hours', 'map', 'photos', 'press', 'follow', 'artists', 'curators', 'collectors', 'auctions', 'calls', 'exhibitions', 'past_exhibitions' ),
 			'map_height'         => 320,
 			'color_accent'       => '#ff6a2b',
 			// Artists, exhibitions, directories, SEO.
@@ -128,7 +128,18 @@ final class Artiey_AET_Settings {
 				}
 				update_option( $migration_key, 1, false );
 			}
-
+			// 3.1: gallery statement, critics, press, awards, team, followers and open calls join the auto profile once.
+			$migration_310 = 'artiey_aet_profile_sections_migrated_310';
+			if ( is_array( $saved ) && ! empty( $saved['profile_sections'] ) && is_array( $saved['profile_sections'] ) && ! get_option( $migration_310, false ) ) {
+				$merged = array_values( array_unique( array_merge( (array) self::$cache['profile_sections'], array( 'statement', 'critics', 'awards', 'team', 'press', 'follow', 'calls' ) ) ) );
+				if ( $merged !== self::$cache['profile_sections'] ) {
+					self::$cache['profile_sections'] = $merged;
+					$migrated = self::$cache;
+					update_option( self::OPTION, $migrated, false );
+					self::$cache = $migrated;
+				}
+				update_option( $migration_310, 1, false );
+			}
 		}
 		return self::$cache;
 	}
@@ -249,7 +260,7 @@ final class Artiey_AET_Settings {
 		$o['sub_sep'] = ( '' === trim( $sep ) ) ? $d['sub_sep'] : ' ' . trim( $sep ) . ' ';
 
 		$secs = isset( $in['profile_sections'] ) && is_array( $in['profile_sections'] ) ? $in['profile_sections'] : array();
-		$o['profile_sections'] = array_values( array_intersect( array( 'header', 'short_bio', 'details', 'contact', 'hours', 'map', 'photos', 'artists', 'exhibitions', 'past_exhibitions' ), $secs ) );
+		$o['profile_sections'] = array_values( array_intersect( array( 'header', 'short_bio', 'statement', 'critics', 'details', 'awards', 'team', 'contact', 'hours', 'map', 'photos', 'press', 'follow', 'artists', 'curators', 'collectors', 'auctions', 'calls', 'exhibitions', 'past_exhibitions' ), $secs ) );
 
 		$asecs = isset( $in['artist_sections'] ) && is_array( $in['artist_sections'] ) ? $in['artist_sections'] : array();
 		$o['artist_sections'] = array_values( array_intersect( array( 'header', 'short_bio', 'statement', 'details', 'awards', 'career_timeline', 'contact', 'works', 'galleries', 'exhibitions', 'activity_chart', 'sales_chart', 'artwork_history' ), $asecs ) );

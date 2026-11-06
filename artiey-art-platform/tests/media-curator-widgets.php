@@ -139,7 +139,8 @@ foreach ([['Artiey_AET_Elementor_Media_Gallery_Widget', 'artiey_media_gallery'],
     $missing = [];
     foreach ($selectors as $sel) { preg_match_all('/\.(aet(?:mg|cu)[a-z0-9_-]*)/', $sel, $mm); foreach ($mm[1] as $cl) { if (!str_contains($css_all, '.' . $cl)) { $missing[$cl] = true; } } }
     ok(!$missing, "$name: every style selector targets a class that exists in the stylesheet" . ($missing ? ' (' . implode(', ', array_keys($missing)) . ')' : ''));
-    $handles = array_merge($w->get_style_depends(), method_exists($w, 'get_script_depends') ? $w->get_script_depends() : []);
+    // 'artiey-follow' is registered by the follow module (art-coa/includes/class-follows.php, covered by tests/follows.php).
+    $handles = array_diff(array_merge($w->get_style_depends(), method_exists($w, 'get_script_depends') ? $w->get_script_depends() : []), ['artiey-follow']);
     $registered = array_merge(array_keys($GLOBALS['reg']['style']), array_keys($GLOBALS['reg']['script']));
     if (!$registered) { $G::register_assets(); $C::register_assets(); $registered = array_merge(array_keys($GLOBALS['reg']['style']), array_keys($GLOBALS['reg']['script'])); }
     ok(!array_diff($handles, $registered), "$name: stylesheet/script handles it depends on are registered");

@@ -200,10 +200,10 @@ final class Profiles
                 <div>
                     <p class="art-coa-eyebrow">هنرمند</p>
                     <h1><?php echo esc_html($artist->display_name ?: ($artist->first_name . ' ' . $artist->last_name)); ?></h1>
-                    <?php if ($artist->email): ?><p class="meta">✉ <?php echo esc_html($artist->email); ?></p><?php endif; ?>
+                    <?php if ($artist->email && is_email($artist->email)): ?><p class="meta">✉ <a href="<?php echo esc_url('mailto:' . antispambot((string) $artist->email)); ?>"><?php echo esc_html(antispambot((string) $artist->email)); ?></a></p><?php endif; ?>
                     <?php if ($artist->phone): ?><p class="meta">☎ <?php echo esc_html($artist->phone); ?></p><?php endif; ?>
                     <?php if ($artist->website): ?>
-                        <p><a href="<?php echo esc_url($artist->website); ?>" target="_blank" rel="noopener"><?php echo esc_html(\WPArtCOA\I18n::t('website')); ?></a></p>
+                        <p><a href="<?php echo esc_url($artist->website); ?>" target="_blank" rel="me noopener noreferrer"><?php echo esc_html(\WPArtCOA\I18n::t('website')); ?></a></p>
                     <?php endif; ?>
                     <div class="art-coa-artist-actions">
                         <a class="button" href="<?php echo esc_url(home_url('/art-coa/shop/artist/' . $artist->slug)); ?>"><?php echo esc_html(I18n::t('shop')); ?></a>
@@ -217,6 +217,7 @@ final class Profiles
                 \WPArtCOA\I18n::t('certificates') => $stats['certs'],
                 \WPArtCOA\I18n::t('exhibitions') => $stats['exhibitions'],
             ]; if ($is_admin) { $artist_stats[\WPArtCOA\I18n::t('sales_total')] = $stats['sales']; } self::stats_bar($artist_stats); ?>
+            <?php echo \WPArtCOA\Follows::followers_html('artist', (int) $artist->id, ['avatars' => 10, 'show_button' => false, 'layout' => 'inline']); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in Follows ?>
             <?php if (apply_filters('art_coa_profile_charts', true, 'artist', $artist)) { echo \WPArtCOA\ChartKit::artist_panel($artist); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in ChartKit ?>
             <?php } ?>
             <?php echo apply_filters('art_coa_artist_bio_html', \WPArtCOA\ArtistBio::render($artist), $artist); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in ArtistBio ?>
@@ -315,13 +316,14 @@ final class Profiles
                     <h1><?php echo esc_html($display_name); ?></h1>
                     <?php if (!empty($curator->specialties)): ?><p class="art-coa-curator-specialties"><?php echo esc_html($curator->specialties); ?></p><?php endif; ?>
                     <?php if (!empty($curator->affiliation)): ?><p class="meta"><?php echo esc_html(I18n::is_fa() ? 'وابستگی سازمانی' : 'Affiliation'); ?>: <?php echo esc_html($curator->affiliation); ?></p><?php endif; ?>
-                    <?php if (!empty($curator->email)): ?><p class="meta">✉ <a href="mailto:<?php echo esc_attr($curator->email); ?>"><?php echo esc_html($curator->email); ?></a></p><?php endif; ?>
-                    <?php if (!empty($curator->phone)): ?><p class="meta">☎ <a href="tel:<?php echo esc_attr(preg_replace('/[^0-9+]/', '', $curator->phone)); ?>"><?php echo esc_html($curator->phone); ?></a></p><?php endif; ?>
+                    <?php if (!empty($curator->email) && is_email($curator->email) && apply_filters('art_coa_curator_public_contact', true, $curator)): ?><p class="meta">✉ <a href="<?php echo esc_url('mailto:' . antispambot((string) $curator->email)); ?>"><?php echo esc_html(antispambot((string) $curator->email)); ?></a></p><?php endif; ?>
+                    <?php if (!empty($curator->phone) && apply_filters('art_coa_curator_public_contact', true, $curator)): ?><p class="meta">☎ <a href="tel:<?php echo esc_attr(preg_replace('/[^0-9+]/', '', $curator->phone)); ?>"><?php echo esc_html($curator->phone); ?></a></p><?php endif; ?>
                     <div class="art-coa-curator-socials">
                         <?php foreach ($links as $service => $url): if ($url): ?>
-                            <a class="art-coa-chip" href="<?php echo esc_url($url); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html(['website' => I18n::t('website'), 'instagram_url' => 'Instagram', 'linkedin_url' => 'LinkedIn'][$service]); ?></a>
+                            <a class="art-coa-chip" href="<?php echo esc_url($url); ?>" target="_blank" rel="me noopener noreferrer"><?php echo esc_html(['website' => I18n::t('website'), 'instagram_url' => 'Instagram', 'linkedin_url' => 'LinkedIn'][$service]); ?></a>
                         <?php endif; endforeach; ?>
                     </div>
+                    <div class="art-coa-artist-actions"><?php echo \WPArtCOA\Follows::button_html('curator', (int) $curator->id); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
                 </div>
             </header>
             <?php self::stats_bar([
@@ -329,6 +331,7 @@ final class Profiles
                 (I18n::is_fa() ? 'فضاهای همکاری' : 'Partner venues') => (int) ($counts->venues ?? 0),
                 (I18n::is_fa() ? 'سابقهٔ حرفه‌ای (سال)' : 'Years of experience') => (int) ($curator->years_experience ?? 0),
             ]); ?>
+            <?php echo \WPArtCOA\Follows::followers_html('curator', (int) $curator->id, ['avatars' => 10, 'show_button' => false, 'layout' => 'inline']); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
             <?php if (!empty($curator->curatorial_statement)): ?><section class="art-coa-section"><h2><?php echo esc_html(I18n::is_fa() ? 'رویکرد کیوریتوری' : 'Curatorial statement'); ?></h2><div class="art-coa-bio"><?php echo wpautop(esc_html($curator->curatorial_statement)); ?></div></section><?php endif; ?>
             <?php if (!empty($curator->bio)): ?><section class="art-coa-section"><h2><?php echo esc_html(I18n::is_fa() ? 'دربارهٔ کیوریتور' : 'Biography'); ?></h2><div class="art-coa-bio"><?php echo wp_kses_post(wpautop(self::clean_text($curator->bio))); ?></div></section><?php endif; ?>
             <?php if (!empty($curator->education) || !empty($curator->credentials) || !empty($curator->languages)): ?>
@@ -424,8 +427,8 @@ final class Profiles
         $artists = $wpdb->get_results($wpdb->prepare(
             'SELECT DISTINCT ar.* FROM ' . Database::table('artists') . ' ar
              INNER JOIN ' . Database::table('artworks') . ' a ON a.artist_id = ar.id
-             WHERE a.gallery_id = %d ORDER BY ar.display_name ASC LIMIT 40',
-            $gallery->id
+             WHERE a.gallery_id = %d AND ar.status = \'active\'' . self::public_clause('a') . ' ORDER BY ar.display_name ASC LIMIT 40',
+            ...array_merge([(int) $gallery->id], self::public_params())
         )) ?: [];
         ?>
         <div class="art-coa-profile art-coa-gallery-profile">
@@ -435,7 +438,7 @@ final class Profiles
                 <div>
                     <p class="art-coa-eyebrow">گالری</p>
                     <h1><?php echo esc_html($gallery->name); ?></h1>
-        <div class="aap-s-1cb660"><?php echo \WPArtCOA\Follows::button_html('gallery', (int) $gallery->id); ?></div>
+                    <div class="aap-s-1cb660"><?php echo \WPArtCOA\Follows::button_html('gallery', (int) $gallery->id); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
                     <p class="meta"><?php echo esc_html(trim(($gallery->city ?: '') . ' ' . ($gallery->country ?: ''))); ?></p>
                     <?php if ($gallery->email): ?><p class="meta">✉ <?php echo esc_html($gallery->email); ?></p><?php endif; ?>
                     <?php if ($gallery->phone): ?><p class="meta">☎ <?php echo esc_html($gallery->phone); ?></p><?php endif; ?>
@@ -451,6 +454,7 @@ final class Profiles
                 \WPArtCOA\I18n::t('artists') => $stats['artists'],
                 \WPArtCOA\I18n::t('certificates') => $stats['certs'],
             ]); ?>
+            <?php echo \WPArtCOA\Follows::followers_html('gallery', (int) $gallery->id, ['avatars' => 10, 'show_button' => false, 'layout' => 'inline']); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
             <?php if (apply_filters('art_coa_profile_charts', true, 'gallery', $gallery)) { echo \WPArtCOA\ChartKit::gallery_panel($gallery); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in ChartKit ?>
             <?php } ?>
             <?php \WPArtCOA\ProfileFields::render('galleries', $gallery); ?>
@@ -642,6 +646,7 @@ final class Profiles
                     <p class="art-coa-eyebrow">مجموعه‌دار</p>
                     <h1><?php echo esc_html($col->display_name); ?></h1>
                     <?php if ($col->collection_name): ?><p class="meta"><?php echo esc_html($col->collection_name); ?></p><?php endif; ?>
+                    <div class="art-coa-artist-actions"><?php echo \WPArtCOA\Follows::button_html('collector', (int) $col->id); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
                 </div>
             </header>
             <?php $collector_stats = ['آثار مجموعه' => $stats['artworks'], 'گواهی‌های فعال' => $stats['certificates']]; if (current_user_can('manage_options')) { $collector_stats['خرید / انتقال'] = $stats['acquisitions']; } self::stats_bar($collector_stats); ?>

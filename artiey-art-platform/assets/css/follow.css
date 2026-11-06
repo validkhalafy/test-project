@@ -1,0 +1,65 @@
+/* Artiey follow buttons + followers panel. Tokens follow the shared design system (Appearance settings). */
+.aet-follow{--aetf-p:var(--aap-primary,var(--art-coa-primary,#1a365d));--aetf-a:var(--aap-secondary,var(--art-coa-accent,#c9a227));--aetf-r:999px;--aetf-fg:#fff;--aetf-on-bg:transparent;--aetf-on-fg:var(--aetf-p);display:inline-flex;align-items:center;flex-wrap:wrap;gap:10px;vertical-align:middle;line-height:1.4}
+.aet-follow *,.aet-follow *::before,.aet-follow *::after{box-sizing:border-box}
+.aet-follow-form{display:inline;margin:0;padding:0}
+.aet-follow-btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:8px 18px;border:2px solid var(--aetf-p);border-radius:var(--aetf-r);background:var(--aetf-p);color:var(--aetf-fg);font:inherit;font-weight:600;font-size:.95em;line-height:1.2;text-decoration:none;cursor:pointer;transition:background-color .18s ease,color .18s ease,border-color .18s ease,transform .18s ease,box-shadow .18s ease;-webkit-tap-highlight-color:transparent}
+.aet-follow-btn:hover{transform:translateY(-1px);box-shadow:0 6px 16px color-mix(in srgb,var(--aetf-p) 28%,transparent);color:var(--aetf-fg)}
+.aet-follow-btn:focus-visible{outline:3px solid var(--aetf-a);outline-offset:2px}
+.aet-follow-btn.is-following{background:var(--aetf-on-bg);color:var(--aetf-on-fg)}
+.aet-follow-btn.is-following:hover,.aet-follow-btn.is-following:focus-visible{border-color:#b42318;color:#b42318;background:color-mix(in srgb,#b42318 8%,transparent);box-shadow:none}
+.aet-follow-btn.is-own{cursor:default;opacity:.75;background:transparent;color:var(--aetf-p)}
+.aet-follow-btn.is-own:hover{transform:none;box-shadow:none}
+.aet-follow.is-busy .aet-follow-btn{pointer-events:none;opacity:.7}
+
+/* icon: plus → check */
+.aet-follow-icon{position:relative;display:inline-block;width:14px;height:14px;flex:0 0 14px}
+.aet-follow-icon::before,.aet-follow-icon::after{content:"";position:absolute;inset:6px 0 auto;height:2px;border-radius:2px;background:currentColor;transition:transform .2s ease,inset .2s ease,width .2s ease}
+.aet-follow-icon::after{transform:rotate(90deg)}
+.is-following .aet-follow-icon::before{inset:8px auto auto 0;width:6px;transform:rotate(45deg)}
+.is-following .aet-follow-icon::after{inset:6px auto auto 3px;width:11px;transform:rotate(-50deg)}
+.is-own .aet-follow-icon{display:none}
+
+.aet-follow-count{display:inline-flex;align-items:baseline;gap:4px;color:#5b6470;font-size:.92em}
+.aet-follow-count strong{color:inherit;font-weight:700;color:#1f2328}
+
+/* sizes and styles */
+.aet-follow--sm .aet-follow-btn{min-height:32px;padding:4px 12px;font-size:.85em}
+.aet-follow--lg .aet-follow-btn{min-height:48px;padding:10px 26px;font-size:1.05em}
+.aet-follow--outline .aet-follow-btn:not(.is-following){background:transparent;color:var(--aetf-p)}
+.aet-follow--outline .aet-follow-btn:not(.is-following):hover{background:var(--aetf-p);color:#fff}
+.aet-follow--ghost .aet-follow-btn{border-color:transparent;background:color-mix(in srgb,var(--aetf-p) 10%,transparent);color:var(--aetf-p)}
+.aet-follow--ghost .aet-follow-btn:hover{color:var(--aetf-p)}
+.aet-follow--pill .aet-follow-btn{--aetf-r:999px;box-shadow:0 2px 8px color-mix(in srgb,var(--aetf-p) 25%,transparent)}
+.aet-follow--solid .aet-follow-btn{--aetf-r:var(--aap-r,10px)}
+
+/* followers panel */
+.aet-followers{--aetf-p:var(--aap-primary,var(--art-coa-primary,#1a365d));display:flex;flex-direction:column;gap:14px;padding:20px;border:1px solid var(--aap-border,#d9dde3);border-radius:var(--aap-r,14px);background:var(--aap-surface,#fff)}
+.aet-followers--inline{flex-direction:row;flex-wrap:wrap;align-items:center;padding:0;border:0;background:none}
+.aet-followers--minimal{padding:0;border:0;background:none}
+.aet-followers-title{margin:0;font-size:1.1em}
+.aet-followers-stats{display:flex;flex-wrap:wrap;gap:28px}
+.aet-followers-stat{display:flex;flex-direction:column;align-items:flex-start;gap:2px}
+.aet-followers-stat strong{font-size:1.5em;line-height:1.1;color:var(--aetf-p)}
+.aet-followers-stat span{color:#5b6470;font-size:.88em}
+.aet-followers-group{display:flex;flex-direction:column;gap:8px}
+.aet-followers-group-label{color:#5b6470;font-size:.85em}
+.aet-followers-list{display:flex;flex-wrap:wrap;gap:0;margin:0;padding:0;list-style:none}
+.aet-followers-list li{margin-inline-start:-8px}
+.aet-followers-list li:first-child{margin-inline-start:0}
+.aet-followers-list a,.aet-followers-more span{display:grid;place-items:center;width:40px;height:40px;overflow:hidden;border:2px solid var(--aap-surface,#fff);border-radius:50%;background:linear-gradient(135deg,var(--aetf-p),color-mix(in srgb,var(--aetf-p) 55%,#c9a227));color:#fff;font-weight:700;text-decoration:none;transition:transform .15s ease}
+.aet-followers-list a:hover,.aet-followers-list a:focus-visible{transform:translateY(-3px);position:relative;z-index:1}
+.aet-followers-list img{width:100%;height:100%;object-fit:cover;display:block}
+.aet-followers-more span{background:#eef1f4;color:#3c434a;font-size:.78em}
+
+/* member dashboard */
+.aet-my-follows-total{display:inline-block;min-width:1.8em;padding:0 8px;border-radius:999px;background:#eef1f4;font-size:.8em;text-align:center}
+.aet-follow-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin:0 0 18px;padding:0;list-style:none}
+.aet-follow-card{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--aap-border,#d9dde3);border-radius:var(--aap-r,12px);background:var(--aap-surface,#fff)}
+.aet-follow-card-media{display:grid;place-items:center;flex:0 0 56px;width:56px;height:56px;overflow:hidden;border-radius:50%;background:#eef1f4;color:#3c434a;font-weight:700;text-decoration:none}
+.aet-follow-card-media img{width:100%;height:100%;object-fit:cover}
+.aet-follow-card-body{display:flex;flex-direction:column;flex:1 1 auto;min-width:0}
+.aet-follow-card-body a{font-weight:600;text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.aet-follow-card-body small{color:#5b6470}
+
+.aet-follow .screen-reader-text,.aet-followers .screen-reader-text{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:nowrap;border:0}
+@media (prefers-reduced-motion:reduce){.aet-follow-btn,.aet-follow-icon::before,.aet-follow-icon::after,.aet-followers-list a{transition:none}.aet-follow-btn:hover{transform:none}}

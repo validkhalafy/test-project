@@ -361,7 +361,14 @@ final class Artiey_AET_Artist {
 		if ( $chips ) {
 			$h .= '<div class="aetp-hero-chips">' . $chips . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
-		return $h . '</div></div></header>';
+		$h .= '</div>';
+		if ( $show( 'header_show_follow' ) && empty( $options['elementor_light_preview'] ) && class_exists( '\\WPArtCOA\\Follows' ) ) {
+			$subject = \WPArtCOA\Follows::subject_for_post( (int) $id );
+			if ( $subject ) {
+				$h .= '<div class="aetp-hero-follow">' . \WPArtCOA\Follows::button_html( $subject[0], (int) $subject[1] ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			}
+		}
+		return $h . '</div></header>';
 	}
 
 	private static function s_short_bio( $a ) {
