@@ -1,0 +1,11 @@
+WP COA Pro bundled QR Code implementation — third-party notices
+
+The QR matrix encoder is bundled locally from qrcode-terminal's vendor/QRCode
+implementation, which was modified from qrcode-generator by Kazuhiko Arase.
+The source files include their original MIT license notices. The qrcode-terminal
+package is distributed under Apache License 2.0. This bundled implementation
+has been adapted to expose an offline browser renderer for WP COA Pro.
+
+No network request is made by the QR generator at runtime.
+
+Apache License 2.0 text is included in the accompanying qrcode-terminal-APACHE-LICENSE.txt.

@@ -1,0 +1,31 @@
+.aetg{direction:rtl}
+.aetg-tabs{display:flex;flex-wrap:wrap;gap:4px;border-bottom:1px solid #c3c4c7;margin:0 -12px 14px;padding:0 12px}
+.aetg-tab{background:#f6f7f7;border:1px solid #c3c4c7;border-bottom:0;padding:7px 14px;cursor:pointer;border-radius:3px 3px 0 0;font-size:13px}
+.aetg-tab.is-active{background:#fff;font-weight:600;position:relative;top:1px;border-bottom:1px solid #fff}
+.aetg-panel{display:none}
+.aetg-panel.is-active{display:block}
+.aetg-field{margin:0 0 14px}
+.aetg-field>label{display:block;font-weight:600;margin-bottom:4px}
+.aetg-field input[type=text],.aetg-field input[type=url],.aetg-field input[type=email],.aetg-field input[type=number],.aetg-field select,.aetg-field textarea{width:100%;max-width:520px}
+.aetg-row{display:flex;gap:20px;flex-wrap:wrap}
+.aetg-row .aetg-field{flex:1;min-width:200px}
+.aetg-hint{color:#666;font-size:12px;margin-top:3px}
+.aetg-map{height:340px;max-width:720px;border:1px solid #c3c4c7;background:#f0f0f1;margin-bottom:6px}
+.aetg-hours{max-width:760px}
+.aetg-hours td,.aetg-hours th{padding:6px 8px;text-align:right}
+.aetg-hours input[type=time]{width:110px}
+.aetg-preview img{max-width:260px;height:auto;display:block;margin-bottom:8px;border:1px solid #ddd}
+.aetg-preview-multi{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.aetg-preview-multi img{width:80px;height:80px;object-fit:cover;margin:0}
+.aetg-checklist{max-height:220px;overflow:auto;border:1px solid #c3c4c7;padding:8px 12px;max-width:520px;background:#fff;margin-top:6px}
+.aetg-checklist label{display:block;padding:3px 0}
+.aetg-checklist label.is-hidden{display:none}
+
+.aetg-tab:focus-visible{outline:2px solid #2271b1;outline-offset:2px;z-index:1}
+.aetg-media-pick,.aetg-media-clear{margin-block-start:4px}
+@media(max-width:600px){.aetg-tabs{overflow-x:auto;flex-wrap:nowrap;margin-inline:-8px;padding-inline:8px}.aetg-tab{flex:none}.aetg-map{height:260px}.aetg-row .aetg-field{min-width:100%}}
+
+.aetg-media-status{min-height:18px;margin:5px 0 0;color:#646970;font-size:12px}
+.aetg-media-status.is-error{color:#b32d2e;font-weight:600}
+.aetg-preview img{max-height:240px;object-fit:contain;background:#f6f7f7}
+.aetg-preview-multi img{max-height:none;background:#fff}

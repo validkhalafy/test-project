@@ -1,0 +1,70 @@
+/* Artiey platform: grouped, deduplicated admin navigation. */
+#toplevel_page_artiey-platform > .wp-submenu {
+    padding-top: 4px;
+    padding-bottom: 8px;
+}
+
+#toplevel_page_artiey-platform .wp-submenu li.artiey-menu-section-heading {
+    display: block;
+    margin: 7px 0 2px;
+    padding: 0;
+    border-top: 1px solid rgba(255, 255, 255, .12);
+    background: transparent;
+}
+
+#toplevel_page_artiey-platform .wp-submenu li.artiey-menu-section-heading:first-of-type {
+    border-top: 0;
+    margin-top: 2px;
+}
+
+#toplevel_page_artiey-platform .wp-submenu .artiey-menu-section-toggle {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 30px;
+    margin: 0;
+    padding: 6px 12px 5px 10px;
+    border: 0;
+    border-radius: 0;
+    color: #9ca9ba;
+    background: transparent;
+    box-shadow: none;
+    text-align: right;
+    font-size: 10.5px;
+    font-weight: 700;
+    line-height: 1.5;
+    cursor: pointer;
+}
+
+#toplevel_page_artiey-platform .wp-submenu .artiey-menu-section-toggle:hover,
+#toplevel_page_artiey-platform .wp-submenu .artiey-menu-section-toggle:focus {
+    color: #fff;
+    background: rgba(255, 255, 255, .055);
+    outline: none;
+    box-shadow: none;
+}
+
+#toplevel_page_artiey-platform .wp-submenu .artiey-menu-section-caret {
+    flex: 0 0 auto;
+    margin-inline-start: 8px;
+    color: #69788c;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1;
+}
+
+#toplevel_page_artiey-platform .wp-submenu li.artiey-menu-section-heading.is-collapsed {
+    margin-bottom: 3px;
+}
+
+#toplevel_page_artiey-platform .wp-submenu > li:not(.artiey-menu-section-heading) > a {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    line-height: 1.55;
+}
+
+#toplevel_page_artiey-platform .wp-submenu li.artiey-menu-section-heading + li {
+    margin-top: 1px;
+}

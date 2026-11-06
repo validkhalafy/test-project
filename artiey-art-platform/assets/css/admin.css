@@ -1,0 +1,18 @@
+.aet-admin .aet-ver{font-size:12px;font-weight:400;color:#777;background:#f0f0f1;border-radius:10px;padding:2px 10px;margin-right:8px;vertical-align:middle}
+.aet-admin .aet-tabs{margin-bottom:0}
+.aet-admin .aet-panel{display:none;background:#fff;border:1px solid #c3c4c7;border-top:0;padding:8px 22px 14px;max-width:880px}
+.aet-admin .aet-panel.is-active{display:block}
+.aet-admin .aet-panel h2.title{margin-top:22px;padding-top:14px;border-top:1px solid #eee}
+.aet-admin .aet-panel h2.title:first-child{border-top:0;margin-top:10px}
+.aet-admin .form-table th{width:230px}
+.aet-admin .aet-help td:first-child{width:160px}
+.aet-admin .aet-reset{margin-top:14px;max-width:880px}
+.aet-admin .wp-picker-container{direction:ltr;display:inline-block}
+
+.art-coa-form--wide{max-width:920px;margin:18px 0 24px;padding:clamp(16px,2.4vw,26px);border:1px solid #dcdcde;border-radius:12px;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.04)}
+.art-coa-form--wide>h2{margin:0 0 18px;padding-bottom:12px;border-bottom:1px solid #e2e4e7;font-size:20px}
+.art-coa-form--wide p{margin:0 0 14px}
+.art-coa-form--wide label{font-weight:600}
+.art-coa-form--wide input.widefat,.art-coa-form--wide select.widefat,.art-coa-form--wide textarea.widefat{min-height:40px;margin-top:5px;padding:7px 10px;border-color:#b8bec7;border-radius:7px;font-weight:400}
+.art-coa-form--wide textarea.widefat{min-height:100px}
+.art-coa-form--wide .art-coa-form-actions{display:flex;gap:8px;padding-top:14px;margin:16px 0 0;border-top:1px solid #e2e4e7}

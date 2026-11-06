@@ -1,0 +1,205 @@
+/* WP COA Pro front-end components. All selectors are namespaced to avoid theme leakage. */
+.wp-coa-directory,
+.wp-coa-public-stats,
+.wp-coa-gallery-profile-card,
+.wp-coa-certificate-guide {
+  --wp-coa-directory-primary: #65513b;
+  --wp-coa-directory-accent: #b29a68;
+  color: var(--wp-coa-component-text, inherit);
+  width: 100%;
+  box-sizing: border-box;
+  line-height: 1.7;
+}
+.wp-coa-directory *,
+.wp-coa-public-stats *,
+.wp-coa-gallery-profile-card *,
+.wp-coa-certificate-guide * { box-sizing: border-box; }
+.wp-coa-component-heading { margin: 0 0 1.15rem; }
+.wp-coa-component-heading h2 { margin: 0; font-size: clamp(1.35rem, 2.2vw, 2rem); line-height: 1.35; }
+.wp-coa-directory-filters { display: flex; align-items: center; flex-wrap: wrap; gap: .75rem; padding: 1rem; margin: 0 0 1.25rem; border: 1px solid #e7e2d9; border-radius: 14px; background: #faf9f6; }
+.wp-coa-directory-filters label { flex: 1 1 220px; min-width: 0; }
+.wp-coa-directory-filters input,
+.wp-coa-directory-filters select { display: block; width: 100%; min-height: 44px; border: 1px solid #d7d1c6; background: #fff; color: #252525; border-radius: 8px; padding: .55rem .75rem; font: inherit; }
+.wp-coa-directory-filters input:focus-visible,
+.wp-coa-directory-filters select:focus-visible { outline: 2px solid var(--wp-coa-directory-accent); outline-offset: 2px; }
+.wp-coa-directory-filters button,
+.wp-coa-primary-button { appearance: none; display: inline-flex; align-items: center; justify-content: center; gap: .4rem; border: 1px solid var(--wp-coa-directory-primary, #65513b); border-radius: 8px; padding: .65rem 1rem; color: #fff; background: var(--wp-coa-directory-primary, #65513b); text-decoration: none; font: inherit; font-weight: 650; cursor: pointer; transition: filter .15s ease, transform .15s ease; }
+.wp-coa-directory-filters button:hover,
+.wp-coa-primary-button:hover { color: #fff; filter: brightness(1.08); transform: translateY(-1px); }
+.wp-coa-directory-filters button:focus-visible,
+.wp-coa-primary-button:focus-visible { outline: 2px solid var(--wp-coa-directory-accent); outline-offset: 3px; }
+.wp-coa-reset-link { color: var(--wp-coa-directory-primary); text-decoration: underline; }
+.wp-coa-directory-grid { display: grid; grid-template-columns: repeat(var(--wp-coa-columns, 3), minmax(0, 1fr)); gap: 1.15rem; align-items: stretch; }
+.wp-coa-gallery-card { position: relative; display: flex; flex-direction: column; min-width: 0; overflow: hidden; border: 1px solid #e7e2d9; border-radius: 15px; background: #fff; box-shadow: 0 5px 22px rgba(31, 28, 23, .045); }
+.wp-coa-gallery-card::before { content: ""; display: block; height: 4px; width: 100%; background: var(--wp-coa-card-accent, #b29a68); }
+.wp-coa-gallery-card-logo { display: flex; align-items: center; justify-content: center; min-height: 105px; padding: 1.1rem 1.25rem .25rem; }
+.wp-coa-gallery-card-logo img { display: block; max-width: 100%; max-height: 76px; width: auto; height: auto; object-fit: contain; }
+.wp-coa-gallery-card-content { display: flex; flex: 1; flex-direction: column; align-items: flex-start; padding: 1.2rem 1.25rem 1.3rem; }
+.wp-coa-gallery-card h3 { margin: 0 0 .6rem; font-size: 1.1rem; line-height: 1.5; color: var(--wp-coa-card-primary, #65513b); overflow-wrap: anywhere; }
+.wp-coa-activity-chip { display: inline-flex; align-items: center; max-width: 100%; margin: 0 0 .75rem; padding: .25rem .65rem; border-radius: 100px; background: #f5f0e7; background: color-mix(in srgb, var(--wp-coa-card-accent, #b29a68) 18%, white); color: var(--wp-coa-card-primary, #65513b); font-size: .82rem; font-weight: 600; }
+.wp-coa-template-meta { margin: 0 0 .5rem; color: #716b62; font-size: .88rem; }
+.wp-coa-gallery-card-certificate-title { margin: 0 0 1rem; color: #4c4944; font-size: .94rem; }
+.wp-coa-card-link { display: inline-flex; gap: .4rem; margin-top: auto; color: var(--wp-coa-card-primary, #65513b); font-weight: 700; text-decoration: none; }
+.wp-coa-card-link:hover { text-decoration: underline; }
+.wp-coa-directory-summary { margin: .9rem 0 0; color: #77716a; font-size: .88rem; }
+.wp-coa-empty-state { padding: 1.2rem; border: 1px dashed #cfc7ba; border-radius: 12px; text-align: center; }
+.wp-coa-public-stats { padding: .2rem 0; }
+.wp-coa-stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 1rem; }
+.wp-coa-stat-card { display: flex; flex-direction: column; justify-content: center; min-width: 0; padding: 1.25rem 1.4rem; border: 1px solid #e9e3d9; border-radius: 14px; background: linear-gradient(145deg, #fff, #faf8f3); box-shadow: 0 4px 18px rgba(35, 28, 20, .035); }
+.wp-coa-stat-value { color: var(--wp-coa-stats-primary, #65513b); font-size: clamp(1.8rem, 3vw, 2.5rem); line-height: 1.2; font-weight: 750; font-variant-numeric: tabular-nums; }
+.wp-coa-stat-label { margin-top: .5rem; color: #625c53; font-size: .94rem; }
+.wp-coa-stats-inline .wp-coa-stats-grid { display: flex; flex-wrap: wrap; gap: 1rem 2rem; }
+.wp-coa-stats-inline .wp-coa-stat-card { flex-direction: row; align-items: baseline; justify-content: flex-start; gap: .65rem; border: 0; border-inline-start: 3px solid var(--wp-coa-stats-accent, #b29a68); border-radius: 0; padding: .25rem 1rem; box-shadow: none; background: transparent; }
+.wp-coa-stats-inline .wp-coa-stat-value { font-size: 1.7rem; }
+.wp-coa-stats-note { margin: .9rem 0 0; color: #77716a; font-size: .8rem; }
+.wp-coa-gallery-profile-card { display: flex; align-items: center; gap: 1.5rem; overflow: hidden; padding: clamp(1.2rem, 3vw, 2rem); border: 1px solid #e7e2d9; border-radius: 18px; background: linear-gradient(125deg, #fff 0%, #faf8f4 100%); box-shadow: 0 7px 30px rgba(31, 28, 23, .06); }
+.wp-coa-profile-card-logo { flex: 0 0 150px; display: flex; align-items: center; justify-content: center; min-height: 110px; padding: 1rem; border: 1px solid #ece7df; border-radius: 14px; background: #fff; }
+.wp-coa-profile-card-logo img { display: block; max-width: 100%; max-height: 95px; width: auto; height: auto; object-fit: contain; }
+.wp-coa-profile-card-body { flex: 1; min-width: 0; }
+.wp-coa-gallery-profile-card h2 { margin: 0 0 .6rem; color: var(--wp-coa-card-primary, #65513b); font-size: clamp(1.25rem, 2.4vw, 1.8rem); line-height: 1.35; }
+.wp-coa-profile-certificate-title { margin: .2rem 0 1rem; }
+.wp-coa-certificate-guide { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.wp-coa-guide-step { padding: 1.3rem; border: 1px solid #e8e2d8; border-radius: 14px; background: #fff; }
+.wp-coa-guide-number { display: flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; margin: 0 0 .8rem; border-radius: 50%; color: #fff; background: var(--wp-coa-guide-primary, #65513b); font-weight: 750; }
+.wp-coa-guide-step h3 { margin: 0 0 .45rem; font-size: 1.05rem; }
+.wp-coa-guide-step p { margin: 0; color: #686158; }
+.wp-coa-guide-disclaimer { grid-column: 1 / -1; padding: .85rem 1rem; border-inline-start: 3px solid var(--wp-coa-guide-accent, #b29a68); background: #faf8f4; font-size: .9rem; }
+@media (max-width: 900px) { .wp-coa-directory-grid { grid-template-columns: repeat(var(--wp-coa-columns-tablet, 2), minmax(0, 1fr)); } }
+@media (max-width: 620px) { .wp-coa-directory-grid { grid-template-columns: repeat(var(--wp-coa-columns-mobile, 1), minmax(0, 1fr)); } .wp-coa-gallery-profile-card { align-items: stretch; flex-direction: column; } .wp-coa-profile-card-logo { flex-basis: auto; min-height: 85px; } .wp-coa-certificate-guide { grid-template-columns: minmax(0, 1fr); } .wp-coa-guide-disclaimer { grid-column: auto; } .wp-coa-directory-filters { align-items: stretch; flex-direction: column; } .wp-coa-directory-filters label { flex-basis: auto; } }
+.wp-coa-gallery-profile-card .wp-coa-primary-button { border-color: var(--wp-coa-card-primary, #65513b); background: var(--wp-coa-card-primary, #65513b); }
+
+/* 1.7.0: improved Persian-first typography, keyboard navigation, and reduced-motion support. */
+.wp-coa-directory,
+.wp-coa-public-stats,
+.wp-coa-gallery-profile-card,
+.wp-coa-certificate-guide {
+  font-family: inherit;
+  text-rendering: optimizeLegibility;
+}
+.wp-coa-directory h2,
+.wp-coa-directory h3,
+.wp-coa-public-stats h2,
+.wp-coa-gallery-profile-card h2,
+.wp-coa-certificate-guide h2,
+.wp-coa-certificate-guide h3 {
+  text-wrap: balance;
+}
+.wp-coa-directory-filters input,
+.wp-coa-directory-filters select,
+.wp-coa-directory-filters button,
+.wp-coa-card-link,
+.wp-coa-primary-button {
+  font-family: inherit;
+  line-height: 1.55;
+}
+.wp-coa-directory-filters input:focus-visible,
+.wp-coa-directory-filters select:focus-visible,
+.wp-coa-directory-filters button:focus-visible,
+.wp-coa-card-link:focus-visible,
+.wp-coa-primary-button:focus-visible {
+  outline: 3px solid var(--wp-coa-directory-accent, #b29a68);
+  outline-offset: 3px;
+}
+.wp-coa-gallery-card h3,
+.wp-coa-gallery-card-certificate-title,
+.wp-coa-profile-certificate-title,
+.wp-coa-stat-label,
+.wp-coa-guide-step p {
+  overflow-wrap: anywhere;
+}
+.wp-coa-directory[lang="en"],
+.wp-coa-public-stats[lang="en"],
+.wp-coa-gallery-profile-card[lang="en"],
+.wp-coa-certificate-guide[lang="en"] {
+  font-variant-numeric: lining-nums tabular-nums;
+}
+@media (prefers-reduced-motion: reduce) {
+  .wp-coa-directory-filters button,
+  .wp-coa-primary-button {
+    transition: none;
+  }
+  .wp-coa-directory-filters button:hover,
+  .wp-coa-primary-button:hover {
+    transform: none;
+  }
+}
+@media (forced-colors: active) {
+  .wp-coa-gallery-card,
+  .wp-coa-stat-card,
+  .wp-coa-guide-step,
+  .wp-coa-gallery-profile-card {
+    border: 1px solid CanvasText;
+  }
+  .wp-coa-directory-filters button,
+  .wp-coa-primary-button {
+    border: 1px solid ButtonText;
+  }
+}
+
+
+
+/* Artist and collector profile system — responsive, RTL-aware public components. */
+.wp-coa-person-directory,
+.wp-coa-person-profile {
+  --wp-coa-person-primary: #65513b;
+  color: #282622;
+  font-family: inherit;
+  max-width: 100%;
+}
+.wp-coa-person-directory-header { margin: 0 0 1.5rem; }
+.wp-coa-person-directory-header h2 { margin: 0 0 .35rem; color: var(--wp-coa-person-primary); line-height: 1.35; }
+.wp-coa-person-directory-header p { margin: 0; opacity: .78; }
+.wp-coa-person-search { display: flex; align-items: center; gap: .65rem; flex-wrap: wrap; margin: 0 0 1.25rem; }
+.wp-coa-person-search input[type="search"] { flex: 1 1 240px; min-width: 0; min-height: 44px; border: 1px solid #d9d4cb; border-radius: 10px; padding: .65rem .85rem; font: inherit; background: #fff; }
+.wp-coa-person-search button { min-height: 44px; padding: .65rem 1.1rem; border: 0; border-radius: 10px; background: var(--wp-coa-person-primary); color: #fff; font: inherit; cursor: pointer; }
+.wp-coa-person-search a { text-decoration: underline; }
+.wp-coa-person-search :focus-visible,
+.wp-coa-person-card-link:focus-visible,
+.wp-coa-person-links a:focus-visible { outline: 3px solid #b29a68; outline-offset: 3px; }
+.wp-coa-person-grid { display: grid; grid-template-columns: repeat(var(--wp-coa-person-columns, 3), minmax(0, 1fr)); gap: 1.25rem; }
+.wp-coa-person-card { overflow: hidden; min-width: 0; border: 1px solid #e8e3dc; border-radius: 16px; background: #fff; box-shadow: 0 6px 24px rgba(33, 26, 18, .06); transition: transform .18s ease, box-shadow .18s ease; }
+.wp-coa-person-card:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(33, 26, 18, .1); }
+.wp-coa-person-card-link { display: flex; height: 100%; color: inherit; text-decoration: none; flex-direction: column; }
+.wp-coa-person-card-image { aspect-ratio: 4 / 3; overflow: hidden; background: #f0ede7; display: flex; align-items: center; justify-content: center; }
+.wp-coa-person-card-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.wp-coa-person-placeholder { color: var(--wp-coa-person-primary); font-size: 3.25rem; font-weight: 600; }
+.wp-coa-person-card-content { padding: 1.2rem; display: flex; flex-direction: column; align-items: flex-start; gap: .45rem; flex: 1; }
+.wp-coa-person-badges { display: flex; gap: .35rem; flex-wrap: wrap; }
+.wp-coa-person-verified, .wp-coa-person-featured { display: inline-flex; align-items: center; gap: .2rem; border-radius: 999px; padding: .18rem .55rem; font-size: .78rem; line-height: 1.5; background: #f0f5ef; color: #2e6635; font-weight: 600; }
+.wp-coa-person-featured { background: #f8f0df; color: #7b5b1a; }
+.wp-coa-person-card h3 { margin: .15rem 0; color: var(--wp-coa-person-primary); font-size: 1.2rem; line-height: 1.4; overflow-wrap: anywhere; }
+.wp-coa-person-tagline { margin: 0; font-weight: 500; line-height: 1.65; }
+.wp-coa-person-location { margin: 0; font-size: .9rem; opacity: .72; }
+.wp-coa-person-excerpt { margin: .25rem 0 .5rem; line-height: 1.85; font-size: .95rem; }
+.wp-coa-person-read-more { margin-top: auto; padding-top: .3rem; font-weight: 600; color: var(--wp-coa-person-primary); }
+.wp-coa-person-empty, .wp-coa-person-not-found { padding: 1.5rem; border: 1px solid #e8e3dc; border-radius: 12px; background: #faf8f4; }
+.wp-coa-person-profile { overflow: hidden; border: 1px solid #e7e1d8; border-radius: 18px; background: #fff; box-shadow: 0 8px 32px rgba(28, 23, 17, .06); }
+.wp-coa-person-cover { min-height: clamp(120px, 20vw, 260px); max-height: 360px; overflow: hidden; background-color: #efebe3; }
+.wp-coa-person-cover img { display: block; width: 100%; height: clamp(120px, 24vw, 300px); object-fit: cover; object-position: center; }
+.wp-coa-person-profile-header { display: flex; align-items: flex-end; gap: 1.25rem; padding: 1.5rem clamp(1rem, 4vw, 2.5rem); border-bottom: 1px solid #eee8df; }
+.wp-coa-person-avatar { width: clamp(100px, 15vw, 168px); height: clamp(100px, 15vw, 168px); object-fit: cover; border-radius: 16px; border: 4px solid #fff; background: #f3f0ea; box-shadow: 0 3px 15px rgba(0,0,0,.12); flex: 0 0 auto; }
+.wp-coa-person-kicker { margin: 0 0 .5rem; font-size: .78rem; letter-spacing: .08em; font-weight: 700; color: var(--wp-coa-person-primary); }
+.wp-coa-person-profile-heading h1 { margin: 0 0 .4rem; font-size: clamp(1.6rem, 3vw, 2.4rem); line-height: 1.3; overflow-wrap: anywhere; }
+.wp-coa-person-profile-tagline { margin: 0; line-height: 1.8; opacity: .88; }
+.wp-coa-person-profile-body { padding: clamp(1rem, 4vw, 2rem); }
+.wp-coa-person-profile-body section { margin: 0 0 1.7rem; }
+.wp-coa-person-profile-body h2 { color: var(--wp-coa-person-primary); font-size: 1.25rem; line-height: 1.5; margin: 0 0 .7rem; }
+.wp-coa-person-prose { line-height: 2; white-space: normal; overflow-wrap: anywhere; }
+.wp-coa-person-facts dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem; margin: 0; }
+.wp-coa-person-facts dl div { padding: .8rem 1rem; border-radius: 10px; background: #f8f6f2; }
+.wp-coa-person-facts dt { font-size: .85rem; opacity: .72; margin-bottom: .2rem; }
+.wp-coa-person-facts dd { margin: 0; font-weight: 600; overflow-wrap: anywhere; }
+.wp-coa-person-links { display: flex; gap: .6rem; flex-wrap: wrap; padding: 0; margin: 0; list-style: none; }
+.wp-coa-person-links li a { display: inline-flex; padding: .55rem .85rem; border: 1px solid #ddd5c9; border-radius: 9px; color: var(--wp-coa-person-primary); text-decoration: none; }
+.wp-coa-person-work-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; }
+.wp-coa-person-work-grid article { border: 1px solid #e8e3dc; border-radius: 12px; padding: .9rem; background: #fcfbf9; }
+.wp-coa-person-work-grid h3 { margin: 0 0 .4rem; font-size: 1rem; line-height: 1.55; }
+.wp-coa-person-work-grid p { margin: 0 0 .35rem; font-size: .9rem; }
+.wp-coa-person-work-grid span { font-size: .85rem; opacity: .75; }
+.wp-coa-person-disclaimer { margin: 1.75rem 0 0; padding: .85rem 1rem; border-inline-start: 3px solid #b29a68; background: #faf8f4; color: #5d554b; font-size: .9rem; line-height: 1.8; }
+@media (max-width: 900px) { .wp-coa-person-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .wp-coa-person-work-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .wp-coa-person-grid, .wp-coa-person-work-grid { grid-template-columns: minmax(0, 1fr); } .wp-coa-person-profile-header { align-items: flex-start; flex-direction: column; } .wp-coa-person-facts dl { grid-template-columns: minmax(0, 1fr); } .wp-coa-person-card-content { padding: 1rem; } }
+@media (prefers-reduced-motion: reduce) { .wp-coa-person-card { transition: none; } .wp-coa-person-card:hover { transform: none; } }
+@media (forced-colors: active) { .wp-coa-person-card, .wp-coa-person-profile, .wp-coa-person-links li a { border: 1px solid CanvasText; } }
+
+.wp-coa-verification .wp-coa-person-inline-link { color: inherit; text-decoration: underline; text-decoration-color: #b29a68; text-underline-offset: 3px; }

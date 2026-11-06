@@ -1,0 +1,1372 @@
+
+msgid ""
+msgstr ""
+"Project-Id-Version: WP COA Pro 1.11.0\n"
+"Report-Msgid-Bugs-To: https://artiey.ir/\n"
+"POT-Creation-Date: 2026-10-24 18:20+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fa_IR\n"
+"Language-Team: fa_IR <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+msgid "&laquo; Previous"
+msgstr "« قبلی"
+
+msgid "A database transaction could not be started."
+msgstr "تراکنش پایگاه داده آغاز نشد."
+
+msgid ""
+"A signature check detects changes to signed certificate metadata. It does"
+" not independently prove the physical artwork is authentic. The event "
+"history is hash-chained for tamper evidence, not guaranteed immutable "
+"storage."
+msgstr ""
+"بررسی امضا تغییرات فراداده امضاشده را آشکار می‌کند، اما به‌تنهایی اصالت "
+"فیزیکی اثر را ثابت نمی‌کند. تاریخچه رویدادها زنجیره هش دارد و ذخیره‌سازی "
+"تغییرناپذیر تضمین‌شده نیست."
+
+msgid "API and integrations"
+msgstr "API و یکپارچه‌سازی‌ها"
+
+msgid "About Artwork Certificates"
+msgstr "درباره گواهی اصالت آثار هنری"
+
+msgid "About Artwork Certificates | درباره گواهی اصالت"
+msgstr "درباره گواهی اصالت آثار هنری | About Artwork Certificates"
+
+msgid "Accent color"
+msgstr "رنگ تأکیدی"
+
+msgid "Actions"
+msgstr "عملیات"
+
+msgid "Active"
+msgstr "فعال"
+
+msgid "Active gallery or institution"
+msgstr "گالری یا مؤسسه فعال"
+
+msgid "Active in the issuer registry"
+msgstr "در سامانه صادرکننده فعال است"
+
+msgid "Active issuing institutions"
+msgstr "مؤسسات صادرکننده فعال"
+
+msgid "Activity type"
+msgstr "نوع فعالیت"
+
+msgid "Actor"
+msgstr "عامل"
+
+msgid "Add the verification form to any page using the shortcode:"
+msgstr "با استفاده از شورت‌کد زیر فرم استعلام را به هر برگه اضافه کنید:"
+
+msgid ""
+"Aggregate certificate and active-institution counts. It does not expose "
+"individual certificate or owner data."
+msgstr ""
+"آمار تجمیعی گواهی\\u200cها و مؤسسات فعال؛ اطلاعات هر گواهی یا مالک را "
+"افشا نمی\\u200cکند."
+
+msgid "All"
+msgstr "همه"
+
+msgid "All activity types"
+msgstr "همه نوع فعالیت\\u200cها"
+
+msgid "Allow visitors to change display language"
+msgstr "اجازه تغییر زبان نمایش به بازدیدکنندگان"
+
+msgid "Art Galleries and Institutions"
+msgstr "گالری‌ها و مؤسسات هنری"
+
+msgid "Art Galleries and Institutions | فهرست گالری\\u200cها"
+msgstr "گالری\\u200cها و مؤسسات هنری | Art Galleries and Institutions"
+
+msgid "Art Galleries and Institutions | فهرست گالری‌ها"
+msgstr "فهرست گالری‌ها و مؤسسات هنری"
+
+msgid "Artist"
+msgstr "هنرمند"
+
+msgid "Artist name"
+msgstr "نام هنرمند"
+
+msgid "Artist name (English)"
+msgstr "نام هنرمند (انگلیسی)"
+
+msgid "Artist name (Persian / primary)"
+msgstr "نام هنرمند (فارسی / زبان اصلی)"
+
+msgid "Artwork"
+msgstr "اثر هنری"
+
+msgid "Artwork / artist"
+msgstr "اثر هنری / هنرمند"
+
+msgid "Artwork Registry"
+msgstr "سامانه ثبت آثار هنری"
+
+msgid "Artwork title"
+msgstr "عنوان اثر"
+
+msgid "Artwork title (English)"
+msgstr "عنوان اثر (انگلیسی)"
+
+msgid "Artwork title (Persian / primary)"
+msgstr "عنوان اثر (فارسی / زبان اصلی)"
+
+msgid "Artwork title and artist are required."
+msgstr "عنوان اثر و نام هنرمند الزامی است."
+
+msgid "Audit events"
+msgstr "رویدادهای ممیزی"
+
+msgid "Audit history"
+msgstr "تاریخچه ممیزی"
+
+msgid "Available shortcodes"
+msgstr "شورت\\u200cکدهای موجود"
+
+msgid "Back to certificates"
+msgstr "بازگشت به گواهی‌ها"
+
+msgid "Body text color"
+msgstr "رنگ متن بدنه"
+
+msgid "Brand identity"
+msgstr "هویت بصری برند"
+
+msgid ""
+"Branded public profile card for one active gallery, selected by ID or "
+"slug."
+msgstr "کارت عمومی دارای هویت بصری برای یک گالری فعال بر اساس شناسه یا نامک."
+
+msgid "Button background"
+msgstr "پس‌زمینه دکمه"
+
+msgid "Button label"
+msgstr "متن دکمه"
+
+msgid "Button label (English)"
+msgstr "متن دکمه (انگلیسی)"
+
+msgid "Button label (Persian / primary)"
+msgstr "متن دکمه (فارسی / زبان اصلی)"
+
+msgid "Button padding"
+msgstr "فاصله داخلی دکمه"
+
+msgid "Button text color"
+msgstr "رنگ متن دکمه"
+
+msgid "CHECK FAILED"
+msgstr "بررسی ناموفق"
+
+msgid "CHECK FAILED — do not rely on this record without further review"
+msgstr "بررسی ناموفق — بدون بررسی بیشتر به این رکورد اتکا نکنید"
+
+msgid "COA Certificates"
+msgstr "گواهی‌های اصالت آثار"
+
+msgid "COA Event History"
+msgstr "تاریخچه رویدادهای گواهی"
+
+msgid "COA — Artist & Collector Directory"
+msgstr "فهرست هنرمندان و کلکتورها"
+
+msgid "COA — Gallery Directory"
+msgstr "فهرست گالری\\u200cها — COA"
+
+msgid "COA — Gallery Profile"
+msgstr "پروفایل گالری — COA"
+
+msgid "COA — Profile Details"
+msgstr "جزئیات پروفایل هنرمند یا کلکتور"
+
+msgid "COA — Public Statistics"
+msgstr "آمار عمومی — COA"
+
+msgid "COA — Verification Guide"
+msgstr "راهنمای استعلام — COA"
+
+msgid "Card background"
+msgstr "پس‌زمینه کارت"
+
+msgid "Card content padding"
+msgstr "فاصله داخلی محتوای کارت"
+
+msgid "Card corner radius"
+msgstr "گردی گوشه کارت"
+
+msgid "Card padding"
+msgstr "فاصله داخلی کارت"
+
+msgid "Card radius"
+msgstr "گردی گوشه‌های کارت"
+
+msgid "Card style"
+msgstr "سبک کارت"
+
+msgid "Cards"
+msgstr "کارت\\u200cها"
+
+msgid "Center"
+msgstr "وسط"
+
+msgid "Certificate"
+msgstr "گواهی"
+
+msgid "Certificate Verification"
+msgstr "استعلام گواهی اصالت"
+
+msgid "Certificate Verification | استعلام اصالت اثر"
+msgstr "استعلام گواهی | Certificate Verification"
+
+msgid "Certificate code"
+msgstr "کد گواهی"
+
+msgid "Certificate creation failed. Check the PHP error log and database health."
+msgstr "صدور گواهی ناموفق بود. گزارش خطای PHP و سلامت پایگاه داده را بررسی کنید."
+
+msgid "Certificate display language"
+msgstr "زبان نمایش گواهی"
+
+msgid "Certificate footer (English)"
+msgstr "پاورقی گواهی (انگلیسی)"
+
+msgid "Certificate footer (Persian / primary)"
+msgstr "پاورقی گواهی (فارسی / زبان اصلی)"
+
+msgid "Certificate frame and highlight color."
+msgstr "رنگ قاب گواهی و بخش‌های برجسته."
+
+msgid "Certificate issued successfully. The issue event was recorded."
+msgstr "گواهی با موفقیت صادر شد و رویداد صدور ثبت گردید."
+
+msgid "Certificate lookup form and public certificate result."
+msgstr "فرم استعلام و نمایش نتیجه عمومی گواهی."
+
+msgid "Certificate metadata could not be serialized."
+msgstr "فراداده گواهی قابل سریال‌سازی نیست."
+
+msgid "Certificate not found."
+msgstr "گواهی پیدا نشد."
+
+msgid "Certificate of Authenticity"
+msgstr "گواهی اصالت اثر هنری"
+
+msgid "Certificate record"
+msgstr "شناسنامه گواهی"
+
+msgid "Certificate revoked and the event recorded."
+msgstr "گواهی باطل شد و رویداد آن ثبت گردید."
+
+msgid "Certificate status"
+msgstr "وضعیت گواهی"
+
+msgid "Certificate verification"
+msgstr "استعلام گواهی"
+
+msgid "Certificate:"
+msgstr "گواهی:"
+
+msgid "Certificates"
+msgstr "گواهی‌ها"
+
+msgid "Certificates registered"
+msgstr "گواهی\\u200cهای ثبت\\u200cشده"
+
+msgid "Choose image"
+msgstr "انتخاب تصویر"
+
+msgid "Close"
+msgstr "بستن"
+
+msgid "Code field placeholder (English)"
+msgstr "متن راهنمای کد (انگلیسی)"
+
+msgid "Code field placeholder (Persian / primary)"
+msgstr "متن راهنمای کد (فارسی / زبان اصلی)"
+
+msgid "Code, artwork, artist, inventory no."
+msgstr "کد، اثر، هنرمند یا شماره ثبت"
+
+msgid "Collector / collection"
+msgstr "مجموعه‌دار / مجموعه"
+
+msgid "Collector / collection (English)"
+msgstr "مجموعه‌دار / مجموعه (انگلیسی)"
+
+msgid "Collector / collection (Persian / primary)"
+msgstr "مجموعه‌دار / مجموعه (فارسی / زبان اصلی)"
+
+msgid ""
+"Collector identity is private on public pages by default. You can enable "
+"visibility in Settings."
+msgstr ""
+"هویت مجموعه‌دار به‌صورت پیش‌فرض در صفحات عمومی پنهان است. نمایش آن را "
+"می‌توانید از تنظیمات فعال کنید."
+
+msgid "Columns (desktop)"
+msgstr "تعداد ستون\\u200cها (رایانه)"
+
+msgid "Columns (mobile)"
+msgstr "تعداد ستون\\u200cها (موبایل)"
+
+msgid "Columns (tablet)"
+msgstr "تعداد ستون\\u200cها (تبلت)"
+
+msgid ""
+"Configure institutional identity, certificate styling, public lookup "
+"visibility, and API access. Changes apply to the public verification form"
+" and newly rendered certificates."
+msgstr ""
+"هویت مؤسسه، ظاهر گواهی، نمایش استعلام عمومی و دسترسی API را تنظیم کنید. "
+"تغییرات در فرم استعلام عمومی و گواهی‌های جدید اعمال می‌شوند."
+
+msgid "Consistent"
+msgstr "سازگار"
+
+msgid "Container"
+msgstr "کادر"
+
+msgid "Content"
+msgstr "محتوا"
+
+msgid "Content padding"
+msgstr "فاصله داخلی محتوا"
+
+msgid ""
+"Control the public lookup form and which certificate fields are shown. "
+"Internal notes and private revocation reasons are never displayed here."
+msgstr ""
+"فرم استعلام عمومی و فیلدهای قابل نمایش گواهی را کنترل کنید. یادداشت‌های "
+"داخلی و دلایل خصوصی ابطال هرگز در این بخش نمایش داده نمی‌شوند."
+
+#, python-brace-format
+msgid ""
+"Controls the public GET endpoint /wp-json/wp-coa-"
+"pro/v1/certificates/{CODE}."
+msgstr "مسیر GET عمومی /wp-json/wp-coa-pro/v1/certificates/{CODE} را کنترل می‌کند."
+
+msgid "Corner radius"
+msgstr "شعاع گوشه‌ها"
+
+msgid "Could not open CSV output."
+msgstr "خروجی CSV باز نشد."
+
+msgid "Create missing recommended pages"
+msgstr "ایجاد برگه\\u200cهای پیشنهادیِ ایجادنشده"
+
+msgid ""
+"Create ready-to-edit WordPress pages using WP COA Pro shortcodes. The "
+"pages use regular WordPress content and remain editable with Gutenberg, "
+"the Classic Editor, or Elementor."
+msgstr ""
+"با شورت\\u200cکدهای WP COA Pro برگه\\u200cهای قابل ویرایش وردپرس بسازید. "
+"این برگه\\u200cها با ویرایشگر بلوکی گوتنبرگ، ویرایشگر کلاسیک یا المنتور "
+"قابل ویرایش هستند."
+
+msgid "Created: %1$d · Already available: %2$d · Errors: %3$d"
+msgstr "ایجادشده: %1$d · از قبل موجود: %2$d · خطاها: %3$d"
+
+msgid "Current brand preview"
+msgstr "پیش‌نمایش برند فعلی"
+
+msgid "Current owner"
+msgstr "مالک فعلی"
+
+msgid "Current owner (English)"
+msgstr "مالک فعلی (انگلیسی)"
+
+msgid "Current owner (Persian / primary)"
+msgstr "مالک فعلی (فارسی / زبان اصلی)"
+
+msgid "Current page"
+msgstr "برگه فعلی"
+
+msgid "Custom verification page URL (optional)"
+msgstr "نشانی سفارشی صفحه استعلام (اختیاری)"
+
+msgid "Date (UTC)"
+msgstr "تاریخ (UTC)"
+
+msgid "Default issuing institution (English)"
+msgstr "مؤسسه پیش‌فرض صادرکننده (انگلیسی)"
+
+msgid "Default issuing institution (Persian / primary)"
+msgstr "مؤسسه پیش‌فرض صادرکننده (فارسی / زبان اصلی)"
+
+msgid "Default public display language"
+msgstr "زبان پیش‌فرض نمایش عمومی"
+
+msgid "Description"
+msgstr "توضیحات"
+
+msgid "Desktop columns"
+msgstr "تعداد ستون در دسکتاپ"
+
+msgid "Details"
+msgstr "جزئیات"
+
+msgid "Dimensions"
+msgstr "ابعاد"
+
+msgid "Directory content"
+msgstr "محتوای فهرست"
+
+msgid "Directory styling"
+msgstr "استایل فهرست"
+
+msgid "Display language"
+msgstr "زبان نمایش"
+
+msgid ""
+"Elementor users can search for “WP COA Certificate Verification” in the "
+"widget panel."
+msgstr ""
+"کاربران Elementor می‌توانند ویجت «WP COA Certificate Verification» را در "
+"پنل ابزارک‌ها جست‌وجو کنند."
+
+msgid ""
+"Elementor widgets are grouped under “WP COA Pro”: Certificate "
+"Verification, Gallery Directory, Public Statistics, Gallery Profile, and "
+"Certificate Guide. If Elementor is installed after this plugin, reload "
+"the editor once."
+msgstr ""
+"ویجت\\u200cهای المنتور در دسته «WP COA Pro» قرار دارند: استعلام گواهی، "
+"فهرست گالری\\u200cها، آمار عمومی، پروفایل گالری و راهنمای استعلام. اگر "
+"المنتور را پس از این افزونه نصب کردید، ویرایشگر را یک\\u200cبار دوباره "
+"بارگذاری کنید."
+
+msgid "Enable public lookup"
+msgstr "فعال‌سازی استعلام عمومی"
+
+msgid "Enable read-only public REST API"
+msgstr "فعال‌سازی REST API عمومی فقط‌خواندنی"
+
+msgid "Enabled"
+msgstr "فعال"
+
+msgid "English"
+msgstr "انگلیسی"
+
+msgid "English only"
+msgstr "فقط انگلیسی"
+
+msgid "Enter a certificate code in the expected format."
+msgstr "کد گواهی را با قالب مورد انتظار وارد کنید."
+
+msgid ""
+"Enter the certificate code to check its current status and the integrity "
+"of the issuer record."
+msgstr "کد گواهی را وارد کنید تا وضعیت فعلی و یکپارچگی رکورد صادرکننده بررسی شود."
+
+msgid "Enter the new owner name in at least one language."
+msgstr "نام مالک جدید را دست‌کم به یک زبان وارد کنید."
+
+msgid "Event"
+msgstr "رویداد"
+
+msgid "Event History"
+msgstr "تاریخچه رویدادها"
+
+msgid "Event chain integrity:"
+msgstr "یکپارچگی زنجیره رویداد:"
+
+msgid "Event hash"
+msgstr "هش رویداد"
+
+msgid "Example"
+msgstr "نمونه"
+
+msgid ""
+"Explain the limits of a digital record clearly; do not imply that a "
+"database check independently proves physical authenticity."
+msgstr ""
+"محدودیت‌های رکورد دیجیتال را روشن بیان کنید؛ بررسی پایگاه داده به‌تنهایی "
+"اثبات‌کننده اصالت فیزیکی اثر نیست."
+
+msgid "Export filtered public metadata (CSV)"
+msgstr "خروجی CSV از فراداده عمومی فیلترشده"
+
+msgid "Export public metadata (CSV)"
+msgstr "خروجی فراداده عمومی (CSV)"
+
+msgid "Failed or no events exist. Investigate before relying on the history."
+msgstr "ناموفق است یا رویدادی وجود ندارد. پیش از اتکا به تاریخچه بررسی کنید."
+
+msgid "Featured profiles only"
+msgstr "فقط پروفایل‌های ویژه"
+
+msgid "Filter"
+msgstr "فیلتر"
+
+msgid "Follow WordPress site locale"
+msgstr "پیروی از زبان سایت وردپرس"
+
+msgid "Form fields and button"
+msgstr "فیلدهای فرم و دکمه"
+
+msgid "Galleries & Activity Profiles"
+msgstr "گالری‌ها و پروفایل‌های فعالیت"
+
+msgid "Galleries & Profiles"
+msgstr "گالری‌ها و پروفایل‌ها"
+
+msgid "Gallery profile"
+msgstr "پروفایل گالری"
+
+msgid "Guide content"
+msgstr "محتوای راهنما"
+
+msgid "Guide styling"
+msgstr "استایل راهنما"
+
+msgid "Heading"
+msgstr "عنوان"
+
+msgid "Heading (English)"
+msgstr "عنوان (انگلیسی)"
+
+msgid "Heading and description"
+msgstr "عنوان و توضیحات"
+
+msgid "Heading color"
+msgstr "رنگ عنوان"
+
+msgid "Hide"
+msgstr "پنهان‌کردن"
+
+msgid "History"
+msgstr "تاریخچه"
+
+msgid "How certificate verification works"
+msgstr "نحوه کار استعلام گواهی"
+
+msgid "INCONSISTENT — contact the issuing institution"
+msgstr "ناسازگار — با مؤسسه صادرکننده تماس بگیرید"
+
+msgid ""
+"Important: a database record or valid digital signature does not, by "
+"itself, prove that the physical artwork is genuine or establish legal "
+"ownership."
+msgstr ""
+"مهم: رکورد پایگاه داده یا امضای دیجیتال معتبر به\\u200cتنهایی اصالت "
+"فیزیکی اثر یا مالکیت قانونی را اثبات نمی\\u200cکند."
+
+msgid "Inline counters"
+msgstr "شمارنده\\u200cهای خطی"
+
+msgid "Input and panel border color"
+msgstr "رنگ حاشیه ورودی و پنل"
+
+msgid "Input background"
+msgstr "پس‌زمینه ورودی"
+
+msgid "Input padding"
+msgstr "فاصله داخلی ورودی"
+
+msgid "Input placeholder"
+msgstr "متن راهنمای فیلد"
+
+msgid "Input placeholder (English)"
+msgstr "متن راهنمای فیلد (انگلیسی)"
+
+msgid "Input text color"
+msgstr "رنگ متن ورودی"
+
+msgid "Institution and certificate defaults"
+msgstr "مؤسسه و تنظیمات پیش‌فرض گواهی"
+
+msgid "Institution logo URL"
+msgstr "نشانی لوگوی مؤسسه"
+
+msgid "Integrity"
+msgstr "یکپارچگی"
+
+msgid ""
+"Integrity scan: %1$s of the latest 200 certificates inspected. This "
+"summary is cached for five minutes and is not a complete forensic audit."
+msgstr ""
+"بررسی یکپارچگی: %1$s مورد از ۲۰۰ گواهی اخیر بررسی شده‌اند. این خلاصه پنج "
+"دقیقه ذخیره می‌شود و ممیزی جرم‌شناختی کامل نیست."
+
+msgid "Internal notes"
+msgstr "یادداشت‌های داخلی"
+
+msgid ""
+"Internal notes are not exposed on the public verification page or CSV "
+"export."
+msgstr "یادداشت‌های داخلی در صفحه استعلام عمومی یا خروجی CSV نمایش داده نمی‌شوند."
+
+msgid "Introduction text (English)"
+msgstr "متن معرفی (انگلیسی)"
+
+msgid "Introduction text (Persian / primary)"
+msgstr "متن معرفی (فارسی / زبان اصلی)"
+
+msgid "Introductory text"
+msgstr "متن معرفی"
+
+msgid "Introductory text (English)"
+msgstr "متن معرفی (انگلیسی)"
+
+msgid "Inventory / accession number"
+msgstr "شماره اموال / ثبت"
+
+msgid "Inventory number"
+msgstr "شماره ثبت"
+
+msgid "Issue a certificate"
+msgstr "صدور گواهی"
+
+msgid "Issue certificate"
+msgstr "صدور گواهی"
+
+msgid "Issue date (UTC)"
+msgstr "تاریخ صدور (UTC)"
+
+msgid ""
+"Issue identifiable artwork certificates, check record integrity, revoke "
+"invalidated certificates, and keep an administrative event history."
+msgstr ""
+"گواهی‌های قابل‌شناسایی برای آثار صادر کنید، یکپارچگی رکورد را بررسی کنید،"
+" گواهی‌های نامعتبر را باطل کنید و تاریخچه رویدادهای مدیریتی را نگه دارید."
+
+msgid "Issued (UTC)"
+msgstr "تاریخ صدور (UTC)"
+
+msgid "Issued and managed using WP COA Pro."
+msgstr "با استفاده از WP COA Pro صادر و مدیریت شده است."
+
+msgid "Issued in last 30 days"
+msgstr "صادرشده در ۳۰ روز گذشته"
+
+msgid "Issuing galleries and institutions"
+msgstr "گالری‌ها و مؤسسات صادرکننده"
+
+msgid "Issuing gallery / institution (English)"
+msgstr "گالری / مؤسسه صادرکننده (انگلیسی)"
+
+msgid "Issuing gallery / institution (Persian / primary)"
+msgstr "گالری / مؤسسه صادرکننده (فارسی / زبان اصلی)"
+
+msgid "Issuing institution"
+msgstr "مؤسسه صادرکننده"
+
+msgid "Issuing institution (English)"
+msgstr "مؤسسه صادرکننده (انگلیسی)"
+
+msgid "Language"
+msgstr "زبان"
+
+msgid "Layout"
+msgstr "چیدمان"
+
+msgid "Left"
+msgstr "چپ"
+
+msgid "Lifecycle and audit history"
+msgstr "چرخه عمر و تاریخچه ممیزی"
+
+msgid "Lifecycle and audit history: passed"
+msgstr "بررسی چرخه عمر و تاریخچه ممیزی موفق بود"
+
+msgid "Lifecycle audit history is unavailable for this legacy record."
+msgstr "تاریخچه ممیزی چرخه عمر برای این رکورد قدیمی در دسترس نیست."
+
+msgid "Main action and heading color."
+msgstr "رنگ اصلی دکمه‌ها و عنوان‌ها."
+
+msgid "Manage certificates"
+msgstr "مدیریت گواهی‌ها"
+
+msgid "Maximum profiles"
+msgstr "حداکثر تعداد پروفایل‌ها"
+
+msgid "Maximum width"
+msgstr "حداکثر عرض"
+
+msgid "Medium / materials"
+msgstr "تکنیک / مواد"
+
+msgid "Medium / materials (English)"
+msgstr "تکنیک / مواد (انگلیسی)"
+
+msgid "Medium / materials (Persian / primary)"
+msgstr "تکنیک / مواد (فارسی / زبان اصلی)"
+
+msgid "Metadata integrity"
+msgstr "یکپارچگی فراداده"
+
+msgid ""
+"Most recent 100 certificate events. Details are visible to authorized "
+"administrators only."
+msgstr "۱۰۰ رویداد اخیر گواهی. جزئیات فقط برای مدیران مجاز قابل مشاهده است."
+
+msgid "New owner (English)"
+msgstr "مالک جدید (انگلیسی)"
+
+msgid "New owner (Persian / primary)"
+msgstr "مالک جدید (فارسی / زبان اصلی)"
+
+msgid "Next &raquo;"
+msgstr "بعدی »"
+
+msgid "No active institutions match these filters."
+msgstr "هیچ مؤسسه فعالی با این فیلترها پیدا نشد."
+
+msgid "No certificate was found for that code."
+msgstr "گواهی‌ای با این کد پیدا نشد."
+
+msgid "No certificates have been issued yet."
+msgstr "هنوز گواهی‌ای صادر نشده است."
+
+msgid "No certificates match the current filters."
+msgstr "گواهی‌ای با فیلترهای فعلی پیدا نشد."
+
+msgid "No events found."
+msgstr "رویدادی یافت نشد."
+
+msgid "Not available for this legacy record"
+msgstr "برای این رکورد قدیمی در دسترس نیست"
+
+msgid "Not created yet"
+msgstr "هنوز ایجاد نشده است"
+
+msgid "Not found"
+msgstr "پیدا نشد"
+
+msgid "Notice accent color"
+msgstr "رنگ تأکیدی اطلاعیه"
+
+msgid "Number badge color"
+msgstr "رنگ نشان شماره"
+
+msgid "Number color"
+msgstr "رنگ اعداد"
+
+msgid "Only an active certificate can be revoked."
+msgstr "فقط گواهی فعال را می‌توان باطل کرد."
+
+msgid ""
+"Only enable public endpoints that your website needs. The API is read-"
+"only and returns public certificate metadata."
+msgstr ""
+"فقط مسیرهای عمومی موردنیاز وب‌سایت را فعال کنید. API فقط‌خواندنی است و "
+"فراداده عمومی گواهی را برمی‌گرداند."
+
+msgid "Open COA management"
+msgstr "باز کردن مدیریت گواهی‌ها"
+
+msgid ""
+"Optional HTTPS image URL. The logo is displayed on printed certificates "
+"and verification UI."
+msgstr ""
+"نشانی HTTPS تصویر اختیاری است. لوگو در گواهی چاپی و رابط استعلام نمایش "
+"داده می‌شود."
+
+msgid "Ownership cannot be transferred for a revoked certificate."
+msgstr "مالکیت گواهی باطل‌شده قابل انتقال نیست."
+
+msgid ""
+"Ownership transfer failed. Check that the certificate is active, the new "
+"owner is provided, and the audit event can be saved."
+msgstr ""
+"انتقال مالکیت ناموفق بود. فعال بودن گواهی، واردشدن مالک جدید و امکان ثبت "
+"رویداد ممیزی را بررسی کنید."
+
+msgid "Ownership transferred; previous owner retained and the event was recorded."
+msgstr "مالکیت منتقل شد؛ مالک پیشین نگهداری و رویداد ثبت شد."
+
+msgid "Page"
+msgstr "برگه"
+
+msgid "Pages & Elementor"
+msgstr "برگه\\u200cها و المنتور"
+
+msgid "Pages and Elementor"
+msgstr "برگه\\u200cها و المنتور"
+
+msgid "Passed — hashes link in sequence."
+msgstr "موفق — هش‌ها به ترتیب به یکدیگر متصل‌اند."
+
+msgid "Persian"
+msgstr "فارسی"
+
+msgid "Persian + English"
+msgstr "فارسی و انگلیسی"
+
+msgid "Persian and English"
+msgstr "فارسی و انگلیسی"
+
+msgid "Persian only"
+msgstr "فقط فارسی"
+
+msgid "Previous owner"
+msgstr "مالک پیشین"
+
+msgid "Previous owner (English)"
+msgstr "مالک پیشین (انگلیسی)"
+
+msgid "Previous owner (Persian / primary)"
+msgstr "مالک پیشین (فارسی / زبان اصلی)"
+
+msgid "Previous owner is retained in signed record and audit event."
+msgstr "مالک پیشین در رکورد امضاشده و رویداد ممیزی حفظ می‌شود."
+
+msgid "Primary color"
+msgstr "رنگ اصلی"
+
+msgid "Print / PDF"
+msgstr "چاپ / PDF"
+
+msgid "Print / Save as PDF"
+msgstr "چاپ / ذخیره به‌صورت PDF"
+
+msgid "Profile"
+msgstr "پروفایل"
+
+msgid "Profile appearance"
+msgstr "ظاهر پروفایل"
+
+msgid "Profile background"
+msgstr "پس‌زمینه پروفایل"
+
+msgid "Profile card styling"
+msgstr "استایل کارت پروفایل"
+
+msgid "Profile radius"
+msgstr "گردی گوشه‌های پروفایل"
+
+msgid "Profile source"
+msgstr "منبع پروفایل"
+
+msgid "Profile type"
+msgstr "نوع پروفایل"
+
+msgid "Profile type for URL mode"
+msgstr "نوع پروفایل در حالت دریافت از نشانی"
+
+msgid "Public API endpoint"
+msgstr "مسیر API عمومی"
+
+msgid "Public aggregate counts for certificates and active institutions."
+msgstr "آمار تجمیعی عمومی گواهی‌ها و مؤسسات فعال."
+
+msgid "Public artwork description (English)"
+msgstr "توضیحات عمومی اثر (انگلیسی)"
+
+msgid "Public artwork description (Persian / primary)"
+msgstr "توضیحات عمومی اثر (فارسی / زبان اصلی)"
+
+msgid "Public certificate lookup is currently disabled."
+msgstr "استعلام عمومی گواهی در حال حاضر غیرفعال است."
+
+msgid "Public disclaimer (English)"
+msgstr "سلب مسئولیت عمومی (انگلیسی)"
+
+msgid "Public disclaimer (Persian / primary)"
+msgstr "سلب مسئولیت عمومی (فارسی / زبان اصلی)"
+
+msgid "Public lookup shortcode:"
+msgstr "شورت‌کد استعلام عمومی:"
+
+msgid "Public verification experience"
+msgstr "تجربه استعلام عمومی"
+
+msgid ""
+"Public visitors can submit a certificate code and inspect its current "
+"status."
+msgstr "بازدیدکنندگان می‌توانند کد گواهی را وارد کرده و وضعیت آن را بررسی کنند."
+
+msgid "Purpose"
+msgstr "کاربرد"
+
+msgid "Quick integration"
+msgstr "یکپارچه‌سازی سریع"
+
+msgid "REVOKED — not currently valid"
+msgstr "باطل‌شده — در حال حاضر معتبر نیست"
+
+msgid "Read type from URL"
+msgstr "خواندن نوع از نشانی صفحه"
+
+msgid "Read-only REST endpoint:"
+msgstr "نشانی REST فقط‌خواندنی:"
+
+msgid "Reason for revocation"
+msgstr "دلیل ابطال گواهی"
+
+msgid "Recent integrity failures"
+msgstr "موارد اخیرِ خطای یکپارچگی"
+
+msgid "Recently issued certificates"
+msgstr "گواهی‌های صادرشده اخیر"
+
+msgid "Recommended page set"
+msgstr "مجموعه برگه\\u200cهای پیشنهادی"
+
+msgid "Record integrity check: passed"
+msgstr "بررسی یکپارچگی رکورد موفق بود"
+
+msgid ""
+"Record integrity checks confirm consistency of signed metadata; they are "
+"not independent proof of the physical artwork’s authenticity."
+msgstr ""
+"بررسی یکپارچگی، سازگاری فراداده امضاشده را تأیید می‌کند و اثبات مستقل "
+"اصالت فیزیکی اثر نیست."
+
+msgid "Record this ownership transfer?"
+msgstr "این انتقال مالکیت ثبت شود؟"
+
+msgid "Record transfer"
+msgstr "ثبت انتقال"
+
+msgid "Remove"
+msgstr "حذف"
+
+msgid "Reset"
+msgstr "پاک کردن فیلترها"
+
+msgid ""
+"Responsive directory of active gallery and institution profiles with "
+"public filters."
+msgstr ""
+"فهرست واکنش\\u200cگرای پروفایل\\u200cهای فعال گالری و مؤسسه با فیلتر "
+"عمومی."
+
+msgid "Responsive directory of active issuing galleries and institutions."
+msgstr "فهرست واکنش‌گرای گالری‌ها و مؤسسات فعال صادرکننده."
+
+msgid "Result panel background"
+msgstr "پس‌زمینه پنل نتیجه"
+
+msgid "Result panel padding"
+msgstr "فاصله داخلی پنل نتیجه"
+
+msgid "Result panel shadow"
+msgstr "سایه پنل نتیجه"
+
+msgid ""
+"Revocation failed. The certificate may already be revoked or the audit "
+"event could not be saved."
+msgstr ""
+"ابطال ناموفق بود؛ ممکن است گواهی قبلاً باطل شده باشد یا رویداد ممیزی "
+"ذخیره نشده باشد."
+
+msgid "Revocation reason"
+msgstr "دلیل ابطال"
+
+msgid "Revoke"
+msgstr "ابطال گواهی"
+
+msgid "Revoke this certificate? This action cannot be undone from this screen."
+msgstr "این گواهی باطل شود؟ این عملیات از این صفحه قابل بازگشت نیست."
+
+msgid "Revoked"
+msgstr "باطل‌شده"
+
+msgid "Right"
+msgstr "راست"
+
+msgid "Save COA settings"
+msgstr "ذخیره تنظیمات COA"
+
+msgid "Search certificates"
+msgstr "جست‌وجوی گواهی‌ها"
+
+msgid "Search galleries and institutions"
+msgstr "جست\\u200cوجوی گالری\\u200cها و مؤسسات"
+
+msgid "Select a profile"
+msgstr "انتخاب پروفایل"
+
+msgid ""
+"Select an active gallery or institution profile before issuing the "
+"certificate."
+msgstr "پیش از صدور گواهی، پروفایل فعال یک گالری یا مؤسسه را انتخاب کنید."
+
+msgid "Select an active gallery profile in the widget settings."
+msgstr "در تنظیمات ویجت یک پروفایل گالری فعال انتخاب کنید."
+
+msgid "Set the default institutional identity used by this site."
+msgstr "هویت پیش‌فرض مؤسسه مورد استفاده این سایت را تعیین کنید."
+
+msgid "Settings"
+msgstr "تنظیمات"
+
+msgid "Short line displayed in the certificate footer."
+msgstr "عبارت کوتاهی که در پاورقی گواهی نمایش داده می‌شود."
+
+msgid "Shortcode"
+msgstr "شورت‌کد"
+
+msgid "Show"
+msgstr "نمایش"
+
+msgid "Show active certificates"
+msgstr "نمایش گواهی\\u200cهای فعال"
+
+msgid "Show active institutions"
+msgstr "نمایش مؤسسات فعال"
+
+msgid "Show activity"
+msgstr "نمایش نوع فعالیت"
+
+msgid "Show activity badge"
+msgstr "نمایش نشان نوع فعالیت"
+
+msgid "Show artist name in public results"
+msgstr "نمایش نام هنرمند در نتایج عمومی"
+
+msgid "Show artwork title in public results"
+msgstr "نمایش عنوان اثر در نتایج عمومی"
+
+msgid "Show authenticity limitation notice"
+msgstr "نمایش اطلاعیه محدودیت استعلام"
+
+msgid "Show biography excerpt"
+msgstr "نمایش خلاصه زندگی‌نامه"
+
+msgid "Show certificate style"
+msgstr "نمایش سبک گواهی"
+
+msgid "Show certificate template"
+msgstr "نمایش قالب گواهی"
+
+msgid "Show collector name publicly (privacy-sensitive)"
+msgstr "نمایش عمومی نام مجموعه‌دار (حساس از نظر حریم خصوصی)"
+
+msgid "Show current owner publicly (privacy-sensitive)"
+msgstr "نمایش عمومی مالک فعلی (حساس از نظر حریم خصوصی)"
+
+msgid "Show dimensions"
+msgstr "نمایش ابعاد"
+
+msgid "Show heading"
+msgstr "نمایش عنوان"
+
+msgid "Show institution logo"
+msgstr "نمایش لوگوی مؤسسه"
+
+msgid "Show institution logo on public lookup"
+msgstr "نمایش لوگوی مؤسسه در استعلام عمومی"
+
+msgid "Show inventory number"
+msgstr "نمایش شماره ثبت"
+
+msgid "Show issue date"
+msgstr "نمایش تاریخ صدور"
+
+msgid "Show issuing institution"
+msgstr "نمایش مؤسسه صادرکننده"
+
+msgid "Show linked active certificates"
+msgstr "نمایش گواهی‌های فعال متصل"
+
+msgid "Show location"
+msgstr "نمایش محل فعالیت"
+
+msgid "Show logo"
+msgstr "نمایش لوگو"
+
+msgid "Show medium / materials"
+msgstr "نمایش تکنیک / مواد"
+
+msgid "Show previous owner publicly (privacy-sensitive)"
+msgstr "نمایش عمومی مالک پیشین (حساس از نظر حریم خصوصی)"
+
+msgid "Show public artwork description"
+msgstr "نمایش توضیحات عمومی اثر"
+
+msgid "Show public contact details"
+msgstr "نمایش اطلاعات تماس عمومی"
+
+msgid "Show search"
+msgstr "نمایش جست‌وجو"
+
+msgid "Show search and activity filters"
+msgstr "نمایش جست\\u200cوجو و فیلتر نوع فعالیت"
+
+msgid "Show social links"
+msgstr "نمایش پیوندهای شبکه اجتماعی"
+
+msgid "Show total certificates"
+msgstr "نمایش کل گواهی\\u200cها"
+
+msgid "Show verification badge"
+msgstr "نمایش نشان تأیید"
+
+msgid "Show verification button"
+msgstr "نمایش دکمه استعلام"
+
+msgid "Show year created"
+msgstr "نمایش سال خلق"
+
+msgid "Signature check passed"
+msgstr "بررسی امضا موفق بود"
+
+msgid "Site language"
+msgstr "زبان سایت"
+
+msgid "Statistics content"
+msgstr "محتوای آمار"
+
+msgid "Statistics styling"
+msgstr "استایل آمار"
+
+msgid "Status"
+msgstr "وضعیت"
+
+msgid "Step card background"
+msgstr "پس\\u200cزمینه کارت مرحله"
+
+msgid "Step card corner radius"
+msgstr "گردی گوشه کارت مرحله"
+
+msgid "Step card padding"
+msgstr "فاصله داخلی کارت مرحله"
+
+msgid "Submit button label (English)"
+msgstr "متن دکمه ارسال (انگلیسی)"
+
+msgid "Submit button label (Persian / primary)"
+msgstr "متن دکمه ارسال (فارسی / زبان اصلی)"
+
+msgid "System overview"
+msgstr "نمای کلی سامانه"
+
+msgid "Text alignment"
+msgstr "تراز متن"
+
+msgid ""
+"The API exposes only public certificate metadata. Do not put secrets or "
+"private notes in public fields."
+msgstr ""
+"API فقط فراداده عمومی گواهی را ارائه می‌کند. اطلاعات محرمانه یا یادداشت "
+"خصوصی را در فیلدهای عمومی وارد نکنید."
+
+msgid ""
+"The certificate audit event could not be saved; the operation was rolled "
+"back."
+msgstr "رویداد ممیزی گواهی ذخیره نشد؛ عملیات بازگردانی شد."
+
+msgid ""
+"The certificate could not be revoked; its status may have changed. "
+"Refresh the page and try again."
+msgstr ""
+"گواهی باطل نشد؛ ممکن است وضعیت آن تغییر کرده باشد. صفحه را بازآوری و "
+"دوباره تلاش کنید."
+
+msgid "The certificate could not be saved. Check the database error log."
+msgstr "ذخیره گواهی ناموفق بود. گزارش خطای پایگاه داده را بررسی کنید."
+
+msgid ""
+"The certificate database is not initialized yet. Activate or reactivate "
+"the plugin, then reload this page."
+msgstr ""
+"پایگاه داده گواهی‌ها هنوز راه‌اندازی نشده است. افزونه را فعال یا دوباره "
+"فعال کنید و صفحه را بازآوری کنید."
+
+msgid "The certificate metadata could not be serialized."
+msgstr "فراداده گواهی قابل سریال‌سازی نیست."
+
+msgid "The certificate signature could not be updated."
+msgstr "امضای گواهی به‌روزرسانی نشد."
+
+msgid "The certificate signing key is not configured."
+msgstr "کلید امضای گواهی پیکربندی نشده است."
+
+msgid ""
+"The create action is explicit and idempotent: pages already recorded by "
+"this plugin are not overwritten, so your design changes are preserved."
+msgstr ""
+"ایجاد برگه\\u200cها با اقدام صریح مدیر انجام می\\u200cشود و تکرار آن "
+"برگه\\u200cهای ثبت\\u200cشده را بازنویسی نمی\\u200cکند؛ بنابراین تغییرات "
+"طراحی شما حفظ می\\u200cشود."
+
+msgid "The gallery branding profile could not be snapshotted."
+msgstr "ثبت تصویر ثابت از هویت بصری گالری ممکن نشد."
+
+msgid "The new owner matches the current owner."
+msgstr "مالک جدید با مالک فعلی یکسان است."
+
+msgid "The ownership change could not be written to the audit history."
+msgstr "تغییر مالکیت در تاریخچه ممیزی ثبت نشد."
+
+msgid "The ownership record could not be updated."
+msgstr "رکورد مالکیت به‌روزرسانی نشد."
+
+msgid "The ownership transfer could not be committed."
+msgstr "ثبت نهایی انتقال مالکیت ممکن نشد."
+
+msgid "The previous owner is retained in the signed record and audit event."
+msgstr "مالک پیشین در رکورد امضاشده و رویداد ممیزی نگهداری می‌شود."
+
+msgid "The revocation history could not be saved; the operation was rolled back."
+msgstr "تاریخچه ابطال ذخیره نشد؛ عملیات بازگردانی شد."
+
+msgid ""
+"These colors are used by the public verification form, Elementor widget, "
+"and printed certificate."
+msgstr ""
+"این رنگ‌ها در فرم استعلام عمومی، ویجت Elementor و گواهی چاپی استفاده "
+"می‌شوند."
+
+msgid ""
+"This certificate has been revoked and must not be presented as currently "
+"valid."
+msgstr "این گواهی باطل شده و نباید به‌عنوان گواهی معتبر فعلی ارائه شود."
+
+msgid ""
+"This description is included in the certificate integrity signature. Do "
+"not enter private information."
+msgstr "این توضیحات در امضای یکپارچگی گواهی ثبت می‌شود. اطلاعات خصوصی وارد نکنید."
+
+msgid ""
+"This lookup reports the status and integrity of the issuer’s database "
+"record. It does not independently establish the physical identity, "
+"provenance, or authenticity of an artwork. Contact the issuing "
+"institution for expert confirmation."
+msgstr ""
+"این استعلام وضعیت و یکپارچگی رکورد پایگاه داده صادرکننده را گزارش می‌کند؛"
+" به‌تنهایی هویت فیزیکی، پیشینه مالکیت یا اصالت اثر را اثبات نمی‌کند. برای"
+" تأیید کارشناسی با مؤسسه صادرکننده تماس بگیرید."
+
+msgid ""
+"Three-step explanatory block for public trust pages, with an optional "
+"limitations notice."
+msgstr ""
+"راهنمای سه\\u200cمرحله\\u200cای برای صفحات اعتمادسازی، همراه با پیام "
+"اختیاری درباره محدودیت استعلام."
+
+msgid "Total certificates"
+msgstr "مجموع گواهی‌ها"
+
+msgid "Transfer ownership"
+msgstr "انتقال مالکیت"
+
+msgid "Trust-oriented introductory page and aggregate public statistics."
+msgstr "برگه معرفی سامانه با تمرکز بر اعتماد و آمار تجمیعی عمومی."
+
+msgid "Use"
+msgstr "کاربرد"
+
+msgid "Use profile selected in URL"
+msgstr "استفاده از پروفایل تعیین‌شده در نشانی صفحه"
+
+msgid "Used as the default issuer when creating new certificates."
+msgstr "هنگام صدور گواهی جدید به‌عنوان صادرکننده پیش‌فرض استفاده می‌شود."
+
+msgid "Verification guide"
+msgstr "راهنمای استعلام"
+
+msgid "Verification heading (English)"
+msgstr "عنوان استعلام (انگلیسی)"
+
+msgid "Verification heading (Persian / primary)"
+msgstr "عنوان استعلام (فارسی / زبان اصلی)"
+
+msgid "Verified"
+msgstr "تأییدشده"
+
+msgid "Verify an Artwork Certificate"
+msgstr "استعلام گواهی اصالت اثر هنری"
+
+msgid "Verify certificate"
+msgstr "بررسی گواهی"
+
+msgid ""
+"Verify the current status using the public verification page on the "
+"issuing website. A digital record does not by itself prove the physical "
+"artwork is authentic."
+msgstr ""
+"وضعیت فعلی را از صفحه استعلام عمومی وب‌سایت صادرکننده بررسی کنید. رکورد "
+"دیجیتال به‌تنهایی اثبات‌کننده اصالت فیزیکی اثر نیست."
+
+msgid "View"
+msgstr "نمایش"
+
+msgid ""
+"Visitors can choose another language when the language switcher is "
+"enabled. Existing records remain unchanged."
+msgstr ""
+"در صورت فعال بودن انتخاب‌گر زبان، بازدیدکنندگان می‌توانند زبان دیگری "
+"انتخاب کنند. رکوردهای قبلی بدون تغییر می‌مانند."
+
+msgid "WARNING: Lifecycle state does not match the audit history."
+msgstr "هشدار: وضعیت چرخه عمر با تاریخچه ممیزی مطابقت ندارد."
+
+msgid ""
+"WARNING: Record integrity check failed. Do not rely on this printout "
+"without further review."
+msgstr ""
+"هشدار: بررسی یکپارچگی رکورد ناموفق بود. بدون بررسی بیشتر به این نسخه چاپی"
+" اتکا نکنید."
+
+msgid "WP COA Certificate Verification"
+msgstr "استعلام گواهی WP COA"
+
+msgid "WP COA Pro"
+msgstr "WP COA Pro"
+
+msgid "WP COA Pro Settings"
+msgstr "تنظیمات WP COA Pro"
+
+msgid "WP COA Pro — Certificate Management"
+msgstr "WP COA Pro — مدیریت گواهی‌ها"
+
+msgid "WP COA Pro — Professional Settings"
+msgstr "WP COA Pro — تنظیمات حرفه‌ای"
+
+msgid "WP COA Pro — Registry Overview"
+msgstr "WP COA Pro — نمای کلی سامانه"
+
+msgid "WP COA Pro: select an existing active gallery profile."
+msgstr "WP COA Pro: یک پروفایل فعال موجود از گالری را انتخاب کنید."
+
+msgid ""
+"When disabled, the shortcode displays a notice instead of exposing lookup"
+" results."
+msgstr ""
+"در صورت غیرفعال‌بودن، شورت‌کد به‌جای نمایش نتایج، پیام اطلاع‌رسانی نشان "
+"می‌دهد."
+
+msgid "WordPress Pages and Elementor"
+msgstr "برگه\\u200cهای وردپرس و المنتور"
+
+msgid "Year created"
+msgstr "سال خلق اثر"
+
+msgid "You are not allowed to access this page."
+msgstr "اجازه دسترسی به این صفحه را ندارید."
+
+msgid "You do not have permission to create COA pages."
+msgstr "اجازه ایجاد برگه‌های گواهی اصالت را ندارید."
+
+msgid "You do not have permission to manage COA pages."
+msgstr "اجازه مدیریت برگه‌های گواهی اصالت را ندارید."
+
+msgid "You do not have permission to manage artist and collector profiles."
+msgstr "اجازه مدیریت پروفایل هنرمندان و کلکتورها را ندارید."
+
+msgid "You do not have permission to manage gallery profiles."
+msgstr "اجازه مدیریت پروفایل گالری‌ها را ندارید."
+
+
+#: includes/class-wp-coa-pro-admin.php
+msgid "Show original artwork image in public results"
+msgstr "نمایش تصویر اصل اثر در نتایج عمومی"
+
+#: includes/class-wp-coa-pro-admin.php
+msgid "The signed image remains part of the certificate record even when public display is disabled."
+msgstr "حتی در صورت غیرفعال بودن نمایش عمومی، هش تصویر امضاشده بخشی از رکورد گواهی باقی می‌ماند."
+

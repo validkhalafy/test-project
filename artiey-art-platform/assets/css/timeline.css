@@ -1,0 +1,413 @@
+.aet {
+	--aet-bar: #6b6b6b;
+	--aet-bar-text: #ffffff;
+	--aet-today: #ff6a2b;
+	--aet-logo: 90px;
+	--aet-gallery-col-width: var(--aet-logo, 90px);
+	--aet-col: 72px;
+	--aet-row: 60px;
+	--aet-head-bg: #f4f4f4;
+	--aet-head-alt: #ececec;
+	--aet-bg: #fbfbfb;
+	--aet-bg-alt: #f3f3f3;
+	--aet-bg-fri: #efefef;
+	--aet-fri-text: #c0392b;
+	--aet-past: #b5b5b5;
+	--aet-now: #2e7d32;
+	--aet-upcoming: #1565c0;
+	--aet-logo-h: 44px;
+	--aet-radius: 0px;
+	--aet-gap: 5px;
+	--aet-title-size: 15px;
+	--aet-sub-size: 11px;
+	direction: rtl;
+	position: relative;
+	width: 100%;
+}
+
+.aet *,
+.aet *::before,
+.aet *::after {
+	box-sizing: border-box;
+}
+
+.aet-body {
+	transition: opacity 0.15s ease;
+}
+
+.aet-loading .aet-body {
+	opacity: 0.45;
+	pointer-events: none;
+}
+
+/* Editable Elementor heading and intro subtitle (outside the calendar grid). */
+.aet-widget-heading {
+	margin: 0 0 18px;
+	direction: rtl;
+	min-width: 0;
+}
+.aet-widget-title {
+	margin: 0;
+	font-weight: 700;
+	line-height: 1.4;
+	white-space: normal;
+	max-width: 100%;
+}
+.aet-widget-subtitle {
+	margin: 8px 0 0;
+	white-space: pre-line;
+	font-size: 0.96em;
+	line-height: 1.8;
+	white-space: normal;
+	max-width: 100%;
+	opacity: 0.82;
+}
+
+/* Navigation */
+.aet-nav {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	margin-bottom: 10px;
+}
+
+.aet-nav-btn {
+	border: 1px solid #d5d5d5;
+	background: #fff;
+	color: #333;
+	padding: 6px 14px;
+	border-radius: 4px;
+	font-size: 13px;
+	line-height: 1.4;
+	cursor: pointer;
+}
+
+.aet-nav-btn:hover {
+	background: #f2f2f2;
+}
+
+.aet-range {
+	font-size: 14px;
+	color: #555;
+	text-align: center;
+}
+
+/* Grid */
+.aet-scroll {
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+}
+
+.aet-grid {
+	display: grid;
+	grid-template-columns: minmax(0, var(--aet-gallery-col-width, var(--aet-logo, 90px))) repeat(var(--aet-days), minmax(var(--aet-col), 1fr));
+	grid-template-rows: auto repeat(var(--aet-rows), minmax(var(--aet-row), auto));
+	/* max-content avoids relying on unsupported CSS multiplication inside calc(). */
+	width: 100%;
+	min-width: max-content;
+	position: relative;
+}
+
+/* Header */
+.aet-corner {
+	grid-row: 1;
+	grid-column: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #888;
+	font-size: 15px;
+	background: #fff;
+}
+
+.aet-head {
+	grid-row: 1;
+	text-align: center;
+	padding: 12px 4px 14px;
+	background: var(--aet-head-bg);
+	border-top: 4px solid transparent;
+	color: #8a8a8a;
+	line-height: 1.3;
+}
+
+.aet-head.aet-alt {
+	background: var(--aet-head-alt);
+}
+
+.aet-head .aet-dn,
+.aet-head .aet-dm {
+	font-size: 13px;
+}
+
+.aet-head .aet-dd {
+	font-size: 30px;
+	font-weight: 700;
+	line-height: 1.35;
+}
+
+.aet-head.aet-today {
+	border-top-color: var(--aet-today);
+	color: #333;
+}
+
+.aet-head.aet-fri .aet-dn {
+	color: var(--aet-fri-text);
+}
+
+/* Background stripes */
+.aet-bg {
+	background: var(--aet-bg);
+	z-index: 0;
+}
+
+.aet-bg.aet-alt {
+	background: var(--aet-bg-alt);
+}
+
+.aet-bg.aet-fri {
+	background: var(--aet-bg-fri);
+}
+
+.aet-bg.aet-today-col {
+	box-shadow: inset 0 0 0 9999px rgba(255, 106, 43, 0.06);
+}
+
+/* Logo cell */
+.aet-logocell {
+	grid-column: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 3px;
+	padding: 6px;
+	min-width: 0;
+	overflow: hidden;
+	z-index: 1;
+	background: #fff;
+}
+
+.aet-logocell a {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 3px;
+	width: 100%;
+	max-width: 100%;
+	min-width: 0;
+	height: auto;
+	text-decoration: none;
+}
+
+.aet-logo {
+	max-width: 100%;
+	max-height: var(--aet-logo-h);
+	width: auto;
+	height: auto;
+	object-fit: contain;
+}
+
+.aet-logo-text {
+	font-size: 11px;
+	color: #555;
+	text-align: center;
+	line-height: 1.4;
+	max-width: 100%;
+	min-width: 0;
+	white-space: normal;
+	overflow-wrap: anywhere;
+}
+
+.aet-gallery-caption {
+	display: block;
+	width: 100%;
+	font-weight: 600;
+	line-height: 1.35;
+	text-overflow: clip;
+}
+
+/* Exhibition bars */
+.aet-bar {
+	z-index: 2;
+	margin: var(--aet-gap) 0;
+	border-radius: var(--aet-radius);
+	background: var(--aet-bar);
+	color: var(--aet-bar-text);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	padding: 4px 14px;
+	text-decoration: none;
+	overflow: hidden;
+	min-width: 0;
+	transition: filter 0.15s ease;
+}
+
+.aet-bar:hover,
+.aet-bar:focus {
+	filter: brightness(1.15);
+	color: var(--aet-bar-text);
+}
+
+.aet-title {
+	font-size: var(--aet-title-size);
+	font-weight: 700;
+	line-height: 1.5;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 100%;
+}
+
+.aet-sub {
+	font-size: var(--aet-sub-size);
+	line-height: 1.5;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 100%;
+	opacity: 0.95;
+}
+
+/* Exhibition continues beyond the visible range */
+.aet-bar.aet-cut-start {
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+.aet-bar.aet-cut-end {
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+}
+
+.aet-empty {
+	z-index: 2;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #777;
+	font-size: 14px;
+}
+
+/* "More" button */
+.aet-more {
+	display: block;
+	margin-top: 14px;
+	padding: 14px;
+	border: 1px solid #ccc;
+	text-align: center;
+	font-weight: 700;
+	font-size: 16px;
+	color: #333;
+	text-decoration: none;
+	background: #fff;
+}
+
+.aet-more:hover {
+	background: #f5f5f5;
+}
+
+@media (max-width: 600px) {
+	.aet {
+		--aet-logo: 70px;
+		--aet-col: 56px;
+	}
+
+	.aet-head .aet-dd {
+		font-size: 22px;
+	}
+}
+
+/* Status colours (optional) */
+.aet-status-on .aet-bar.aet-st-now {
+	background: var(--aet-now);
+}
+
+.aet-status-on .aet-bar.aet-st-upcoming {
+	background: var(--aet-upcoming);
+}
+
+.aet-status-on .aet-bar.aet-st-past {
+	background: var(--aet-past);
+}
+
+/* Effect toggles from the settings page */
+.aet-no-stripes .aet-bg.aet-alt {
+	background: var(--aet-bg);
+}
+
+.aet-no-stripes .aet-head.aet-alt {
+	background: var(--aet-head-bg);
+}
+
+.aet-no-fri .aet-bg.aet-fri {
+	background: var(--aet-bg);
+}
+
+.aet-no-fri .aet-bg.aet-fri.aet-alt {
+	background: var(--aet-bg-alt);
+}
+
+.aet-no-stripes.aet-no-fri .aet-bg.aet-fri.aet-alt {
+	background: var(--aet-bg);
+}
+
+.aet-no-fri .aet-head.aet-fri .aet-dn {
+	color: inherit;
+}
+
+.aet-no-todaycol .aet-bg.aet-today-col {
+	box-shadow: none;
+}
+
+/* Dark / auto colour scheme (Elementor widget option). Editor-picked colours (inline selectors) still win. */
+.aet-scheme-dark .aet{--aet-head-bg:#23262d;--aet-head-alt:#2a2e36;--aet-bg:#181b20;--aet-bg-alt:#1d2026;--aet-bg-fri:#20242b;--aet-fri-text:#ff8b80;--aet-past:#6b7280;color:#e7e9ee}
+.aet-scheme-dark .aet-logo-text,.aet-scheme-dark .aet-range,.aet-scheme-dark .aet-head{color:#e7e9ee}
+.aet-scheme-dark .aet-nav-btn{background:#23262d;color:#e7e9ee;border-color:#3a3f48}
+@media (prefers-color-scheme: dark){
+	.aet-scheme-auto .aet{--aet-head-bg:#23262d;--aet-head-alt:#2a2e36;--aet-bg:#181b20;--aet-bg-alt:#1d2026;--aet-bg-fri:#20242b;--aet-fri-text:#ff8b80;--aet-past:#6b7280;color:#e7e9ee}
+	.aet-scheme-auto .aet-logo-text,.aet-scheme-auto .aet-range,.aet-scheme-auto .aet-head{color:#e7e9ee}
+	.aet-scheme-auto .aet-nav-btn{background:#23262d;color:#e7e9ee;border-color:#3a3f48}
+}
+
+/* Clear state for exhibition entries that have not been linked to a gallery yet. */
+.aet-logo-unassigned{opacity:.66;font-size:10px;border:1px dashed #c7cbd1;border-radius:6px;padding:5px}
+.aet-logocell.no-gallery{background:rgba(245,247,250,.75)}
+
+/* ------------------------------------------------------------------
+   Elementor navigation arrows: professional skins, RTL-safe glyphs.
+   All classes are scoped to the current widget wrapper.
+   ------------------------------------------------------------------ */
+.aet-nav{align-items:center;gap:clamp(8px,1.5vw,16px)}
+.aet-nav-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;transition:color .18s ease,background-color .18s ease,border-color .18s ease,box-shadow .18s ease,transform .18s ease; text-decoration:none}
+.aet-nav-icon{display:inline-grid;place-items:center;flex:0 0 1.55em;width:1.55em;height:1.55em;min-width:1.55em;border:1px solid transparent;border-radius:0;background:transparent;color:var(--aet-nav-icon-color,currentColor);line-height:1;vertical-align:middle;transition:color .18s ease,background-color .18s ease,border-color .18s ease,transform .18s ease,box-shadow .18s ease}
+.aet-nav-icon:before{content:"›";display:block;font:inherit;font-size:1.15em;font-weight:800;line-height:1;color:inherit}
+.aet-nav-icon-next:before{content:"‹"}
+.aet-nav-shape-outline .aet-nav-icon{border-color:currentColor;border-radius:8px}
+.aet-nav-shape-circle .aet-nav-icon{border:1px solid currentColor;border-radius:50%}
+.aet-nav-shape-filled-circle .aet-nav-icon{border:1px solid var(--aet-nav-icon-bg,var(--aet-today,#3156a6));border-radius:50%;background:var(--aet-nav-icon-bg,var(--aet-today,#3156a6));color:var(--aet-nav-icon-color,#fff)}
+.aet-nav-shape-rounded-square .aet-nav-icon{border:1px solid var(--aet-nav-icon-bg,rgba(60,80,120,.18));border-radius:9px;background:var(--aet-nav-icon-bg,rgba(60,80,120,.12))}
+.aet-nav-shape-soft-square .aet-nav-icon{border:1px solid transparent;border-radius:9px;background:var(--aet-nav-icon-bg,rgba(60,80,120,.10))}
+.aet-nav-shape-glass .aet-nav-icon{border:1px solid color-mix(in srgb,currentColor 28%,transparent);border-radius:50%;background:var(--aet-nav-icon-bg,rgba(255,255,255,.58));backdrop-filter:blur(8px);box-shadow:0 3px 12px rgba(20,30,50,.08)}
+.aet-nav-shape-pill .aet-nav-icon{width:2.15em;min-width:2.15em;border:1px solid currentColor;border-radius:999px}
+.aet-nav-glyph-arrow .aet-nav-icon-prev:before{content:"→"}.aet-nav-glyph-arrow .aet-nav-icon-next:before{content:"←"}
+.aet-nav-glyph-chevron .aet-nav-icon-prev:before{content:"›"}.aet-nav-glyph-chevron .aet-nav-icon-next:before{content:"‹"}
+.aet-nav-glyph-double .aet-nav-icon-prev:before{content:"»"}.aet-nav-glyph-double .aet-nav-icon-next:before{content:"«"}
+.aet-nav-glyph-long .aet-nav-icon-prev:before{content:"⟶"}.aet-nav-glyph-long .aet-nav-icon-next:before{content:"⟵"}
+.aet-nav-glyph-triangle .aet-nav-icon-prev:before{content:"▶"}.aet-nav-glyph-triangle .aet-nav-icon-next:before{content:"◀"}
+.aet-nav-glyph-caret .aet-nav-icon-prev:before{content:"❯"}.aet-nav-glyph-caret .aet-nav-icon-next:before{content:"❮"}
+.aet-nav-glyph-minimal .aet-nav-icon-prev:before{content:"›";font-weight:500}.aet-nav-glyph-minimal .aet-nav-icon-next:before{content:"‹";font-weight:500}
+.aet-nav-glyph-none .aet-nav-icon:before{content:""}
+.aet-nav-labels-icons .aet-nav-label{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.aet-nav-motion-lift .aet-nav-btn:hover .aet-nav-icon,.aet-nav-motion-lift .aet-nav-btn:focus-visible .aet-nav-icon{transform:translateY(-2px)}
+.aet-nav-motion-scale .aet-nav-btn:hover .aet-nav-icon,.aet-nav-motion-scale .aet-nav-btn:focus-visible .aet-nav-icon{transform:scale(1.1)}
+.aet-nav-motion-slide .aet-nav-btn-prev:hover .aet-nav-icon,.aet-nav-motion-slide .aet-nav-btn-prev:focus-visible .aet-nav-icon{transform:translateX(3px)}
+.aet-nav-motion-slide .aet-nav-btn-next:hover .aet-nav-icon,.aet-nav-motion-slide .aet-nav-btn-next:focus-visible .aet-nav-icon{transform:translateX(-3px)}
+.aet-nav-motion-rotate .aet-nav-btn:hover .aet-nav-icon,.aet-nav-motion-rotate .aet-nav-btn:focus-visible .aet-nav-icon{transform:rotate(-10deg)}
+.aet-nav-motion-none .aet-nav-icon{transition:none}
+.aet-nav-btn:focus-visible{outline:2px solid var(--aet-nav-icon-color,#3156a6);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){.aet-nav-btn,.aet-nav-icon{transition:none!important}.aet-nav-motion-lift .aet-nav-btn:hover .aet-nav-icon,.aet-nav-motion-scale .aet-nav-btn:hover .aet-nav-icon,.aet-nav-motion-slide .aet-nav-btn:hover .aet-nav-icon,.aet-nav-motion-rotate .aet-nav-btn:hover .aet-nav-icon{transform:none!important}}

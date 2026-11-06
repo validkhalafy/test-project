@@ -1,0 +1,29 @@
+/* Admin styles are loaded inline as fallback. Extend here if needed. */
+
+/* Media pickers & admin thumbs */
+.art-coa-form--wide{max-width:820px}
+.art-coa-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start;margin-bottom:8px}
+@media(max-width:782px){.art-coa-form-grid{grid-template-columns:1fr}}
+.art-coa-picker{margin:0 0 14px}
+.art-coa-picker-box{display:flex;gap:14px;align-items:flex-start;margin-top:6px}
+.art-coa-picker-preview{position:relative;flex:none;width:120px;border:1px dashed #b6bcc6;border-radius:8px;background:#f6f7f7;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.art-coa-picker--portrait .art-coa-picker-preview{aspect-ratio:3/4}
+.art-coa-picker--landscape .art-coa-picker-preview{aspect-ratio:4/3}
+.art-coa-picker--square .art-coa-picker-preview{aspect-ratio:1}
+.art-coa-picker--wide .art-coa-picker-preview{aspect-ratio:16/5;width:200px}
+.art-coa-picker-preview img{width:100%;height:100%;object-fit:cover}
+.art-coa-picker-ph{font-size:28px;color:#a7aaad}
+.art-coa-picker-actions .button{margin-inline-end:8px}
+.art-coa-multi-list{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:8px 0;padding:0}
+.art-coa-multi-list li{position:relative;width:84px;height:84px;border-radius:8px;overflow:hidden;cursor:move;background:#eee}
+.art-coa-multi-list img{width:100%;height:100%;object-fit:cover;display:block}
+.art-coa-multi-list .js-del{position:absolute;top:3px;inset-inline-end:3px;width:20px;height:20px;border:0;border-radius:50%;background:#000a;color:#fff;cursor:pointer;line-height:1}
+.art-coa-admin-thumb{width:56px;height:56px;object-fit:cover;border-radius:6px;display:block;background:#f0f0f1}
+.art-coa-admin-thumb.is-round{border-radius:50%}
+.art-coa-admin-thumb.is-empty{display:flex;align-items:center;justify-content:center;color:#a7aaad}
+.art-badge-published,.art-badge-approved{background:#d1f2d9;color:#00a32a}
+.art-badge-pending{background:#fcf3d6;color:#8a6d00}
+.art-badge-rejected{background:#fcf0f1;color:#d63638}
+/* Media picker feedback */
+.art-coa-media-status.is-error{color:#b32d2e;font-weight:600}
+.art-coa-media-status:not(.is-error){color:#50575e}

@@ -1,0 +1,19 @@
+Artiey Art Platform 3.0.0
+
+Base: 2.32.33 Speed Optimized
+
+Changes:
+- Bumped plugin/platform version to 3.0.0; bundled WP COA module version and database schema are intentionally unchanged.
+- Directory HTML cache now uses the persistent WordPress object cache when an external object-cache drop-in is active; otherwise it safely falls back to transients.
+- Reduced public directory HTML cache lifetime to 90 seconds.
+- Added directory cache generation invalidation when metadata changes on artist, gallery, artwork, or exhibition posts, preventing stale cards after image, city, relation, or display-field edits.
+- Preserved existing routes, post types, Elementor widget definitions, database tables, and admin UI.
+
+Validation:
+- 723 automated plugin tests passed, 0 failed.
+- PHP syntax: 151 PHP files passed.
+- JavaScript syntax: 12 JS files passed.
+
+Important:
+- These checks do not replace live WordPress/Elementor compatibility, browser, load, or penetration testing.
+- Back up files and database before updating. No destructive database migration is included in this release.

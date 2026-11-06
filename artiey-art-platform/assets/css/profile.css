@@ -1,0 +1,549 @@
+.aetp{--aetp-accent:#ff6a2b;--aetp-map-h:320px;--aetp-cols:3;direction:rtl;color:#222;line-height:1.8}
+.aetp *,.aetp *::before,.aetp *::after{box-sizing:border-box}
+.aetp a{text-decoration:none}
+
+/* Hero */
+.aetp-hero{position:relative;margin:0 0 24px;border-radius:10px;overflow:hidden;background:linear-gradient(135deg,#3a3a3a,#6b6b6b);color:#fff}
+.aetp-cover-wrap{position:absolute;inset:0}
+.aetp-cover{width:100%;height:100%;object-fit:cover;display:block}
+.aetp-hero.has-cover::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.65),rgba(0,0,0,.1))}
+.aetp-hero-inner{position:relative;z-index:2;display:flex;align-items:flex-end;gap:18px;padding:150px 24px 22px;min-height:260px;flex-wrap:wrap}
+.aetp-hero:not(.has-cover) .aetp-hero-inner{padding-top:40px;min-height:0;align-items:center}
+.aetp-logo{width:96px;height:96px;background:#fff;border-radius:10px;padding:8px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+.aetp-logo img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
+.aetp-names{flex:1;min-width:200px}
+.aetp-title{margin:0;color:#fff;font-size:28px;line-height:1.4}
+.aetp-title-en{font-size:15px;opacity:.9;letter-spacing:.3px;text-align:right}
+.aetp-meta{font-size:14px;opacity:.95;margin:4px 0 10px}
+.aetp-dot{opacity:.7;margin:0 4px}
+
+/* Badges */
+.aetp-badge{display:inline-block;font-size:12px;font-weight:600;padding:3px 12px;border-radius:20px;background:#e5e5e5;color:#333;line-height:1.7}
+.aetp-st-open{background:#d9f2df;color:#14632a}
+.aetp-st-shut{background:#e5e5e5;color:#555}
+.aetp-st-active{background:#e1ecf8;color:#1b4d8c}
+.aetp-st-appointment{background:#fff0c9;color:#7a5a00}
+.aetp-st-closed{background:#fbe0dd;color:#9b2a1c}
+.aetp-st-permanent{background:#f4c9c4;color:#7c1d12}
+
+.aetp-lead{font-size:17px;color:#444;margin:0 0 24px;padding-right:14px;border-right:4px solid var(--aetp-accent)}
+
+/* Live profile and platform counters */
+.aetp-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:10px;margin:0 0 24px}
+.aetp-stat{display:flex;flex-direction:column;justify-content:center;min-height:78px;padding:12px 16px;border:1px solid #e9e9e9;border-radius:10px;background:linear-gradient(145deg,#fff,#fafafa);text-align:center}
+.aetp-stat strong{font-size:23px;line-height:1.35;color:var(--aetp-accent);font-variant-numeric:tabular-nums}
+.aetp-stat span{font-size:12px;color:#666}
+.aetp-stats-title{font-size:20px;margin:0 0 14px}
+
+/* Sections */
+.aetp-sec{margin:0 0 30px}
+.aetp-sec>h3{font-size:19px;margin:0 0 14px;padding-bottom:8px;border-bottom:2px solid #eee;position:relative}
+.aetp-sec>h3::after{content:"";position:absolute;right:0;bottom:-2px;width:56px;height:2px;background:var(--aetp-accent)}
+.aetp-sub-h{margin:18px 0 10px;font-size:15px;color:#555}
+.aetp-g-now{color:#14632a}
+.aetp-g-upcoming{color:#1b4d8c}
+
+.aetp-dl{display:grid;grid-template-columns:max-content 1fr;gap:8px 20px;margin:0}
+.aetp-dl dt{color:#777;font-weight:400}
+.aetp-dl dd{margin:0;font-weight:600}
+.aetp-dl a{color:inherit;border-bottom:1px dotted #aaa}
+.aetp-dl a:hover{color:var(--aetp-accent)}
+
+.aetp-chip{display:inline-block;background:#f1f1f1;border-radius:14px;padding:0 12px;margin:0 0 4px 4px;font-weight:400;border-bottom:0!important;font-size:13px}
+.aetp-social{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.aetp-pill{display:inline-block;padding:6px 16px;border-radius:20px;background:#f1f1f1;color:#222;font-size:13px;transition:.15s}
+.aetp-pill:hover{background:var(--aetp-accent);color:#fff}
+.aetp-wa:hover{background:#25d366}
+.aetp-ig:hover{background:#c13584}
+.aetp-tg:hover{background:#2aabee}
+
+/* Hours */
+.aetp-hours-head{margin-bottom:10px}
+.aetp-table{border-collapse:collapse;width:100%;max-width:460px}
+.aetp-table th,.aetp-table td{text-align:right;padding:7px 10px;border-bottom:1px solid #eee;font-weight:400}
+.aetp-table th{color:#555;width:110px}
+.aetp-table tr.is-today th,.aetp-table tr.is-today td{background:#fff6f0;font-weight:700;color:#222}
+.aetp-muted{color:#999}
+.aetp-note{margin:10px 0 0;font-size:13px;color:#666}
+
+/* Map */
+.aetp-address{margin:0 0 12px}
+.aetp-map-frame{height:var(--aetp-map-h);border-radius:8px;overflow:hidden;border:1px solid #ddd}
+.aetp-map-frame iframe{width:100%;height:100%;border:0;display:block}
+
+/* Photos */
+.aetp-photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.aetp-photo-grid img{width:100%;height:160px;object-fit:cover;border-radius:6px;display:block}
+
+/* Cards (artists + exhibitions) */
+.aetp-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px}
+.aetp-card{display:flex;flex-direction:column;color:inherit;gap:2px}
+.aetp-card-img{display:block;aspect-ratio:1/1;background:#eee;border-radius:8px;overflow:hidden;margin-bottom:6px}
+.aetp-card-img.aetp-ratio-poster{aspect-ratio:3/4}
+.aetp-card-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .25s}
+.aetp-card:hover .aetp-card-img img{transform:scale(1.04)}
+.aetp-card-title{font-weight:700;font-size:14px;line-height:1.6;color:#222}
+.aetp-card:hover .aetp-card-title{color:var(--aetp-accent)}
+.aetp-card-sub{font-size:12px;color:#777;line-height:1.6}
+
+/* Exhibition cards may expose a separate curator-profile link; keep valid, non-nested anchors. */
+.aetp-exhibition-card-wrap{display:flex;flex-direction:column;gap:5px;min-width:0;height:100%}
+.aetp-exhibition-card-wrap>.aetp-card{min-width:0}
+.aetp-card-curator-link{display:inline-flex;align-self:flex-start;font-size:12px;line-height:1.7;color:var(--aetp-accent);text-decoration:underline;text-underline-offset:3px}
+.aetp-card-curator-link:focus-visible{outline:2px solid var(--aetp-accent);outline-offset:3px;border-radius:2px}
+
+/* Gallery grid shortcode */
+.aetp-grid{display:grid;grid-template-columns:repeat(var(--aetp-cols),1fr);gap:20px}
+.aetp-gcard{display:flex;flex-direction:column;background:#fff;border:1px solid #e6e6e6;border-radius:10px;overflow:hidden;color:inherit;transition:box-shadow .2s}
+.aetp-gcard:hover{box-shadow:0 6px 20px rgba(0,0,0,.1)}
+.aetp-gcard-cover{display:block;height:150px;background:linear-gradient(135deg,#3a3a3a,#6b6b6b);position:relative}
+.aetp-gcard-cover img{width:100%;height:100%;object-fit:cover;display:block}
+.aetp-gcard-body{display:flex;flex-direction:column;gap:2px;padding:14px;position:relative}
+.aetp-gcard-logo{position:absolute;top:-30px;right:14px;width:56px;height:56px;background:#fff;border-radius:8px;padding:4px;box-shadow:0 1px 6px rgba(0,0,0,.2);display:flex;align-items:center;justify-content:center}
+.aetp-gcard-logo img{max-width:100%;max-height:100%;object-fit:contain}
+.aetp-gcard-body .aetp-card-title{margin-top:18px}
+.aetp-gcard-body .aetp-badge{align-self:flex-start;margin-top:6px}
+
+@media (max-width:768px){
+	.aetp-grid{grid-template-columns:repeat(2,1fr)}
+	.aetp-hero-inner{padding:120px 16px 16px}
+	.aetp-title{font-size:22px}
+	.aetp-dl{grid-template-columns:1fr}
+	.aetp-dl dt{margin-top:6px}
+}
+@media (max-width:480px){
+	.aetp-grid{grid-template-columns:1fr}
+}
+
+/* ===== v1.3: tabs, ribbons, filters, artist + exhibition profiles ===== */
+
+/* Poster tabs (all panels visible without JS) */
+.aetp-tablist{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 16px}
+.aetp-tabbtn{border:1px solid #d7d7d7;background:#fff;color:#333;padding:7px 16px;border-radius:20px;cursor:pointer;font-size:14px;line-height:1.6;font-family:inherit}
+.aetp-tabbtn em{font-style:normal;background:#eee;border-radius:10px;padding:0 8px;margin-right:4px;font-size:12px}
+.aetp-tabbtn.is-active{background:var(--aetp-accent);border-color:var(--aetp-accent);color:#fff}
+.aetp-tabbtn.is-active em{background:rgba(255,255,255,.25);color:#fff}
+.aetp-tabs.js .aetp-tabpanel{display:none}
+.aetp-tabs.js .aetp-tabpanel.is-active{display:block}
+.aetp-tabs.js .aetp-tabpanel[hidden]{display:none!important}
+.aetp-tabs.js .aetp-tabpanel:not([hidden]){display:block}
+.aetp-tabs:not(.js) .aetp-tablist{display:none}
+.aetp-tabs:not(.js) .aetp-tabpanel{margin-bottom:18px}
+
+/* Poster cards */
+.aetp-card-img{position:relative}
+.aetp-noposter{display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:34px;font-weight:700;color:#fff;background:linear-gradient(135deg,#4a4a4a,#8a8a8a)}
+.aetp-ribbon{position:absolute;top:8px;right:8px;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:700;color:#fff;line-height:1.7;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.aetp-rb-now{background:#2e7d32}
+.aetp-rb-upcoming{background:#1565c0}
+.aetp-rb-past{background:#757575}
+.aetp-card-gal{color:var(--aetp-accent);font-weight:600}
+.aetp-poster .aetp-card-sub{display:block}
+
+/* Gallery card extras */
+.aetp-gcard-foot{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px}
+.aetp-mini{font-size:11px;padding:2px 10px;border-radius:12px;line-height:1.7}
+.aetp-mini-now{background:#d9f2df;color:#14632a}
+.aetp-mini-up{background:#e1ecf8;color:#1b4d8c}
+.aetp-card-style{color:var(--aetp-accent)}
+
+/* Directory */
+.aetd-filters{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;background:#f7f7f7;border:1px solid #e8e8e8;border-radius:10px;padding:14px;margin:0 0 14px}
+.aetd-f{display:flex;flex-direction:column;gap:4px;min-width:150px;flex:1 1 150px}
+.aetd-f-search{flex:2 1 220px}
+.aetd-lbl{font-size:12px;color:#666}
+.aetd-f select,.aetd-f input[type=search]{width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:6px;background:#fff;font-family:inherit;font-size:14px;height:40px}
+.aetd-f-check{flex-direction:row;align-items:center;gap:6px;font-size:14px;min-width:0;flex:0 0 auto;height:40px}
+.aetd-actions{display:flex;align-items:center;gap:12px}
+.aetd-btn{background:var(--aetp-accent);color:#fff;border:0;padding:0 22px;height:40px;border-radius:6px;cursor:pointer;font-family:inherit;font-size:14px}
+.aetd-btn:hover{filter:brightness(1.08)}
+.aetd-reset{font-size:13px;color:#666;text-decoration:underline}
+.aetd-count{font-size:13px;color:#777;margin:0 0 12px}
+.aetd-empty{text-align:center;padding:36px 10px;color:#777;background:#fafafa;border-radius:8px}
+.aetd.aetd-loading .aetd-inner{opacity:.5;pointer-events:none;transition:opacity .15s}
+.aetd-pager{margin:22px 0 0}
+.aetd-pager ul{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;list-style:none;margin:0;padding:0}
+.aetd-pager .page-numbers{display:inline-block;min-width:36px;text-align:center;padding:6px 12px;border:1px solid #ddd;border-radius:6px;color:#333;background:#fff}
+.aetd-pager .page-numbers.current{background:var(--aetp-accent);border-color:var(--aetp-accent);color:#fff}
+.aetd .aetp-grid .aetp-card,.aetd .aetp-grid .aetp-gcard{min-width:0}
+
+/* Artist hero */
+.aetp-hero-artist .aetp-hero-inner{align-items:flex-end}
+.aetp-avatar{width:120px;height:120px;border-radius:50%;overflow:hidden;border:4px solid #fff;background:#fff;flex:0 0 auto;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+.aetp-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.aetp-hero-chips{margin-top:8px}
+.aetp-hero-chips .aetp-chip{background:rgba(255,255,255,.2);color:#fff}
+.aetp-list{margin:0;padding:0 18px 0 0;line-height:2}
+.aetp-list li::marker{color:var(--aetp-accent)}
+
+/* Single exhibition */
+.aetp-ex-wrap{display:grid;gap:24px;margin:0 0 26px}
+.aetp-ex-wrap.has-poster{grid-template-columns:minmax(220px,340px) 1fr;align-items:start}
+.aetp-ex-poster{position:relative;border-radius:10px;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,.15)}
+.aetp-ex-poster img{width:100%;height:auto;display:block}
+.aetp-ex-info .aetp-dl{margin-top:6px}
+.aetp-exb-now{background:#d9f2df;color:#14632a}
+.aetp-exb-upcoming{background:#e1ecf8;color:#1b4d8c}
+.aetp-exb-past{background:#e5e5e5;color:#555}
+
+@media (max-width:768px){
+	.aetp-ex-wrap.has-poster{grid-template-columns:1fr}
+	.aetp-ex-poster{max-width:340px}
+	.aetd-f{flex:1 1 100%}
+	.aetp-avatar{width:88px;height:88px}
+}
+
+/* ===== v2.0: artworks + certificate blocks ===== */
+.aetp-card-img.aetp-ratio-art{aspect-ratio:4/5}
+.aetp-card-price{font-weight:700;color:var(--aetp-accent);font-size:14px}
+.aetp-sale-available{background:#2e7d32}
+.aetp-sale-reserved{background:#b26a00}
+.aetp-sale-sold{background:#9b2a1c}
+.aetp-sale-not_for_sale{background:#616161}
+.aetp-coa-dot{position:absolute;bottom:8px;left:8px;width:26px;height:26px;border-radius:50%;background:#fff;color:#2e7d32;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.3);font-size:14px}
+
+.aetp-aw-wrap{display:grid;gap:28px;margin:0 0 30px}
+.aetp-aw-wrap.has-media{grid-template-columns:minmax(260px,1.1fr) 1fr;align-items:start}
+.aetp-aw-media{position:relative;border-radius:10px;overflow:hidden;background:#f3f3f3;box-shadow:0 4px 18px rgba(0,0,0,.12)}
+.aetp-aw-media img{display:block;width:100%;height:auto}
+.aetp-aw-title{color:#222;margin:0}
+.aetp-aw-title-en{color:#777;margin:0 0 10px;font-size:14px}
+.aetp-price{margin:16px 0 4px;font-size:24px;font-weight:700;color:var(--aetp-accent)}
+
+.aetp-coa{margin:16px 0 0;padding:12px 14px;border-radius:10px;border:1px solid #cfe8d4;background:#f2faf4;display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px}
+.aetp-coa-title{font-weight:700;color:#14632a}
+.aetp-coa-code{font-family:monospace;font-size:13px;background:#fff;border:1px solid #d6e7da;border-radius:6px;padding:1px 8px;letter-spacing:.3px}
+.aetp-coa-date{font-size:12px;color:#5b7a63}
+.aetp-coa-revoked{border-color:#f0c6c0;background:#fdf3f2}
+.aetp-coa-revoked .aetp-coa-title{color:#9b2a1c}
+.aetp-coa-check{border-color:#f1dca3;background:#fff9e6}
+.aetp-coa-check .aetp-coa-title{color:#7a5a00}
+
+@media (max-width:768px){
+	.aetp-aw-wrap.has-media{grid-template-columns:1fr}
+}
+
+/* ===== v2.21: widget personalisation (colour scheme, hover, focus, empty state) ===== */
+.aetp-empty{text-align:center;padding:24px 10px;color:#777;background:#fafafa;border-radius:8px}
+.aetp a:focus-visible,.aetp button:focus-visible,.aetp select:focus-visible,.aetp input:focus-visible{outline:3px solid var(--aetp-accent);outline-offset:2px}
+
+.aetp-hover-lift .aetp-card,.aetp-hover-lift .aetp-gcard{transition:transform .2s ease,box-shadow .2s ease}
+.aetp-hover-lift .aetp-card:hover,.aetp-hover-lift .aetp-gcard:hover{transform:translateY(-4px);box-shadow:0 10px 26px rgba(0,0,0,.14)}
+.aetp-hover-none .aetp-card,.aetp-hover-none .aetp-gcard,.aetp-hover-none .aetp-card-img img{transition:none}
+.aetp-hover-none .aetp-card:hover .aetp-card-img img{transform:none}
+.aetp-hover-none .aetp-gcard:hover{box-shadow:none}
+
+/* Dark scheme: the same rules apply for "dark" and for "auto" on dark devices. */
+.aetp-scheme-dark .aetp{background:#14161a;color:#e7e9ee;padding:18px;border-radius:12px}
+.aetp-scheme-dark .aetp-card-title,.aetp-scheme-dark .aetp-aw-title,.aetp-scheme-dark .aetp-sec>h3,.aetp-scheme-dark .aetp-stats-title{color:#f3f4f7}
+.aetp-scheme-dark .aetp-sec>h3{border-bottom-color:#2c3037}
+.aetp-scheme-dark .aetp-lead{color:#c9ccd3}
+.aetp-scheme-dark .aetp-card-sub,.aetp-scheme-dark .aetp-aw-title-en,.aetp-scheme-dark .aetd-count,.aetp-scheme-dark .aetd-lbl,.aetp-scheme-dark .aetp-stat span,.aetp-scheme-dark .aetd-reset,.aetp-scheme-dark .aetp-coa-date{color:#a9aeb8}
+.aetp-scheme-dark .aetp-stat,.aetp-scheme-dark .aetp-gcard{background:#1d2026;border-color:#2c3037}
+.aetp-scheme-dark .aetp-card-img{background:#23262d}
+.aetp-scheme-dark .aetd-filters{background:#1b1e23;border-color:#2c3037}
+.aetp-scheme-dark .aetd-f select,.aetp-scheme-dark .aetd-f input[type=search]{background:#23262d;color:#e7e9ee;border-color:#3a3f48}
+.aetp-scheme-dark .aetd-empty,.aetp-scheme-dark .aetp-empty{background:#1b1e23;color:#a9aeb8}
+.aetp-scheme-dark .aetd-pager .page-numbers{background:#1d2026;border-color:#2c3037;color:#e7e9ee}
+.aetp-scheme-dark .aetp-badge{background:#2c3037;color:#e1e3e8}
+.aetp-scheme-dark .aetp-coa{background:#172019;border-color:#2c4a33}
+.aetp-scheme-dark .aetp-coa-code{background:#14161a;border-color:#2c4a33;color:#e7e9ee}
+@media (prefers-color-scheme: dark){
+	.aetp-scheme-auto .aetp{background:#14161a;color:#e7e9ee;padding:18px;border-radius:12px}
+	.aetp-scheme-auto .aetp-card-title,.aetp-scheme-auto .aetp-aw-title,.aetp-scheme-auto .aetp-sec>h3,.aetp-scheme-auto .aetp-stats-title{color:#f3f4f7}
+	.aetp-scheme-auto .aetp-sec>h3{border-bottom-color:#2c3037}
+	.aetp-scheme-auto .aetp-lead{color:#c9ccd3}
+	.aetp-scheme-auto .aetp-card-sub,.aetp-scheme-auto .aetp-aw-title-en,.aetp-scheme-auto .aetd-count,.aetp-scheme-auto .aetd-lbl,.aetp-scheme-auto .aetp-stat span,.aetp-scheme-auto .aetd-reset,.aetp-scheme-auto .aetp-coa-date{color:#a9aeb8}
+	.aetp-scheme-auto .aetp-stat,.aetp-scheme-auto .aetp-gcard{background:#1d2026;border-color:#2c3037}
+	.aetp-scheme-auto .aetp-card-img{background:#23262d}
+	.aetp-scheme-auto .aetd-filters{background:#1b1e23;border-color:#2c3037}
+	.aetp-scheme-auto .aetd-f select,.aetp-scheme-auto .aetd-f input[type=search]{background:#23262d;color:#e7e9ee;border-color:#3a3f48}
+	.aetp-scheme-auto .aetd-empty,.aetp-scheme-auto .aetp-empty{background:#1b1e23;color:#a9aeb8}
+	.aetp-scheme-auto .aetd-pager .page-numbers{background:#1d2026;border-color:#2c3037;color:#e7e9ee}
+	.aetp-scheme-auto .aetp-badge{background:#2c3037;color:#e1e3e8}
+	.aetp-scheme-auto .aetp-coa{background:#172019;border-color:#2c4a33}
+	.aetp-scheme-auto .aetp-coa-code{background:#14161a;border-color:#2c4a33;color:#e7e9ee}
+}
+@media (prefers-reduced-motion: reduce){
+	.aetp *,.aetp *::before,.aetp *::after{transition:none!important;animation:none!important}
+	.aetp-card:hover .aetp-card-img img{transform:none}
+}
+
+/* ===== 2.29.4: Elementor profile tabs and curated directory card skins ===== */
+.aetp-elementor-tabs{width:100%;min-width:0}
+.aetp-tabs .aetp-tablist{display:flex;flex-wrap:wrap;align-items:center;gap:8px;max-width:100%;margin:0 0 16px;padding:0 0 6px;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin}
+.aetp-tabs .aetp-tabbtn{flex:0 0 auto;white-space:nowrap;transition:background-color .18s ease,color .18s ease,border-color .18s ease}
+.aetp-tabs .aetp-tabbtn:focus-visible{outline:3px solid var(--aetp-accent);outline-offset:3px}
+.aetp-tabs .aetp-tabpanel{min-width:0;border-radius:var(--aetp-tab-panel-radius,12px)}
+.aetp-elementor-tabs .aetp-tabpanel>.aetp{padding:0;background:transparent}
+.aetd-live-status.screen-reader-text{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.aetd[data-error="1"] .aetd-live-status{color:#9b2a1c}
+.aetd-loading{position:relative}
+.aetd-loading:after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;border-radius:inherit;background:linear-gradient(110deg,transparent 35%,rgba(127,127,127,.08) 50%,transparent 65%);background-size:200% 100%;animation:aetd-shimmer 1.4s linear infinite}
+@keyframes aetd-shimmer{to{background-position-x:-200%}}
+
+/* Editorial cards: generous image ratios and a stronger typographic hierarchy. */
+.aetd-card-editorial .aetp-grid,.aetd-card-editorial .aetp-cards{align-items:stretch}
+.aetd-card-editorial .aetp-card,.aetd-card-editorial .aetp-gcard{height:100%;border-radius:14px;overflow:hidden;box-shadow:0 5px 18px rgba(0,0,0,.07);transition:transform .2s ease,box-shadow .2s ease}
+.aetd-card-editorial .aetp-card:hover,.aetd-card-editorial .aetp-gcard:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(0,0,0,.13)}
+.aetd-card-editorial .aetp-card-img{aspect-ratio:4/5;overflow:hidden}
+.aetd-card-editorial .aetp-card-img img,.aetd-card-editorial .aetp-gcard-cover img{width:100%;height:100%;object-fit:cover;transition:transform .35s ease}
+.aetd-card-editorial .aetp-card:hover .aetp-card-img img,.aetd-card-editorial .aetp-gcard:hover .aetp-gcard-cover img{transform:scale(1.035)}
+.aetd-card-editorial .aetp-card-title{font-size:1.04em;font-weight:700;line-height:1.8}
+.aetd-card-editorial .aetp-card-sub{line-height:1.8}
+
+/* Compact horizontal cards, useful for directory sidebars and artist indexes. */
+.aetd-card-compact .aetp-grid,.aetd-card-compact .aetp-cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.aetd-card-compact .aetp-card{display:grid;grid-template-columns:minmax(76px,100px) minmax(0,1fr);grid-template-rows:min-content;align-content:start;gap:3px 12px;min-width:0;padding:10px;border:1px solid #e6e6e6;border-radius:12px;box-shadow:none;text-align:start;overflow:hidden}
+.aetd-card-compact .aetp-card-img{grid-column:1;grid-row:1 / span 5;aspect-ratio:3/4;align-self:start;width:100%;overflow:hidden;border-radius:8px}
+.aetd-card-compact .aetp-card-img img{width:100%;height:100%;object-fit:cover}
+.aetd-card-compact .aetp-card-title,.aetd-card-compact .aetp-card-sub,.aetd-card-compact .aetp-card-price{grid-column:2;min-width:0;overflow-wrap:anywhere}
+.aetd-card-compact .aetp-card-title{align-self:end;font-size:.96em;line-height:1.7}
+.aetd-card-compact .aetp-gcard{display:grid;grid-template-columns:minmax(76px,100px) minmax(0,1fr);gap:0 12px;padding:10px;border:1px solid #e6e6e6;border-radius:12px;box-shadow:none;overflow:hidden}
+.aetd-card-compact .aetp-gcard-cover{grid-column:1;grid-row:1;min-height:100px;overflow:hidden;border-radius:8px}
+.aetd-card-compact .aetp-gcard-cover img{width:100%;height:100%;min-height:100px;object-fit:cover}
+.aetd-card-compact .aetp-gcard-body{grid-column:2;grid-row:1;min-width:0;padding:0;background:transparent}
+.aetd-card-compact .aetp-gcard-logo{display:none}
+.aetd-card-compact .aetp-gcard-foot{gap:4px}
+
+/* Framed cards use a quiet frame instead of the default floating shadow. */
+.aetd-card-framed .aetp-card,.aetd-card-framed .aetp-gcard{height:100%;border:1px solid #d8dbe0;border-radius:8px;box-shadow:none;overflow:hidden}
+.aetd-card-framed .aetp-card{padding:8px}
+.aetd-card-framed .aetp-gcard-body{padding:12px}
+.aetd-card-framed .aetp-card-img,.aetd-card-framed .aetp-gcard-cover{border-radius:4px;overflow:hidden}
+
+@media(max-width:767px){
+  .aetd-card-compact .aetp-grid,.aetd-card-compact .aetp-cards{grid-template-columns:minmax(0,1fr)}
+  .aetp-tabs .aetp-tablist{flex-wrap:nowrap;justify-content:flex-start;padding:2px 2px 8px}
+  .aetp-tabs .aetp-tabbtn{font-size:13px;padding:7px 12px}
+}
+@media(prefers-reduced-motion:reduce){
+  .aetd-loading:after{animation:none}
+  .aetd-card-editorial .aetp-card,.aetd-card-editorial .aetp-gcard,.aetd-card-editorial .aetp-card-img img,.aetd-card-editorial .aetp-gcard-cover img,.aetp-tabs .aetp-tabbtn{transition:none}
+}
+
+
+/* ===== 2.29.9: artist profile biography, career timeline and integrated COA charts/history ===== */
+.aetp-bio-more{margin:14px 0 0}
+.aetp-bio-more>summary{display:inline-flex;align-items:center;gap:8px;max-width:100%;padding:8px 16px;border:1px solid var(--aetp-accent);border-radius:999px;background:transparent;color:var(--aetp-accent);font:inherit;font-size:14px;font-weight:700;cursor:pointer;list-style:none;transition:background-color .18s ease,color .18s ease,border-color .18s ease}
+.aetp-bio-more>summary::-webkit-details-marker{display:none}
+.aetp-bio-more>summary::after{content:"＋";font-size:16px;line-height:1}
+.aetp-bio-more[open]>summary::after{content:"−"}
+.aetp-bio-more>summary:hover{background:var(--aetp-accent);color:#fff}
+.aetp-bio-more .when-open{display:none}
+.aetp-bio-more[open] .when-closed{display:none}
+.aetp-bio-more[open] .when-open{display:inline}
+.aetp-bio-more .aetp-bio-text{margin-top:12px}
+.aetp-career-list{--aetp-career-line:#dedede;list-style:none;margin:0;padding:0 24px 0 0;position:relative}
+.aetp-career-list:before{content:"";position:absolute;right:8px;top:8px;bottom:8px;width:2px;background:var(--aetp-career-line);border-radius:2px}
+.aetp-career-item{display:grid;grid-template-columns:minmax(82px,auto) minmax(0,1fr);gap:4px 12px;position:relative;padding:0 14px 22px 0;min-width:0}
+.aetp-career-item:before{content:"";position:absolute;right:-21px;top:7px;width:10px;height:10px;border:2px solid var(--aetp-accent);background:#fff;border-radius:50%;box-shadow:0 0 0 3px rgba(255,255,255,.75)}
+.aetp-career-kind{font-size:12px;color:#777;font-weight:700;grid-column:1 / -1}
+.aetp-career-year{font-size:13px;color:var(--aetp-accent);font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.aetp-career-text{min-width:0;overflow-wrap:anywhere}
+.aetp-artist-chart .art-coa-chart{margin:0;max-width:100%}
+.aetp-artist-history .art-coa-artwork-history{max-width:100%}
+.aetp-artist-history .art-coa-ah-note{font-size:12px;line-height:1.8;opacity:.8}
+@media(max-width:600px){.aetp-career-item{grid-template-columns:1fr;gap:3px}.aetp-career-kind{grid-column:1}.aetp-career-year{white-space:normal}}
+@media(prefers-reduced-motion:reduce){.aetp-bio-more>summary{transition:none}}
+
+/* Single-paragraph biographies use a short preview inside the summary to avoid duplicate excerpt text. */
+.aetp-bio-more.aetp-bio-single-long>summary{display:block;width:100%;max-width:100%;text-align:start;white-space:normal;border-radius:12px;line-height:1.9}
+.aetp-bio-single-long .aetp-single-preview{display:block;font-weight:400;overflow-wrap:anywhere;margin-bottom:10px}
+.aetp-bio-single-long .aetp-single-continue{display:inline-flex;align-items:center;padding:5px 12px;border-radius:999px;background:var(--aetp-accent);color:#fff;font-size:.9em;font-weight:700}
+.aetp-bio-single-long>summary:hover{color:inherit}
+.aetp-bio-single-long>summary:hover .aetp-single-continue{filter:brightness(.92)}
+
+/* ===== Artiey unified Elementor design system v2.30.1 ===== */
+.aetp .aetp-work-item{margin:0;min-width:0;overflow:hidden}
+.aetp .aetp-work-item>a{display:block;overflow:hidden;border-radius:inherit}
+.aetp .aetp-work-caption{font-size:.86em;line-height:1.65;color:var(--aetp-muted,#777);padding:7px 2px 0;overflow-wrap:anywhere}
+.aetp .aetp-work-item img{transition:transform .28s ease,filter .28s ease}
+.aetp .aetp-work-item:hover img{transform:scale(1.025)}
+.aetp .aetp-work-item a:focus-visible,.aetp .aetp-card:focus-visible,.aetp .aetp-gcard:focus-visible,.aetp .aetp-pill:focus-visible{outline:3px solid var(--aetp-accent);outline-offset:3px}
+.aetp-design-editorial .aetp .aetp-hero{border-radius:2px;margin-bottom:30px}
+.aetp-design-editorial .aetp .aetp-sec{padding:clamp(16px,2.2vw,28px);border:1px solid rgba(120,120,120,.18);background:rgba(127,127,127,.025)}
+.aetp-design-editorial .aetp .aetp-sec>h3{letter-spacing:.01em;padding-bottom:12px}
+.aetp-design-editorial .aetp .aetp-sec>h3:after{width:84px;height:3px}
+.aetp-design-editorial .aetp .aetp-card,.aetp-design-editorial .aetp .aetp-gcard{border-radius:3px;box-shadow:0 7px 22px rgba(0,0,0,.06)}
+.aetp-design-luxury .aetp{--aetp-accent:#b58a50}
+.aetp-design-luxury .aetp .aetp-hero{border-radius:4px;box-shadow:0 14px 36px rgba(0,0,0,.14)}
+.aetp-design-luxury .aetp .aetp-sec{padding:clamp(18px,2.5vw,32px);border:1px solid rgba(181,138,80,.22);border-radius:3px}
+.aetp-design-luxury .aetp .aetp-sec>h3{font-weight:600;letter-spacing:.015em}
+.aetp-design-luxury .aetp .aetp-card,.aetp-design-luxury .aetp .aetp-gcard{border:1px solid rgba(181,138,80,.24);border-radius:3px;box-shadow:0 8px 28px rgba(34,25,12,.08)}
+.aetp-design-luxury .aetp .aetp-chip,.aetp-design-luxury .aetp .aetp-pill{border-radius:3px}
+.aetp-design-minimal .aetp .aetp-hero{border-radius:0;box-shadow:none}
+.aetp-design-minimal .aetp .aetp-sec{padding:10px 0;border:0;border-radius:0;background:transparent;box-shadow:none}
+.aetp-design-minimal .aetp .aetp-sec>h3{border-bottom:1px solid currentColor;padding-bottom:5px}
+.aetp-design-minimal .aetp .aetp-sec>h3:after{display:none}
+.aetp-design-minimal .aetp .aetp-card,.aetp-design-minimal .aetp .aetp-gcard{border:0;border-radius:0;box-shadow:none}
+.aetp-design-framed .aetp .aetp-sec{padding:18px;border:1px solid currentColor;border-radius:0}
+.aetp-design-framed .aetp .aetp-card,.aetp-design-framed .aetp .aetp-gcard{border:1px solid currentColor;border-radius:0;box-shadow:none}
+.aetp-design-framed .aetp .aetp-card-img,.aetp-design-framed .aetp .aetp-gcard-cover{border-radius:0}
+
+/* Section-heading visual variants selected from Elementor. */
+.aetp-heading-underline .aetp .aetp-sec>h3{border-bottom-width:1px}
+.aetp-heading-underline .aetp .aetp-sec>h3:after{width:100%;height:2px}
+.aetp-heading-plain .aetp .aetp-sec>h3{padding-bottom:0;border-bottom:0}
+.aetp-heading-plain .aetp .aetp-sec>h3:after{display:none}
+.aetp-heading-boxed .aetp .aetp-sec>h3{padding:9px 13px;border:1px solid rgba(127,127,127,.22);border-radius:8px;background:rgba(127,127,127,.06)}
+.aetp-heading-boxed .aetp .aetp-sec>h3:after{display:none}
+
+/* Card and tab interaction presets. */
+.aetp-hover-scale .aetp .aetp-card,.aetp-hover-scale .aetp .aetp-gcard{transition:transform .22s ease,box-shadow .22s ease}
+.aetp-hover-scale .aetp .aetp-card:hover,.aetp-hover-scale .aetp .aetp-gcard:hover{transform:translateY(-2px) scale(1.015);box-shadow:0 12px 28px rgba(0,0,0,.13)}
+.aetp-hover-glow .aetp .aetp-card,.aetp-hover-glow .aetp .aetp-gcard{transition:box-shadow .22s ease,border-color .22s ease}
+.aetp-hover-glow .aetp .aetp-card:hover,.aetp-hover-glow .aetp .aetp-gcard:hover{box-shadow:0 0 0 1px var(--aetp-accent),0 12px 30px rgba(0,0,0,.13);border-color:var(--aetp-accent)}
+.aetp-tab-style-square .aetp-tabs .aetp-tabbtn{border-radius:3px}
+.aetp-tab-style-underline .aetp-tabs .aetp-tabbtn{background:transparent;border:0;border-bottom:2px solid transparent;border-radius:0}
+.aetp-tab-style-underline .aetp-tabs .aetp-tabbtn.is-active{border-bottom-color:var(--aetp-accent);background:transparent;color:var(--aetp-accent)}
+
+/* Artist, gallery, artwork and exhibition layout variations. */
+.aetp-artist-header-centered .aetp .aetp-hero-artist .aetp-hero-inner{flex-direction:column;align-items:center;justify-content:center;text-align:center;padding-top:clamp(100px,13vw,160px)}
+.aetp-artist-header-centered .aetp .aetp-hero-artist .aetp-names{width:100%;min-width:0;text-align:center}
+.aetp-artist-header-centered .aetp .aetp-hero-artist .aetp-title-en{text-align:center}
+.aetp-artist-header-centered .aetp .aetp-hero-artist .aetp-hero-chips{display:flex;justify-content:center;flex-wrap:wrap}
+.aetp-artist-header-editorial .aetp .aetp-hero-artist .aetp-hero-inner{padding-inline:clamp(18px,4vw,48px)}
+.aetp-artist-header-editorial .aetp .aetp-hero-artist .aetp-names{border-inline-start:3px solid var(--aetp-accent);padding-inline-start:18px}
+.aetp-artist-header-compact .aetp .aetp-hero-artist .aetp-hero-inner{min-height:175px;padding:100px 18px 18px;gap:12px}
+.aetp-artist-header-compact .aetp .aetp-hero-artist .aetp-avatar{width:76px;height:76px}
+.aetp-gallery-header-centered .aetp .aetp-hero .aetp-hero-inner{flex-direction:column;align-items:center;justify-content:center;text-align:center;padding-top:clamp(80px,12vw,140px)}
+.aetp-gallery-header-centered .aetp .aetp-hero .aetp-names{width:100%;min-width:0;text-align:center}
+.aetp-gallery-header-centered .aetp .aetp-hero .aetp-title-en{text-align:center}
+.aetp-gallery-header-compact .aetp .aetp-hero .aetp-hero-inner{min-height:160px;padding:90px 18px 18px;gap:12px}
+.aetp-gallery-header-editorial .aetp .aetp-hero .aetp-hero-inner{padding-inline:clamp(18px,4vw,48px)}
+.aetp-gallery-header-editorial .aetp .aetp-hero .aetp-names{border-inline-start:3px solid var(--aetp-accent);padding-inline-start:18px}
+.aetp-artwork-style-showcase .aetp .aetp-aw-wrap.has-media{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:clamp(22px,4vw,52px)}
+.aetp-artwork-style-showcase .aetp .aetp-aw-media{box-shadow:0 16px 42px rgba(0,0,0,.16);border-radius:3px}
+.aetp-artwork-style-showcase .aetp .aetp-aw-media img{max-height:82vh;object-fit:contain}
+.aetp-artwork-style-minimal .aetp .aetp-aw-wrap.has-media{gap:18px}
+.aetp-artwork-style-minimal .aetp .aetp-aw-media{box-shadow:none;border-radius:0;background:transparent}
+.aetp-exhibition-style-poster .aetp .aetp-ex-wrap.has-poster{grid-template-columns:minmax(260px,420px) minmax(0,1fr);gap:clamp(20px,4vw,42px)}
+.aetp-exhibition-style-poster .aetp .aetp-ex-poster{box-shadow:0 14px 34px rgba(0,0,0,.16);border-radius:4px;overflow:hidden}
+.aetp-exhibition-style-poster .aetp .aetp-ex-poster img{width:100%;height:auto;display:block}
+.aetp-exhibition-style-compact .aetp .aetp-ex-wrap.has-poster{grid-template-columns:minmax(130px,210px) minmax(0,1fr);gap:18px}
+
+@media (max-width:767px){
+ .aetp-artist-header-centered .aetp .aetp-hero-artist .aetp-hero-inner,.aetp-gallery-header-centered .aetp .aetp-hero .aetp-hero-inner{padding-top:100px}
+ .aetp-artwork-style-showcase .aetp .aetp-aw-wrap.has-media,.aetp-exhibition-style-poster .aetp .aetp-ex-wrap.has-poster,.aetp-exhibition-style-compact .aetp .aetp-ex-wrap.has-poster{grid-template-columns:minmax(0,1fr)}
+}
+@media (prefers-reduced-motion:reduce){
+ .aetp .aetp-work-item img,.aetp-hover-scale .aetp .aetp-card,.aetp-hover-scale .aetp .aetp-gcard,.aetp-hover-glow .aetp .aetp-card,.aetp-hover-glow .aetp .aetp-gcard{transition:none!important}
+ .aetp .aetp-work-item:hover img,.aetp-hover-scale .aetp .aetp-card:hover,.aetp-hover-scale .aetp .aetp-gcard:hover{transform:none!important}
+}
+
+
+/* 2.30.4: configurable horizontal/vertical artist-profile tabs. */
+.aetp-tabs{min-width:0}
+.aetp-tabs.is-horizontal{display:block}
+.aetp-tabs .aetp-tabbtn{display:inline-flex;align-items:center}
+.aetp-tabs.is-horizontal>.aetp-tablist{display:flex;flex-direction:row;align-items:center}
+.aetp-tabs.is-vertical.js{display:grid;grid-template-columns:minmax(160px,240px) minmax(0,1fr);gap:20px;align-items:start}
+.aetp-tabs.is-vertical.js>.aetp-tablist{grid-column:1;grid-row:1;display:flex;flex-direction:column;align-items:stretch;gap:8px;min-width:0;max-width:100%;margin:0;padding:0;overflow:visible;border:0}
+.aetp-tabs.is-vertical.js>.aetp-tablist>.aetp-tabbtn{width:100%;max-width:100%;justify-content:flex-start;text-align:start;white-space:normal;overflow-wrap:anywhere}
+.aetp-tabs.is-vertical.js>.aetp-tabpanel{grid-column:2;grid-row:1;min-width:0;width:100%;}
+.aetp-tabs.is-vertical:not(.js){display:block}
+.aetp-tabs.is-vertical:not(.js)>.aetp-tablist{display:none}
+.aetp-tabs.is-vertical:not(.js)>.aetp-tabpanel{margin-bottom:18px}
+@media(max-width:767px){
+ .aetp-tabs.is-vertical.js{grid-template-columns:minmax(0,1fr);gap:12px}
+ .aetp-tabs.is-vertical.js>.aetp-tablist{grid-column:1;grid-row:1;display:flex;flex-direction:column}
+ .aetp-tabs.is-vertical.js>.aetp-tabpanel{grid-column:1;grid-row:2}
+ .aetp-tabs.is-horizontal.js>.aetp-tablist{flex-wrap:nowrap;overflow-x:auto;max-width:100%;}
+}
+
+/* Artiey Pro tabs: responsive equal-width navigation, indicators, animation and panel polish. */
+.aetp-tabs.is-equal-width>.aetp-tablist>.aetp-tabbtn{flex:1 1 0;justify-content:center;min-width:0;white-space:normal;text-align:center}
+.aetp-tab-indicator-none .aetp-tabs .aetp-tabbtn.is-active{box-shadow:none;border-bottom-color:transparent}
+.aetp-tab-indicator-bottom .aetp-tabs .aetp-tabbtn.is-active{box-shadow:inset 0 -2px 0 var(--aetp-accent);border-bottom-color:var(--aetp-accent)}
+.aetp-tab-indicator-side .aetp-tabs .aetp-tabbtn.is-active{border-inline-start:3px solid var(--aetp-accent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--aetp-accent) 15%,transparent)}
+.aetp-tab-indicator-glow .aetp-tabs .aetp-tabbtn.is-active{box-shadow:0 0 0 1px var(--aetp-accent),0 5px 18px color-mix(in srgb,var(--aetp-accent) 20%,transparent)}
+.aetp-tabs .aetp-tablist{border-radius:var(--aetp-tab-nav-radius,12px)}
+.aetp-tabs .aetp-tabpanel{border:1px solid var(--aetp-tab-panel-border,transparent);min-height:2rem}
+.aetp-tabs .aetp-tabbtn:disabled{opacity:.5;cursor:not-allowed}
+.aetp-tabpanel-animate-fade{animation:aetp-tab-fade .2s ease both}
+.aetp-tabpanel-animate-slide{animation:aetp-tab-slide .22s ease both}
+@keyframes aetp-tab-fade{from{opacity:0}to{opacity:1}}
+@keyframes aetp-tab-slide{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.aetp-tabpanel-animate-fade,.aetp-tabpanel-animate-slide{animation:none!important}}
+
+/* 2.30.6 Pro tab skins and alignment for profile, catalogue, stats, timeline and COA widgets. */
+.aetp-tabs .aetp-tablist{display:flex;align-items:center;gap:8px;min-width:0;max-width:100%;padding:6px;margin:0 0 16px;border:1px solid rgba(127,127,127,.18);}
+.aetp-tabs .aetp-tabbtn{appearance:none;border:1px solid transparent;background:transparent;color:inherit;cursor:pointer;font:inherit;line-height:1.35;padding:10px 16px;transition:background-color .18s ease,color .18s ease,border-color .18s ease,box-shadow .18s ease;flex:0 0 auto;}
+.aetp-tabs .aetp-tabbtn:focus-visible{outline:2px solid var(--aetp-accent,#8e6b9b);outline-offset:3px;}
+.aetp-tabs .aetp-tabpanel[hidden]{display:none!important;}
+.aetp-tabs-skin-pills>.aetp-tablist{border-radius:999px;background:rgba(127,127,127,.06);}
+.aetp-tabs-skin-pills .aetp-tabbtn{border-radius:999px;}
+.aetp-tabs-skin-underline>.aetp-tablist{background:transparent;border-width:0 0 1px;border-radius:0;padding:0;}
+.aetp-tabs-skin-underline .aetp-tabbtn{border:0;border-radius:0;border-bottom:2px solid transparent;background:transparent;}
+.aetp-tabs-skin-underline .aetp-tabbtn.is-active{border-bottom-color:var(--aetp-accent,#8e6b9b);color:var(--aetp-accent,#8e6b9b);}
+.aetp-tabs-skin-boxed>.aetp-tablist{border-radius:12px;background:rgba(127,127,127,.04);}
+.aetp-tabs-skin-boxed .aetp-tabbtn{border-color:rgba(127,127,127,.18);border-radius:8px;background:rgba(127,127,127,.035);}
+.aetp-tabs-skin-boxed .aetp-tabbtn.is-active{border-color:var(--aetp-accent,#8e6b9b);background:color-mix(in srgb,var(--aetp-accent,#8e6b9b) 10%,transparent);}
+.aetp-tabs-skin-minimal>.aetp-tablist{background:transparent;border:0;border-radius:0;padding:0;}
+.aetp-tabs-skin-minimal .aetp-tabbtn{border:0;border-radius:0;padding-inline:8px;}
+.aetp-tabs-align-center:not(.is-vertical)>.aetp-tablist{justify-content:center;}
+.aetp-tabs-align-end:not(.is-vertical)>.aetp-tablist{justify-content:flex-end;}
+.aetp-tabs-align-stretch:not(.is-vertical)>.aetp-tablist>.aetp-tabbtn{flex:1 1 0;text-align:center;justify-content:center;}
+.aetp-tabs-align-start:not(.is-vertical)>.aetp-tablist{justify-content:flex-start;}
+.aetp-tabs-panel-bordered>.aetp-tabpanel{border:1px solid rgba(127,127,127,.2);border-radius:12px;padding:clamp(12px,2vw,24px);}
+.aetp-tabs-panel-card>.aetp-tabpanel{border:1px solid rgba(127,127,127,.16);border-radius:18px;padding:clamp(16px,2.4vw,30px);box-shadow:0 10px 28px rgba(0,0,0,.07);background:var(--aetp-tabs-panel-bg,rgba(127,127,127,.025));}
+.aetp-tabs-panel-flat>.aetp-tabpanel{border:0;border-radius:0;padding:12px 0;box-shadow:none;background:transparent;}
+.aetp-tabs.is-scrollable:not(.is-vertical)>.aetp-tablist{overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;scrollbar-color:rgba(127,127,127,.4) transparent;}
+.aetp-tabs.is-scrollable:not(.is-vertical)>.aetp-tablist>.aetp-tabbtn{white-space:nowrap;}
+.aetp-tabs.is-vertical>.aetp-tablist{align-items:stretch;}
+.aetp-tabs.is-vertical.aetp-tabs-align-center>.aetp-tablist>.aetp-tabbtn{justify-content:center;}
+.aetp-tabs.is-vertical.aetp-tabs-align-end>.aetp-tablist>.aetp-tabbtn{justify-content:flex-end;}
+@media(max-width:767px){.aetp-tabs.is-horizontal.js>.aetp-tablist{overflow-x:auto;overscroll-behavior-x:contain}.aetp-tabs-panel-card>.aetp-tabpanel{border-radius:12px}}
+@media(prefers-reduced-motion:reduce){.aetp-tabs .aetp-tabbtn{transition:none}}
+
+
+/* 2.32.4 Pro gallery relationships: artists, curators, public collectors and auction lots. */
+.aetp .aetp-related-section{min-width:0}
+.aetp .aetp-related-heading{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:0 0 18px}
+.aetp .aetp-related-heading h3{margin:0;min-width:0}
+.aetp .aetp-related-count{display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:30px;padding:0 9px;border-radius:999px;background:color-mix(in srgb,var(--aetp-accent,#8e6b9b) 10%,transparent);color:var(--aetp-accent,#8e6b9b);font-size:.82em;font-weight:700;line-height:1;flex:0 0 auto}
+.aetp .aetp-related-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;min-width:0}
+.aetp .aetp-related-card{display:flex;flex-direction:column;min-width:0;height:100%;overflow:hidden;border:1px solid rgba(127,127,127,.18);border-radius:16px;background:var(--aetp-related-card-bg,#fff);color:inherit;text-decoration:none!important;box-shadow:0 5px 18px rgba(0,0,0,.045);transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+.aetp .aetp-related-card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--aetp-accent,#8e6b9b) 42%,rgba(127,127,127,.18));box-shadow:0 12px 28px rgba(0,0,0,.09);color:inherit}
+.aetp .aetp-related-card:focus-visible{outline:2px solid var(--aetp-accent,#8e6b9b);outline-offset:3px}
+.aetp .aetp-related-media{display:flex;align-items:center;justify-content:center;position:relative;width:100%;height:190px;overflow:hidden;background:linear-gradient(135deg,rgba(127,127,127,.08),rgba(127,127,127,.025));flex:0 0 auto}
+.aetp .aetp-related-media img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .35s ease}
+.aetp .aetp-related-card:hover .aetp-related-media img{transform:scale(1.035)}
+.aetp .aetp-related-placeholder{display:flex;align-items:center;justify-content:center;width:100%;height:100%;color:var(--aetp-accent,#8e6b9b);font-size:36px;opacity:.55}
+.aetp .aetp-related-content{display:flex;flex:1 1 auto;flex-direction:column;align-items:flex-start;gap:7px;padding:15px 16px 16px;min-width:0}
+.aetp .aetp-related-title{display:block;width:100%;color:inherit;font-size:1rem;font-weight:750;line-height:1.6;overflow-wrap:anywhere}
+.aetp .aetp-related-sub,.aetp .aetp-related-meta{display:block;width:100%;color:inherit;font-size:.84rem;line-height:1.7;opacity:.72;overflow-wrap:anywhere}
+.aetp .aetp-related-badge{display:inline-flex;align-items:center;max-width:100%;margin-top:3px;padding:5px 9px;border-radius:999px;background:color-mix(in srgb,var(--aetp-accent,#8e6b9b) 10%,transparent);color:var(--aetp-accent,#8e6b9b);font-size:.75rem;font-weight:700;line-height:1.45;overflow-wrap:anywhere}
+.aetp .aetp-related-grid.is-compact{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.aetp .aetp-related-grid.is-compact .aetp-related-card{flex-direction:row;min-height:112px}
+.aetp .aetp-related-grid.is-compact .aetp-related-media{width:112px;height:auto;min-height:112px;max-width:38%}
+.aetp .aetp-related-grid.is-compact .aetp-related-content{justify-content:center;padding:12px}
+.aetp .aetp-related-grid.is-compact .aetp-related-title{font-size:.94rem}
+@media(max-width:1024px){.aetp .aetp-related-grid.is-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:767px){.aetp .aetp-related-grid.is-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.aetp .aetp-related-media{height:155px}.aetp .aetp-related-content{padding:12px}.aetp .aetp-related-grid.is-compact{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:480px){.aetp .aetp-related-grid.is-grid{grid-template-columns:minmax(0,1fr)}.aetp .aetp-related-grid.is-grid .aetp-related-card{display:grid;grid-template-columns:112px minmax(0,1fr);flex-direction:row;min-height:112px}.aetp .aetp-related-grid.is-grid .aetp-related-media{width:112px;height:100%;min-height:112px}.aetp .aetp-related-grid.is-grid .aetp-related-content{justify-content:center}.aetp .aetp-related-grid.is-compact .aetp-related-media{width:96px;min-height:96px}}
+@media(prefers-reduced-motion:reduce){.aetp .aetp-related-card,.aetp .aetp-related-media img{transition:none!important}.aetp .aetp-related-card:hover{transform:none}}
+
+/* Lightweight status card rendered instead of live COA datasets while editing an artist in Elementor. */
+.aetp-editor-preview-note{margin:14px 0;padding:14px 16px;border:1px dashed var(--aetp-accent,#ff6a2b);border-radius:12px;background:rgba(128,128,128,.06);font-size:13px;line-height:1.9}
+.aetp-editor-preview-note strong{display:block;margin-bottom:3px}
+.aetp-editor-preview-note p{margin:0;opacity:.78}
+
+/* Editable Elementor tab labels and optional icons. */
+.aetp-tabs .aetp-tabbtn{gap:.5em}
+.aetp-tabs .aetp-tab-icon{display:inline-flex;align-items:center;justify-content:center;line-height:1;flex:0 0 auto}
+.aetp-tabs .aetp-tab-icon svg{width:1em;height:1em;max-width:1em;max-height:1em}
+.aetp-tabs .aetp-tab-label{display:inline-block;min-width:0}
+
+/* Artist portfolio carousel: native scroll-snap, keyboard and touch friendly. */
+.aetp-photo-carousel{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(220px,30%);grid-template-columns:none;overflow-x:auto;overscroll-behavior-inline:contain;scroll-snap-type:inline mandatory;padding:4px 2px 14px;scrollbar-width:thin}
+.aetp-photo-carousel .aetp-work-item{min-width:0;scroll-snap-align:start}
+.aetp-photo-carousel img{height:260px}
+.aetp-artist-media-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:18px}
+.aetp-artist-media-item{min-width:0;padding:14px;border:1px solid var(--aetp-border,#e5e7eb);border-radius:12px}
+.aetp-video-frame{position:relative;aspect-ratio:16/9;overflow:hidden;border-radius:10px}
+.aetp-video-frame iframe,.aetp-video-frame video{width:100%;height:100%;border:0}
+@media(max-width:767px){.aetp-photo-carousel{grid-auto-columns:78%}.aetp-photo-carousel img{height:220px}}
+
+.artiey-language-switcher{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.artiey-language-switcher a{display:inline-flex;align-items:center;padding:6px 10px;border:1px solid var(--aetp-border,#ddd);border-radius:999px;text-decoration:none}.artiey-language-switcher a[aria-current=page]{background:var(--aetp-accent,#333);color:#fff}

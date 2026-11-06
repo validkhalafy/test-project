@@ -1,0 +1,68 @@
+/* Artiey smart scroller. Colours, radius and shadows follow the shared design tokens (Appearance settings).
+   Without JavaScript every mode degrades to a normal scroll-snap scroller. */
+.aetss{--aetss-w:320px;--aetss-gap:18px;--aetss-r:var(--aap-r,16px);--aetss-accent:var(--aap-primary,var(--art-coa-primary,#1a365d));--aetss-gold:var(--aap-secondary,var(--art-coa-accent,#c9a227));--aetss-nav-bg:rgba(255,255,255,.94);--aetss-nav-fg:#1d2327;position:relative;box-sizing:border-box;color:inherit}
+.aetss *,.aetss *::before,.aetss *::after{box-sizing:border-box}
+.aetss-track{list-style:none;margin:0;padding:0}
+.aetss-slide{margin:0;padding:0;min-width:0}
+
+/* Visually hidden live region: themes do not all ship .screen-reader-text on the front end */
+.aetss-live,.aetss .screen-reader-text{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:nowrap;border:0}
+
+/* ---- toolbar: 2D / 3D switch ---- */
+.aetss-toolbar{display:flex;justify-content:flex-end;margin-bottom:10px}
+.aetss--forced-flat .aetss-toolbar{display:none}
+.aetss-mode{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;border:2px solid var(--aetss-accent);border-radius:999px;background:transparent;color:var(--aetss-accent);font:inherit;font-weight:700;font-size:.9em;cursor:pointer;min-height:38px;transition:background .15s,color .15s}
+.aetss-mode:hover{background:var(--aetss-accent);color:#fff}
+.aetss-mode:focus-visible{outline:3px solid var(--aetss-gold);outline-offset:2px}
+.aetss-mode[aria-pressed="false"] .aetss-mode-2d,.aetss-mode[aria-pressed="true"] .aetss-mode-3d{display:none}
+
+/* ---- flat mode (also the no-JS fallback) ---- */
+.aetss--flat .aetss-stage,.aetss:not(.aetss-ready) .aetss-stage{overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;padding:6px 0 14px}
+.aetss--flat .aetss-stage::-webkit-scrollbar,.aetss:not(.aetss-ready) .aetss-stage::-webkit-scrollbar{display:none}
+.aetss--flat .aetss-track,.aetss:not(.aetss-ready) .aetss-track{display:flex;gap:var(--aetss-gap);padding-inline:max(8px,calc((100% - var(--aetss-w)) / 2))}
+.aetss--flat .aetss-slide,.aetss:not(.aetss-ready) .aetss-slide{flex:0 0 min(var(--aetss-w),82vw);scroll-snap-align:center}
+.aetss-stage:focus-visible{outline:3px solid var(--aetss-gold);outline-offset:3px;border-radius:var(--aetss-r)}
+
+/* ---- 3D modes ---- */
+.aetss--coverflow.aetss-ready .aetss-stage,.aetss--cylinder.aetss-ready .aetss-stage{position:relative;overflow:hidden;perspective:var(--aetss-persp,1200px);perspective-origin:50% 45%;padding:26px 0 34px;touch-action:pan-y;cursor:grab;-webkit-user-select:none;user-select:none}
+.aetss-dragging .aetss-stage{cursor:grabbing}
+.aetss--coverflow.aetss-ready .aetss-track,.aetss--cylinder.aetss-ready .aetss-track{position:relative;width:min(var(--aetss-w),82vw);margin-inline:auto;transform-style:preserve-3d}
+.aetss--coverflow.aetss-ready .aetss-slide,.aetss--cylinder.aetss-ready .aetss-slide{position:absolute;inset-block-start:0;inset-inline-start:0;width:100%;transition:transform .6s cubic-bezier(.22,.8,.24,1),opacity .45s ease;will-change:transform,opacity}
+.aetss-dragging .aetss-slide{transition:none!important}
+.aetss--coverflow.aetss-ready .aetss-slide[aria-hidden="false"] .aetss-card,.aetss--cylinder.aetss-ready .aetss-slide[aria-hidden="false"] .aetss-card{box-shadow:0 18px 40px rgba(0,0,0,.28)}
+
+/* ---- card ---- */
+.aetss-card{position:relative;display:flex;flex-direction:column;height:100%;overflow:hidden;border-radius:var(--aetss-r);background:var(--aap-surface,#fff);border:1px solid var(--aap-border,#d9dde3);box-shadow:var(--aap-shadow,0 2px 6px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.10))}
+.aetss-media{display:block;position:relative;aspect-ratio:var(--aetss-ratio,4/3);overflow:hidden;background:#e9ecf0}
+.aetss-media img{display:block;width:100%;height:100%;object-fit:cover;-webkit-user-drag:none;user-select:none;pointer-events:none}
+.aetss-noimg{display:block;width:100%;height:100%;background:linear-gradient(135deg,#d9dde3,#eef0f3)}
+.aetss-badge{position:absolute;inset-block-start:12px;inset-inline-start:12px;padding:3px 11px;border-radius:999px;background:var(--aetss-gold);color:#1d2327;font-size:.78em;font-weight:700;line-height:1.7;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.aetss-body{display:flex;flex-direction:column;gap:6px;padding:14px 16px 16px;min-width:0}
+.aetss-title{margin:0;font-size:1.06em;line-height:1.5}
+.aetss-title a{color:var(--aetss-accent);text-decoration:none}
+.aetss-title a:hover,.aetss-title a:focus-visible{text-decoration:underline}
+.aetss-meta{margin:0;color:#5b6470;font-size:.88em}
+.aetss-excerpt{margin:0;line-height:1.8;color:#3c434a;font-size:.93em}
+.aetss-cta{align-self:flex-start;display:inline-block;margin-top:4px;padding:8px 16px;border-radius:calc(var(--aetss-r) * .7);background:var(--aetss-accent);color:#fff;text-decoration:none;font-weight:600;font-size:.9em;min-height:38px}
+.aetss-cta:hover{filter:brightness(1.12)}
+.aetss-cta:focus-visible,.aetss-title a:focus-visible{outline:3px solid var(--aetss-gold);outline-offset:2px}
+.aetss-card--html{padding:16px;overflow:auto}
+.aetss-slide--html .aetss-card{min-height:200px;justify-content:center}
+
+/* ---- arrows + dots ---- */
+.aetss-nav{position:absolute;inset-block-start:calc(50% - 22px);z-index:5;display:grid;place-items:center;width:44px;height:44px;padding:0;border:0;border-radius:50%;background:var(--aetss-nav-bg);color:var(--aetss-nav-fg);box-shadow:0 2px 10px rgba(0,0,0,.28);cursor:pointer;transition:opacity .2s,transform .2s}
+.aetss-nav:hover{transform:scale(1.07)}
+.aetss-nav:focus-visible{outline:3px solid var(--aetss-gold);outline-offset:2px}
+.aetss-nav[disabled]{opacity:.35;cursor:default;transform:none}
+.aetss-prev{inset-inline-start:10px}
+.aetss-next{inset-inline-end:10px}
+:dir(rtl) .aetss-nav svg{transform:scaleX(-1)}
+[dir="rtl"] .aetss-nav svg{transform:scaleX(-1)}
+.aetss-dots{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:8px}
+.aetss-dot{width:10px;height:10px;padding:0;border:0;border-radius:50%;background:#c3c8d0;cursor:pointer;transition:background .2s,transform .2s}
+.aetss-dot[aria-selected="true"]{background:var(--aetss-accent);transform:scale(1.3)}
+.aetss-dot:focus-visible{outline:2px solid var(--aetss-accent);outline-offset:3px}
+.aetss-heading{margin:0 0 16px;line-height:1.4;color:var(--aetss-accent)}
+
+@media (max-width:600px){.aetss-nav{width:38px;height:38px;inset-block-start:calc(50% - 19px)}}
+@media (prefers-reduced-motion:reduce){.aetss *{transition:none!important;animation:none!important}}
